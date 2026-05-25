@@ -1,2 +1,49 @@
 .vercel
 .env*
+
+# Windows user profile system files
+NTUSER.DAT
+NTUSER.DAT*.TM.blf
+NTUSER.DAT*.TMContainer*.regtrans-ms
+ntuser.dat.LOG*
+ntuser.ini
+
+# Windows profile directories
+AppData/
+Application Data/
+Cookies/
+Local Settings/
+NetHood/
+PrintHood/
+Recent/
+SendTo/
+Start Menu/
+Templates/
+
+# Shell / editor state
+.bash_history
+.lesshst
+.cache/
+.local/
+.config/
+
+# Cloud / sync
+OneDrive/
+WPS Cloud Files/
+
+# IDE / tool config
+.vscode/
+.vscode-shared/
+.codex/
+.gitconfig
+.wslconfig
+
+# Claude internal config
+.claude.json
+.claude.json.backup
+.claude/
+
+# Personal folders
+Saved Games/
+Favorites/
+Links/
