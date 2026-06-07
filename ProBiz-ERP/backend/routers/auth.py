@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from database import get_db
 import models
-from auth import verify_password, get_password_hash, create_access_token, get_current_user
+from auth import verify_password, get_password_hash, create_access_token, create_refresh_token, decode_token, get_current_user
+from jose import JWTError
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
@@ -26,8 +27,10 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
     if not user.is_active:
         raise HTTPException(status_code=401, detail="Account is deactivated")
     token = create_access_token({"sub": user.email})
+    refresh = create_refresh_token({"sub": user.email})
     return {
         "access_token": token,
+        "refresh_token": refresh,
         "token_type": "bearer",
         "user": {
             "id": user.id,
@@ -70,3 +73,34 @@ def get_me(current_user: models.User = Depends(get_current_user)):
 def list_users(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     users = db.query(models.User).all()
     return [{"id": u.id, "name": u.name, "email": u.email, "role": u.role, "is_active": u.is_active} for u in users]
+
+class RefreshRequest(BaseModel):
+    refresh_token: str
+
+@router.post("/refresh")
+def refresh_token(request: RefreshRequest, db: Session = Depends(get_db)):
+    try:
+        payload = decode_token(request.refresh_token)
+        if payload.get("type") != "refresh":
+            raise HTTPException(status_code=401, detail="Invalid token type")
+        email = payload.get("sub")
+        user = db.query(models.User).filter(models.User.email == email).first()
+        if not user or not user.is_active:
+            raise HTTPException(status_code=401, detail="User not found")
+        new_access = create_access_token({"sub": email})
+        new_refresh = create_refresh_token({"sub": email})
+        return {"access_token": new_access, "refresh_token": new_refresh, "token_type": "bearer"}
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid or expired refresh token")
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+@router.post("/change-password")
+def change_password(request: ChangePasswordRequest, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if not verify_password(request.current_password, current_user.hashed_password):
+        raise HTTPException(status_code=400, detail="Current password is incorrect")
+    current_user.hashed_password = get_password_hash(request.new_password)
+    db.commit()
+    return {"message": "Password changed successfully"}
