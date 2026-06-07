@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+
+  # PostgreSQL database
+  db:
+    image: postgres:16-alpine
+    container_name: probiz_db
+    restart: always
+    environment:
+      POSTGRES_DB: probiz_db
+      POSTGRES_USER: probiz_user
+      POSTGRES_PASSWORD: probiz_secure_pass_2024
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U probiz_user -d probiz_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # FastAPI backend
+  backend:
+    build: ./backend
+    container_name: probiz_backend
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://probiz_user:probiz_secure_pass_2024@db:5432/probiz_db
+      SECRET_KEY: probiz-erp-super-secret-change-in-production-raees2024
+      ACCESS_TOKEN_EXPIRE_MINUTES: 480
+      REFRESH_TOKEN_EXPIRE_DAYS: 30
+      ALLOWED_ORIGINS: http://localhost,http://localhost:80
+      DEBUG: "false"
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "python seed.py && uvicorn main:app --host 0.0.0.0 --port 8000"
+
+  # React frontend (nginx)
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: http://localhost:8000
+    container_name: probiz_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  postgres_data:
