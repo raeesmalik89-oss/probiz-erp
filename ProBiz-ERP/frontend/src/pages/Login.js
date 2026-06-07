@@ -7,7 +7,7 @@ import { TrendingUp, Eye, EyeOff, Lock, Mail } from 'lucide-react';
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('admin@probiz.pk');
+  const [email, setEmail] = useState('raees.malik89@gmail.com');
   const [password, setPassword] = useState('admin123');
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ export default function Login() {
   };
 
   const demoAccounts = [
-    { label: 'Admin', email: 'admin@probiz.pk', password: 'admin123' },
+    { label: 'Admin', email: 'raees.malik89@gmail.com', password: 'admin123' },
     { label: 'Manager', email: 'manager@probiz.pk', password: 'manager123' },
     { label: 'Cashier', email: 'cashier@probiz.pk', password: 'cashier123' },
   ];

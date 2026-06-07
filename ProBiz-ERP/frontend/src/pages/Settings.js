@@ -25,10 +25,10 @@ const Field = ({ label, value, onChange, type = 'text', readOnly }) => (
 
 export default function Settings() {
   const { user } = useAuth();
-  const [companyName, setCompanyName] = useState('ProBiz Enterprise');
-  const [companyAddress, setCompanyAddress] = useState('Main Gulberg, Lahore, Pakistan');
-  const [companyPhone, setCompanyPhone] = useState('042-37426911');
-  const [companyEmail, setCompanyEmail] = useState('info@probiz-erp.pk');
+  const [companyName, setCompanyName] = useState('Dr Muhammad Raees RPh');
+  const [companyAddress, setCompanyAddress] = useState('House 124, Street 39, I-14/3, Islamabad');
+  const [companyPhone, setCompanyPhone] = useState('0316-8818693');
+  const [companyEmail, setCompanyEmail] = useState('raees.malik89@gmail.com');
   const [currency, setCurrency] = useState('PKR (Rs.)');
   const [taxRate, setTaxRate] = useState('0');
   const [notifications, setNotifications] = useState({ lowStock: true, salesAlert: false, payroll: true });
