@@ -19,7 +19,7 @@ def seed():
 
     # Branches
     branches = [
-        models.Branch(name="Main Branch - Lahore", city="Lahore", address="1 Main Blvd, Gulberg", phone="042-111-222-333"),
+        models.Branch(name="Main Branch - Islamabad", city="Islamabad", address="House 124, Street 39, I-14/3, Islamabad", phone="0316-8818693"),
         models.Branch(name="Karachi Branch", city="Karachi", address="45 Clifton Road", phone="021-111-222-333"),
         models.Branch(name="Islamabad Branch", city="Islamabad", address="F-7 Markaz", phone="051-111-222-333"),
     ]
@@ -28,7 +28,7 @@ def seed():
 
     # Users
     users = [
-        models.User(name="Admin User", email="admin@probiz.pk", hashed_password=get_password_hash("admin123"), role="superadmin", branch_id=branches[0].id),
+        models.User(name="Dr Muhammad Raees RPh", email="raees.malik89@gmail.com", hashed_password=get_password_hash("admin123"), role="superadmin", branch_id=branches[0].id),
         models.User(name="Manager One", email="manager@probiz.pk", hashed_password=get_password_hash("manager123"), role="manager", branch_id=branches[0].id),
         models.User(name="Cashier Ali", email="cashier@probiz.pk", hashed_password=get_password_hash("cashier123"), role="cashier", branch_id=branches[0].id),
         models.User(name="Accountant Sara", email="accountant@probiz.pk", hashed_password=get_password_hash("acc123"), role="accountant", branch_id=branches[0].id),
@@ -171,7 +171,7 @@ def seed():
     db.commit()
     print("Database seeded successfully!")
     print("\nDemo credentials:")
-    print("  Admin:      admin@probiz.pk     / admin123")
+    print("  Admin:      raees.malik89@gmail.com / admin123")
     print("  Manager:    manager@probiz.pk   / manager123")
     print("  Cashier:    cashier@probiz.pk   / cashier123")
     print("  Accountant: accountant@probiz.pk / acc123")

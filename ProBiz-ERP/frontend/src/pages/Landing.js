@@ -288,9 +288,9 @@ export default function Landing() {
             <h2 style={{ fontSize: 38, fontWeight: 800, marginBottom: 16 }}>Get in Touch</h2>
             <p style={{ color: '#64748b', fontSize: 17, lineHeight: 1.7, marginBottom: 40 }}>Ready to transform your business? Contact our team for a free demo and consultation.</p>
             {[
-              [Phone, '042-37426911 to 15', 'Call us anytime'],
-              [Mail, 'info@probiz-erp.pk', 'Email support'],
-              [MapPin, 'Lahore, Pakistan', 'Head Office'],
+              [Phone, '0316-8818693', 'Call us anytime'],
+              [Mail, 'raees.malik89@gmail.com', 'Email support'],
+              [MapPin, 'House 124, Street 39, I-14/3, Islamabad', 'Head Office'],
             ].map(([Icon, value, label]) => (
               <div key={label} style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
                 <div style={{ width: 48, height: 48, background: '#dbeafe', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -335,7 +335,8 @@ export default function Landing() {
             </div>
             <span style={{ color: '#fff', fontWeight: 800, fontSize: 20 }}>ProBiz ERP</span>
           </div>
-          <p style={{ fontSize: 14, marginBottom: 24 }}>Pakistan's most advanced business management system.</p>
+          <p style={{ fontSize: 14, marginBottom: 8 }}>Pakistan's most advanced business management system.</p>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 24 }}>Dr Muhammad Raees RPh &nbsp;|&nbsp; raees.malik89@gmail.com &nbsp;|&nbsp; 0316-8818693</p>
           <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', fontSize: 13, flexWrap: 'wrap', gap: 12 }}>
             <span>© 2024 ProBiz ERP. All rights reserved.</span>
             <span>Made with ❤️ in Pakistan</span>
