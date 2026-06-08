@@ -51,6 +51,9 @@ class ProductCreate(BaseModel):
     stock: float = 0.0
     min_stock: float = 0.0
     max_stock: Optional[float] = None
+    batch_no: Optional[str] = None
+    mfg_date: Optional[str] = None
+    expiry_date: Optional[str] = None
 
 @router.get("/products")
 def get_products(
@@ -84,6 +87,7 @@ def get_products(
             "unit": p.unit, "cost_price": p.cost_price, "sale_price": p.sale_price,
             "wholesale_price": p.wholesale_price, "stock": p.stock,
             "min_stock": p.min_stock, "max_stock": p.max_stock,
+            "batch_no": p.batch_no, "mfg_date": p.mfg_date, "expiry_date": p.expiry_date,
             "low_stock": p.stock <= p.min_stock,
         } for p in products]
     }
