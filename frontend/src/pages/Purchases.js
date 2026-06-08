@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import API from '../api/client';
 import toast from 'react-hot-toast';
-import { Plus, Search, Truck, Trash2, X, Eye } from 'lucide-react';
+import { Plus, Search, Truck, Trash2, X, Eye, Printer } from 'lucide-react';
 
 const Modal = ({ title, onClose, children, wide }) => (
   <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
@@ -181,12 +181,117 @@ export default function Purchases() {
 
       {viewPO && (
         <Modal title={`PO: ${viewPO.po_number}`} onClose={() => setViewPO(null)}>
-          <p style={{ marginBottom: 8 }}><b>Supplier:</b> {viewPO.supplier?.name}</p>
+          {/* PO Header */}
+          <div style={{ background: 'linear-gradient(135deg,#1e40af,#3b82f6)', borderRadius: 12, padding: '16px 20px', marginBottom: 16, color: '#fff' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <div style={{ fontSize: 20, fontWeight: 900 }}>ProBiz ERP</div>
+                <div style={{ fontSize: 11, opacity: 0.8 }}>House 124, Street 39, I-14/3, Islamabad</div>
+                <div style={{ fontSize: 11, opacity: 0.8 }}>📞 0316-8818693</div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: 11, opacity: 0.7, letterSpacing: 2 }}>PURCHASE ORDER</div>
+                <div style={{ fontSize: 16, fontWeight: 800 }}>{viewPO.po_number}</div>
+                <div style={{ fontSize: 11, opacity: 0.8 }}>{viewPO.created_at ? new Date(viewPO.created_at).toLocaleDateString('en-PK') : '-'}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Supplier & Payment Info */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
+            <div style={{ background: '#f8fafc', borderRadius: 8, padding: '12px 14px', borderLeft: '3px solid #1e40af' }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Supplier</div>
+              <div style={{ fontWeight: 700, fontSize: 14 }}>{viewPO.supplier?.name}</div>
+              {viewPO.supplier?.phone && <div style={{ fontSize: 12, color: '#64748b' }}>{viewPO.supplier.phone}</div>}
+              {viewPO.supplier?.city && <div style={{ fontSize: 12, color: '#64748b' }}>{viewPO.supplier.city}</div>}
+            </div>
+            <div style={{ background: '#f8fafc', borderRadius: 8, padding: '12px 14px', borderLeft: '3px solid #10b981' }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Payment</div>
+              <div style={{ fontWeight: 700, fontSize: 14, textTransform: 'capitalize' }}>{(viewPO.payment_method || '').replace('_', ' ')}</div>
+              <span style={{ background: '#d1fae5', color: '#065f46', padding: '2px 8px', borderRadius: 20, fontSize: 11, fontWeight: 700 }}>{viewPO.status?.toUpperCase()}</span>
+            </div>
+          </div>
+
+          {/* Items Table */}
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, marginBottom: 16 }}>
-            <thead><tr style={{ background: '#f8fafc' }}>{['Product', 'Qty', 'Unit Cost', 'Total'].map(h => <th key={h} style={{ padding: '8px', textAlign: 'left', fontWeight: 600 }}>{h}</th>)}</tr></thead>
-            <tbody>{viewPO.items?.map((item, i) => <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}><td style={{ padding: '8px' }}>{item.product_name}</td><td style={{ padding: '8px' }}>{item.quantity}</td><td style={{ padding: '8px' }}>Rs. {item.unit_cost?.toLocaleString()}</td><td style={{ padding: '8px', fontWeight: 600 }}>Rs. {item.total?.toLocaleString()}</td></tr>)}</tbody>
+            <thead><tr style={{ background: '#1e40af', color: '#fff' }}>
+              {['Product', 'Qty', 'Unit Cost', 'Total'].map(h => <th key={h} style={{ padding: '8px 12px', textAlign: h === 'Total' ? 'right' : 'left', fontWeight: 600, fontSize: 12 }}>{h}</th>)}
+            </tr></thead>
+            <tbody>
+              {viewPO.items?.map((item, i) => (
+                <tr key={i} style={{ borderBottom: '1px solid #f1f5f9', background: i % 2 === 0 ? '#fff' : '#f8fafc' }}>
+                  <td style={{ padding: '9px 12px', fontWeight: 600 }}>{item.product_name}</td>
+                  <td style={{ padding: '9px 12px', color: '#64748b' }}>{item.quantity}</td>
+                  <td style={{ padding: '9px 12px' }}>Rs. {item.unit_cost?.toLocaleString()}</td>
+                  <td style={{ padding: '9px 12px', fontWeight: 700, textAlign: 'right' }}>Rs. {item.total?.toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
-          <div style={{ fontWeight: 800, fontSize: 17, color: '#1e40af' }}>TOTAL: Rs. {viewPO.total?.toLocaleString()}</div>
+
+          {/* Totals */}
+          <div style={{ background: '#f8fafc', borderRadius: 10, padding: 16, marginBottom: 4 }}>
+            {viewPO.discount > 0 && <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}><span style={{ color: '#64748b' }}>Discount</span><span style={{ color: '#ef4444' }}>- Rs. {viewPO.discount?.toLocaleString()}</span></div>}
+            {viewPO.tax > 0 && <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}><span style={{ color: '#64748b' }}>Tax</span><span>Rs. {viewPO.tax?.toLocaleString()}</span></div>}
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 900, fontSize: 18, background: '#1e40af', color: '#fff', borderRadius: 8, padding: '10px 14px', marginBottom: 8 }}>
+              <span>TOTAL</span><span>Rs. {viewPO.total?.toLocaleString()}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, fontWeight: 700, background: '#d1fae5', borderRadius: 8, padding: '8px 14px', color: '#065f46' }}>
+              <span>✓ Paid</span><span>Rs. {viewPO.paid?.toLocaleString()}</span>
+            </div>
+            {viewPO.balance > 0 && <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, fontWeight: 700, background: '#fee2e2', borderRadius: 8, padding: '8px 14px', color: '#991b1b', marginTop: 6 }}><span>Balance Due</span><span>Rs. {viewPO.balance?.toLocaleString()}</span></div>}
+          </div>
+
+          {/* Print Button */}
+          <button onClick={() => {
+            const w = window.open('', '_blank');
+            w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"/><title>PO ${viewPO.po_number}</title>
+            <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;color:#1e293b}
+            .page{width:210mm;min-height:297mm;margin:0 auto;padding:20mm}
+            .header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #1e40af;padding-bottom:16px;margin-bottom:24px}
+            .brand{font-size:26px;font-weight:900;color:#1e40af}.sub{font-size:11px;color:#64748b;margin-top:3px}
+            .po-title{text-align:right}.po-title h2{font-size:28px;font-weight:900;color:#1e40af;letter-spacing:2px}
+            .info{display:flex;gap:20px;margin-bottom:24px}.info-box{flex:1;background:#f8fafc;border-radius:8px;padding:14px;border-left:4px solid #1e40af}
+            .info-box h4{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;margin-bottom:6px}
+            .info-box p{font-size:14px;font-weight:600}.info-box span{font-size:12px;color:#64748b}
+            table{width:100%;border-collapse:collapse;margin-bottom:24px}
+            thead tr{background:#1e40af;color:#fff}thead th{padding:10px 14px;text-align:left;font-size:12px;font-weight:700}
+            thead th:last-child{text-align:right}
+            tbody tr:nth-child(even){background:#f8fafc}tbody td{padding:10px 14px;font-size:13px}tbody td:last-child{text-align:right;font-weight:700}
+            .total-box{display:flex;justify-content:flex-end}.totals{width:260px}
+            .t-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid #f1f5f9}
+            .t-row span:first-child{color:#64748b}
+            .t-final{display:flex;justify-content:space-between;padding:12px 14px;background:#1e40af;color:#fff;border-radius:8px;font-size:18px;font-weight:900;margin-top:6px}
+            .t-paid{display:flex;justify-content:space-between;padding:8px 14px;background:#d1fae5;border-radius:8px;font-size:14px;font-weight:700;color:#065f46;margin-top:6px}
+            .t-bal{display:flex;justify-content:space-between;padding:8px 14px;background:#fee2e2;border-radius:8px;font-size:14px;font-weight:700;color:#991b1b;margin-top:4px}
+            .footer{text-align:center;border-top:2px solid #e2e8f0;padding-top:16px;font-size:12px;color:#94a3b8;margin-top:24px}
+            @media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}</style></head>
+            <body><div class="page">
+            <div class="header">
+              <div><div class="brand">ProBiz ERP</div><div class="sub">Advanced Pharmacy & Business Management</div><div class="sub">📍 House 124, Street 39, I-14/3, Islamabad</div><div class="sub">📞 0316-8818693</div></div>
+              <div class="po-title"><h2>PURCHASE ORDER</h2><div style="font-size:14px;font-weight:700;color:#475569;margin-top:4px">${viewPO.po_number}</div><div style="font-size:12px;color:#64748b">${viewPO.created_at ? new Date(viewPO.created_at).toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}</div></div>
+            </div>
+            <div class="info">
+              <div class="info-box"><h4>Supplier</h4><p>${viewPO.supplier?.name || ''}</p><span>${viewPO.supplier?.phone || ''}</span>${viewPO.supplier?.city ? `<br/><span>${viewPO.supplier.city}</span>` : ''}</div>
+              <div class="info-box"><h4>Payment Info</h4><p>${(viewPO.payment_method || 'cash').replace('_', ' ').toUpperCase()}</p><span>Status: ${(viewPO.status || '').toUpperCase()}</span></div>
+            </div>
+            <table>
+              <thead><tr><th>#</th><th>Product</th><th>Unit Cost</th><th>Qty</th><th>Total</th></tr></thead>
+              <tbody>${viewPO.items?.map((item, i) => `<tr><td style="color:#94a3b8">${i + 1}</td><td><strong>${item.product_name}</strong></td><td>Rs. ${item.unit_cost?.toLocaleString()}</td><td>${item.quantity}</td><td>Rs. ${item.total?.toLocaleString()}</td></tr>`).join('')}</tbody>
+            </table>
+            <div class="total-box"><div class="totals">
+              ${viewPO.discount > 0 ? `<div class="t-row"><span>Discount</span><span style="color:#ef4444">- Rs. ${viewPO.discount?.toLocaleString()}</span></div>` : ''}
+              ${viewPO.tax > 0 ? `<div class="t-row"><span>Tax</span><span>Rs. ${viewPO.tax?.toLocaleString()}</span></div>` : ''}
+              <div class="t-final"><span>TOTAL</span><span>Rs. ${viewPO.total?.toLocaleString()}</span></div>
+              <div class="t-paid"><span>✓ Paid</span><span>Rs. ${viewPO.paid?.toLocaleString()}</span></div>
+              ${viewPO.balance > 0 ? `<div class="t-bal"><span>Balance Due</span><span>Rs. ${viewPO.balance?.toLocaleString()}</span></div>` : ''}
+            </div></div>
+            <div class="footer"><p>ProBiz ERP &nbsp;|&nbsp; probiz-erp-poru.vercel.app &nbsp;|&nbsp; Computer-generated document</p></div>
+            </div><script>window.onload=()=>window.print()</script></body></html>`);
+            w.document.close();
+          }} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 18px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, fontSize: 14, cursor: 'pointer', width: '100%', justifyContent: 'center', marginTop: 16 }}>
+            <Printer size={16} /> Print / Save as PDF
+          </button>
         </Modal>
       )}
     </div>
