@@ -79,7 +79,7 @@ const PrintInvoice = ({ sale }) => {
             <div class="invoice-title">
               <h2>INVOICE</h2>
               <div class="inv-no">${sale.invoice_no}</div>
-              <div class="inv-date">${new Date(sale.created_at).toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+              <div class="inv-date">${new Date(sale.created_at).toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Karachi' })}</div>
               <div style="margin-top:6px"><span class="badge">${(sale.status || 'completed').toUpperCase()}</span></div>
             </div>
           </div>
@@ -94,8 +94,8 @@ const PrintInvoice = ({ sale }) => {
             <div class="info-box">
               <h4>Payment Info</h4>
               <p>${(sale.payment_method || 'Cash').replace('_', ' ').toUpperCase()}</p>
-              <span>Date: ${new Date(sale.created_at).toLocaleDateString('en-PK')}</span><br/>
-              <span>Time: ${new Date(sale.created_at).toLocaleTimeString('en-PK')}</span>
+              <span>Date: ${new Date(sale.created_at).toLocaleDateString('en-PK', { timeZone: 'Asia/Karachi' })}</span><br/>
+              <span>Time: ${new Date(sale.created_at).toLocaleTimeString('en-PK', { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit', hour12: true })}</span>
             </div>
           </div>
 
