@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --silent
 COPY . .
-ENV REACT_APP_API_URL=https://web-production-aded4.up.railway.app
+ENV REACT_APP_API_URL=https://raees1989.pythonanywhere.com
 RUN npm run build
 
 FROM node:20-alpine
