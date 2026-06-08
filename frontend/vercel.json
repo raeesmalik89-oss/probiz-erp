@@ -2,7 +2,7 @@
   "buildCommand": "REACT_APP_API_URL=https://raees1989.pythonanywhere.com npm run build",
   "outputDirectory": "build",
   "framework": "create-react-app",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+  "routes": [
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
