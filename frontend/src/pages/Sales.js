@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import API from '../api/client';
 import toast from 'react-hot-toast';
-import { Plus, Search, ShoppingCart, Trash2, X, Eye } from 'lucide-react';
+import { Plus, Search, ShoppingCart, Trash2, X, Eye, Printer } from 'lucide-react';
 
 const Modal = ({ title, onClose, children, wide }) => (
   <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-    <div style={{ background: '#fff', borderRadius: 16, padding: 28, width: '100%', maxWidth: wide ? 800 : 500, maxHeight: '90vh', overflowY: 'auto' }}>
+    <div style={{ background: '#fff', borderRadius: 16, padding: 28, width: '100%', maxWidth: wide ? 800 : 560, maxHeight: '90vh', overflowY: 'auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <h3 style={{ fontWeight: 700, fontSize: 18 }}>{title}</h3>
         <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={20} /></button>
@@ -14,6 +14,146 @@ const Modal = ({ title, onClose, children, wide }) => (
     </div>
   </div>
 );
+
+// ─── Printable Invoice Component ─────────────────────────────────────────────
+const PrintInvoice = ({ sale }) => {
+  const printInvoice = () => {
+    const printWindow = window.open('', '_blank');
+    const content = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8"/>
+        <title>Invoice ${sale.invoice_no}</title>
+        <style>
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          body { font-family: Arial, sans-serif; color: #1e293b; background: #fff; }
+          .page { width: 210mm; min-height: 297mm; margin: 0 auto; padding: 20mm; }
+          .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #1e40af; padding-bottom: 16px; margin-bottom: 24px; }
+          .brand-name { font-size: 28px; font-weight: 900; color: #1e40af; letter-spacing: -1px; }
+          .brand-sub { font-size: 12px; color: #64748b; margin-top: 2px; }
+          .brand-contact { font-size: 11px; color: #475569; margin-top: 4px; }
+          .invoice-title { text-align: right; }
+          .invoice-title h2 { font-size: 32px; font-weight: 900; color: #1e40af; letter-spacing: 2px; }
+          .invoice-title .inv-no { font-size: 14px; color: #475569; margin-top: 4px; font-weight: 700; }
+          .invoice-title .inv-date { font-size: 12px; color: #64748b; margin-top: 2px; }
+          .info-section { display: flex; justify-content: space-between; margin-bottom: 24px; gap: 24px; }
+          .info-box { flex: 1; background: #f8fafc; border-radius: 8px; padding: 14px 16px; border-left: 4px solid #1e40af; }
+          .info-box h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin-bottom: 6px; }
+          .info-box p { font-size: 14px; font-weight: 600; color: #1e293b; margin-bottom: 2px; }
+          .info-box span { font-size: 12px; color: #64748b; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+          thead tr { background: #1e40af; color: #fff; }
+          thead th { padding: 10px 14px; text-align: left; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; }
+          thead th:last-child { text-align: right; }
+          tbody tr { border-bottom: 1px solid #f1f5f9; }
+          tbody tr:nth-child(even) { background: #f8fafc; }
+          tbody td { padding: 10px 14px; font-size: 13px; }
+          tbody td:last-child { text-align: right; font-weight: 700; }
+          .totals { display: flex; justify-content: flex-end; margin-bottom: 24px; }
+          .totals-box { width: 260px; }
+          .totals-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-bottom: 1px solid #f1f5f9; }
+          .totals-row span:first-child { color: #64748b; }
+          .total-final { display: flex; justify-content: space-between; padding: 12px 14px; background: #1e40af; color: #fff; border-radius: 8px; font-size: 18px; font-weight: 900; margin-top: 6px; }
+          .paid-row { display: flex; justify-content: space-between; padding: 8px 14px; background: #d1fae5; border-radius: 8px; font-size: 14px; font-weight: 700; color: #065f46; margin-top: 6px; }
+          .change-row { display: flex; justify-content: space-between; padding: 8px 14px; background: #fff7ed; border-radius: 8px; font-size: 14px; font-weight: 700; color: #92400e; margin-top: 4px; }
+          .footer { text-align: center; border-top: 2px solid #e2e8f0; padding-top: 16px; font-size: 12px; color: #94a3b8; }
+          .footer strong { color: #1e40af; }
+          .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; background: #d1fae5; color: #065f46; }
+          @media print {
+            body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            .page { padding: 10mm; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="page">
+          <div class="header">
+            <div>
+              <div class="brand-name">ProBiz ERP</div>
+              <div class="brand-sub">Advanced Pharmacy & Business Management</div>
+              <div class="brand-contact">📍 House 124, Street 39, I-14/3, Islamabad</div>
+              <div class="brand-contact">📞 0316-8818693 &nbsp;|&nbsp; ✉️ raees.malik89@gmail.com</div>
+            </div>
+            <div class="invoice-title">
+              <h2>INVOICE</h2>
+              <div class="inv-no">${sale.invoice_no}</div>
+              <div class="inv-date">${new Date(sale.created_at).toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+              <div style="margin-top:6px"><span class="badge">${(sale.status || 'completed').toUpperCase()}</span></div>
+            </div>
+          </div>
+
+          <div class="info-section">
+            <div class="info-box">
+              <h4>Bill To</h4>
+              <p>${sale.customer?.name || 'Walk-in Customer'}</p>
+              ${sale.customer?.phone ? `<span>📞 ${sale.customer.phone}</span>` : ''}
+              ${sale.customer?.city ? `<br/><span>📍 ${sale.customer.city}</span>` : ''}
+            </div>
+            <div class="info-box">
+              <h4>Payment Info</h4>
+              <p>${(sale.payment_method || 'Cash').replace('_', ' ').toUpperCase()}</p>
+              <span>Date: ${new Date(sale.created_at).toLocaleDateString('en-PK')}</span><br/>
+              <span>Time: ${new Date(sale.created_at).toLocaleTimeString('en-PK')}</span>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Unit Price</th>
+                <th>Qty</th>
+                ${sale.items?.some(i => i.discount > 0) ? '<th>Discount</th>' : ''}
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${sale.items?.map((item, i) => `
+                <tr>
+                  <td style="color:#94a3b8">${i + 1}</td>
+                  <td><strong>${item.product_name}</strong></td>
+                  <td>Rs. ${item.unit_price?.toLocaleString()}</td>
+                  <td>${item.quantity}</td>
+                  ${sale.items?.some(i => i.discount > 0) ? `<td>Rs. ${item.discount?.toLocaleString() || 0}</td>` : ''}
+                  <td>Rs. ${item.total?.toLocaleString()}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <div class="totals">
+            <div class="totals-box">
+              <div class="totals-row"><span>Subtotal</span><span>Rs. ${sale.subtotal?.toLocaleString()}</span></div>
+              ${sale.discount > 0 ? `<div class="totals-row"><span>Discount</span><span style="color:#ef4444">- Rs. ${sale.discount?.toLocaleString()}</span></div>` : ''}
+              ${sale.tax > 0 ? `<div class="totals-row"><span>Tax</span><span>Rs. ${sale.tax?.toLocaleString()}</span></div>` : ''}
+              <div class="total-final"><span>TOTAL</span><span>Rs. ${sale.total?.toLocaleString()}</span></div>
+              <div class="paid-row"><span>✓ Paid</span><span>Rs. ${sale.paid?.toLocaleString()}</span></div>
+              ${(sale.balance || 0) > 0 ? `<div class="change-row"><span>Balance Due</span><span>Rs. ${sale.balance?.toLocaleString()}</span></div>` : ''}
+              ${(sale.paid - sale.total) > 0 ? `<div class="change-row"><span>Change</span><span>Rs. ${(sale.paid - sale.total)?.toLocaleString()}</span></div>` : ''}
+            </div>
+          </div>
+
+          <div class="footer">
+            <p>Thank you for your business! &nbsp;|&nbsp; <strong>ProBiz ERP</strong> &nbsp;|&nbsp; probiz-erp-poru.vercel.app</p>
+            <p style="margin-top:4px">This is a computer-generated invoice. No signature required.</p>
+          </div>
+        </div>
+        <script>window.onload = () => { window.print(); }</script>
+      </body>
+      </html>
+    `;
+    printWindow.document.write(content);
+    printWindow.document.close();
+  };
+
+  return (
+    <button onClick={printInvoice} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 18px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, fontSize: 14, cursor: 'pointer', width: '100%', justifyContent: 'center', marginTop: 16 }}>
+      <Printer size={16} /> Print / Save as PDF
+    </button>
+  );
+};
 
 export default function Sales() {
   const [sales, setSales] = useState([]);
@@ -75,7 +215,7 @@ export default function Sales() {
   const handleSale = async () => {
     if (cartItems.length === 0) { toast.error('Add at least one product'); return; }
     try {
-      await API.post('/api/sales/', {
+      const res = await API.post('/api/sales/', {
         customer_id: posForm.customer_id || null,
         items: cartItems.map(i => ({ product_id: i.product_id, quantity: i.qty, unit_price: i.price, discount: i.discount || 0 })),
         discount: parseFloat(posForm.discount) || 0,
@@ -87,6 +227,9 @@ export default function Sales() {
       setShowPOS(false);
       setCartItems([]);
       setPosForm({ customer_id: '', discount: 0, tax: 0, paid: 0, payment_method: 'cash' });
+      // Auto-open invoice after sale
+      const detail = await API.get(`/api/sales/${res.data.id}`);
+      setViewSale(detail.data);
       load();
     } catch (e) { toast.error(e.response?.data?.detail || 'Error'); }
   };
@@ -127,7 +270,9 @@ export default function Sales() {
                   <td style={{ padding: '11px 14px' }}><span style={{ background: s.status === 'completed' ? '#d1fae5' : '#fee2e2', color: s.status === 'completed' ? '#065f46' : '#991b1b', padding: '3px 9px', borderRadius: 20, fontSize: 11, fontWeight: 700 }}>{s.status}</span></td>
                   <td style={{ padding: '11px 14px', color: '#64748b', fontSize: 12 }}>{s.created_at ? new Date(s.created_at).toLocaleDateString('en-PK') : '-'}</td>
                   <td style={{ padding: '11px 14px' }}>
-                    <button onClick={async () => { const r = await API.get(`/api/sales/${s.id}`); setViewSale(r.data); }} style={{ padding: '5px', border: '1px solid #e2e8f0', borderRadius: 6, background: '#fff', cursor: 'pointer' }}><Eye size={14} color="#3b82f6" /></button>
+                    <button onClick={async () => { const r = await API.get(`/api/sales/${s.id}`); setViewSale(r.data); }} style={{ padding: '5px 8px', border: '1px solid #e2e8f0', borderRadius: 6, background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: 12 }}>
+                      <Eye size={14} color="#3b82f6" /> View
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -182,7 +327,6 @@ export default function Sales() {
               </div>
             </div>
 
-            {/* Order summary */}
             <div style={{ background: '#f8fafc', borderRadius: 12, padding: 20 }}>
               <h4 style={{ fontWeight: 700, marginBottom: 16 }}>Order Summary</h4>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: 14 }}>
@@ -225,45 +369,71 @@ export default function Sales() {
         </Modal>
       )}
 
-      {/* View sale modal */}
+      {/* View Invoice Modal */}
       {viewSale && (
         <Modal title={`Invoice: ${viewSale.invoice_no}`} onClose={() => setViewSale(null)}>
-          <div style={{ background: '#f8fafc', borderRadius: 10, padding: 16, marginBottom: 16 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, marginBottom: 6 }}>
-              <span style={{ color: '#64748b' }}>Customer</span><span style={{ fontWeight: 600 }}>{viewSale.customer?.name || 'Walk-in'}</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, marginBottom: 6 }}>
-              <span style={{ color: '#64748b' }}>Date</span><span>{viewSale.created_at ? new Date(viewSale.created_at).toLocaleString('en-PK') : '-'}</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
-              <span style={{ color: '#64748b' }}>Payment</span><span style={{ textTransform: 'capitalize' }}>{viewSale.payment_method}</span>
+          {/* Invoice Header */}
+          <div style={{ background: 'linear-gradient(135deg,#1e40af,#3b82f6)', borderRadius: 12, padding: '16px 20px', marginBottom: 16, color: '#fff' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <div style={{ fontSize: 20, fontWeight: 900 }}>ProBiz ERP</div>
+                <div style={{ fontSize: 11, opacity: 0.8 }}>House 124, Street 39, I-14/3, Islamabad</div>
+                <div style={{ fontSize: 11, opacity: 0.8 }}>📞 0316-8818693</div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: 11, opacity: 0.7, letterSpacing: 2 }}>INVOICE</div>
+                <div style={{ fontSize: 16, fontWeight: 800 }}>{viewSale.invoice_no}</div>
+                <div style={{ fontSize: 11, opacity: 0.8 }}>{viewSale.created_at ? new Date(viewSale.created_at).toLocaleDateString('en-PK') : '-'}</div>
+              </div>
             </div>
           </div>
+
+          {/* Customer & Payment Info */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
+            <div style={{ background: '#f8fafc', borderRadius: 8, padding: '12px 14px', borderLeft: '3px solid #1e40af' }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Bill To</div>
+              <div style={{ fontWeight: 700, fontSize: 14 }}>{viewSale.customer?.name || 'Walk-in Customer'}</div>
+              {viewSale.customer?.phone && <div style={{ fontSize: 12, color: '#64748b' }}>{viewSale.customer.phone}</div>}
+            </div>
+            <div style={{ background: '#f8fafc', borderRadius: 8, padding: '12px 14px', borderLeft: '3px solid #10b981' }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Payment</div>
+              <div style={{ fontWeight: 700, fontSize: 14, textTransform: 'capitalize' }}>{(viewSale.payment_method || '').replace('_', ' ')}</div>
+              <span style={{ background: '#d1fae5', color: '#065f46', padding: '2px 8px', borderRadius: 20, fontSize: 11, fontWeight: 700 }}>{viewSale.status?.toUpperCase()}</span>
+            </div>
+          </div>
+
+          {/* Items Table */}
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, marginBottom: 16 }}>
-            <thead><tr style={{ background: '#f1f5f9' }}>
-              {['Product', 'Qty', 'Price', 'Total'].map(h => <th key={h} style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600 }}>{h}</th>)}
+            <thead><tr style={{ background: '#1e40af', color: '#fff' }}>
+              {['Product', 'Qty', 'Price', 'Total'].map(h => <th key={h} style={{ padding: '8px 12px', textAlign: h === 'Total' ? 'right' : 'left', fontWeight: 600, fontSize: 12 }}>{h}</th>)}
             </tr></thead>
             <tbody>
               {viewSale.items?.map((item, i) => (
-                <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '8px 12px' }}>{item.product_name}</td>
-                  <td style={{ padding: '8px 12px' }}>{item.quantity}</td>
-                  <td style={{ padding: '8px 12px' }}>Rs. {item.unit_price?.toLocaleString()}</td>
-                  <td style={{ padding: '8px 12px', fontWeight: 600 }}>Rs. {item.total?.toLocaleString()}</td>
+                <tr key={i} style={{ borderBottom: '1px solid #f1f5f9', background: i % 2 === 0 ? '#fff' : '#f8fafc' }}>
+                  <td style={{ padding: '9px 12px', fontWeight: 600 }}>{item.product_name}</td>
+                  <td style={{ padding: '9px 12px', color: '#64748b' }}>{item.quantity}</td>
+                  <td style={{ padding: '9px 12px' }}>Rs. {item.unit_price?.toLocaleString()}</td>
+                  <td style={{ padding: '9px 12px', fontWeight: 700, textAlign: 'right' }}>Rs. {item.total?.toLocaleString()}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <div style={{ background: '#f8fafc', borderRadius: 10, padding: 16 }}>
-            {[['Subtotal', viewSale.subtotal], ['Discount', viewSale.discount], ['Tax', viewSale.tax]].map(([l, v]) => v > 0 && (
-              <div key={l} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, marginBottom: 6 }}>
-                <span style={{ color: '#64748b' }}>{l}</span><span>Rs. {v?.toLocaleString()}</span>
-              </div>
-            ))}
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: 17, borderTop: '1px solid #e2e8f0', paddingTop: 10 }}>
-              <span>TOTAL</span><span style={{ color: '#1e40af' }}>Rs. {viewSale.total?.toLocaleString()}</span>
+
+          {/* Totals */}
+          <div style={{ background: '#f8fafc', borderRadius: 10, padding: 16, marginBottom: 4 }}>
+            {viewSale.discount > 0 && <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}><span style={{ color: '#64748b' }}>Discount</span><span style={{ color: '#ef4444' }}>- Rs. {viewSale.discount?.toLocaleString()}</span></div>}
+            {viewSale.tax > 0 && <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}><span style={{ color: '#64748b' }}>Tax</span><span>Rs. {viewSale.tax?.toLocaleString()}</span></div>}
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 900, fontSize: 18, background: '#1e40af', color: '#fff', borderRadius: 8, padding: '10px 14px', marginBottom: 8 }}>
+              <span>TOTAL</span><span>Rs. {viewSale.total?.toLocaleString()}</span>
             </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, fontWeight: 700, background: '#d1fae5', borderRadius: 8, padding: '8px 14px', color: '#065f46' }}>
+              <span>✓ Paid</span><span>Rs. {viewSale.paid?.toLocaleString()}</span>
+            </div>
+            {viewSale.balance > 0 && <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, fontWeight: 700, background: '#fee2e2', borderRadius: 8, padding: '8px 14px', color: '#991b1b', marginTop: 6 }}><span>Balance Due</span><span>Rs. {viewSale.balance?.toLocaleString()}</span></div>}
           </div>
+
+          {/* Print Button */}
+          <PrintInvoice sale={viewSale} />
         </Modal>
       )}
     </div>
