@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import API from '../api/client';
+import { formatDate } from '../utils/dateFormat';
 import toast from 'react-hot-toast';
 import { Plus, BookOpen, X, DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
 
@@ -162,7 +163,7 @@ export default function Accounting() {
               {transactions.length === 0 ? <tr><td colSpan={6} style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>No transactions yet</td></tr>
                 : transactions.map(t => (
                   <tr key={t.id} style={{ borderBottom: '1px solid #f8fafc' }}>
-                    <td style={{ padding: '10px 14px', color: '#64748b', fontSize: 12 }}>{t.date ? new Date(t.date).toLocaleDateString('en-PK') : '-'}</td>
+                    <td style={{ padding: '10px 14px', color: '#64748b', fontSize: 12 }}>{t.date ? formatDate(t.date) : '-'}</td>
                     <td style={{ padding: '10px 14px', fontWeight: 600 }}>{t.account}</td>
                     <td style={{ padding: '10px 14px', color: '#475569' }}>{t.description}</td>
                     <td style={{ padding: '10px 14px', color: '#64748b', fontFamily: 'monospace', fontSize: 12 }}>{t.reference || '-'}</td>

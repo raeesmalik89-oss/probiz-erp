@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import API from '../api/client';
+import { formatDate, formatDateTime } from '../utils/dateFormat';
 import toast from 'react-hot-toast';
 import { Plus, Search, ShoppingCart, Trash2, X, Eye, Printer } from 'lucide-react';
 
@@ -268,7 +269,7 @@ export default function Sales() {
                   <td style={{ padding: '11px 14px', color: s.balance > 0 ? '#ef4444' : '#10b981', fontWeight: 600 }}>Rs. {s.balance?.toLocaleString()}</td>
                   <td style={{ padding: '11px 14px' }}><span style={{ background: '#f1f5f9', color: '#475569', padding: '2px 8px', borderRadius: 20, fontSize: 12 }}>{s.payment_method}</span></td>
                   <td style={{ padding: '11px 14px' }}><span style={{ background: s.status === 'completed' ? '#d1fae5' : '#fee2e2', color: s.status === 'completed' ? '#065f46' : '#991b1b', padding: '3px 9px', borderRadius: 20, fontSize: 11, fontWeight: 700 }}>{s.status}</span></td>
-                  <td style={{ padding: '11px 14px', color: '#64748b', fontSize: 12 }}>{s.created_at ? new Date(s.created_at).toLocaleDateString('en-PK') : '-'}</td>
+                  <td style={{ padding: '11px 14px', color: '#64748b', fontSize: 12 }}>{s.created_at ? formatDate(s.created_at) : '-'}</td>
                   <td style={{ padding: '11px 14px' }}>
                     <button onClick={async () => { const r = await API.get(`/api/sales/${s.id}`); setViewSale(r.data); }} style={{ padding: '5px 8px', border: '1px solid #e2e8f0', borderRadius: 6, background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: 12 }}>
                       <Eye size={14} color="#3b82f6" /> View
@@ -383,7 +384,7 @@ export default function Sales() {
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: 11, opacity: 0.7, letterSpacing: 2 }}>INVOICE</div>
                 <div style={{ fontSize: 16, fontWeight: 800 }}>{viewSale.invoice_no}</div>
-                <div style={{ fontSize: 11, opacity: 0.8 }}>{viewSale.created_at ? new Date(viewSale.created_at).toLocaleDateString('en-PK') : '-'}</div>
+                <div style={{ fontSize: 11, opacity: 0.8 }}>{viewSale.created_at ? formatDate(viewSale.created_at) : '-'}</div>
               </div>
             </div>
           </div>

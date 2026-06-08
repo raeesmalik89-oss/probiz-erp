@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import API from '../api/client';
+import { formatDate } from '../utils/dateFormat';
 import toast from 'react-hot-toast';
 import { Plus, Search, Truck, Trash2, X, Eye, Printer } from 'lucide-react';
 
@@ -113,7 +114,7 @@ export default function Purchases() {
                   <td style={{ padding: '11px 14px', color: p.balance > 0 ? '#ef4444' : '#10b981', fontWeight: 600 }}>Rs. {p.balance?.toLocaleString()}</td>
                   <td style={{ padding: '11px 14px' }}><span style={{ background: '#f1f5f9', color: '#475569', padding: '2px 8px', borderRadius: 20, fontSize: 12 }}>{p.payment_method}</span></td>
                   <td style={{ padding: '11px 14px' }}><span style={{ background: '#d1fae5', color: '#065f46', padding: '3px 9px', borderRadius: 20, fontSize: 11, fontWeight: 700 }}>{p.status}</span></td>
-                  <td style={{ padding: '11px 14px', color: '#64748b', fontSize: 12 }}>{p.created_at ? new Date(p.created_at).toLocaleDateString('en-PK') : '-'}</td>
+                  <td style={{ padding: '11px 14px', color: '#64748b', fontSize: 12 }}>{p.created_at ? formatDate(p.created_at) : '-'}</td>
                   <td style={{ padding: '11px 14px' }}>
                     <button onClick={async () => { const r = await API.get(`/api/purchases/${p.id}`); setViewPO(r.data); }} style={{ padding: '5px', border: '1px solid #e2e8f0', borderRadius: 6, background: '#fff', cursor: 'pointer' }}><Eye size={14} color="#3b82f6" /></button>
                   </td>
