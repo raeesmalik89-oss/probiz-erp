@@ -2,14 +2,14 @@ FROM node:20-alpine AS build
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --silent
+RUN npm install --silent
 COPY . .
-ARG REACT_APP_API_URL=http://localhost:8000
-ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ENV REACT_APP_API_URL=https://raees1989.pythonanywhere.com
 RUN npm run build
 
-FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+FROM node:20-alpine
+RUN npm install -g serve
+WORKDIR /app
+COPY --from=build /app/build ./build
+EXPOSE 3000
+CMD ["serve", "-s", "build", "-l", "3000"]

@@ -106,6 +106,9 @@ def get_sale(sale_id: int, db: Session = Depends(get_db), _=Depends(get_current_
             "product_name": i.product.name if i.product else "",
             "quantity": i.quantity, "unit_price": i.unit_price,
             "discount": i.discount, "total": i.total,
+            "batch_no": i.product.batch_no if i.product else None,
+            "mfg_date": i.product.mfg_date if i.product else None,
+            "expiry_date": i.product.expiry_date if i.product else None,
         } for i in s.items]
     }
 

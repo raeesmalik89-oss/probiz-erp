@@ -1,0 +1,12 @@
+{
+  "experimentalServices": {
+    "frontend": {
+      "root": "frontend",
+      "framework": "create-react-app",
+      "buildCommand": "npm run build",
+      "rewrites": [
+        { "source": "/(.*)", "destination": "/index.html" }
+      ]
+    }
+  }
+}
