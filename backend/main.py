@@ -5,12 +5,15 @@ from fastapi.responses import JSONResponse
 from database import engine
 from config import settings
 import models
-from routers import auth, inventory, sales, purchases, accounting, payroll, dashboard, admin
+from routers import auth, inventory, sales, purchases, accounting, payroll, dashboard, admin, subscription, demo_requests
 import time
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+if not settings.SECRET_KEY:
+    raise RuntimeError("SECRET_KEY is not set. Add it to your .env file.")
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -25,7 +28,7 @@ app = FastAPI(
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.origins_list + ["*"],   # tighten in production
+    allow_origins=settings.origins_list if not settings.DEBUG else ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -54,6 +57,8 @@ app.include_router(accounting.router)
 app.include_router(payroll.router)
 app.include_router(dashboard.router)
 app.include_router(admin.router)
+app.include_router(subscription.router)
+app.include_router(demo_requests.router)
 
 @app.get("/")
 def root():

@@ -104,9 +104,12 @@ const PrintInvoice = ({ sale }) => {
               <tr>
                 <th>#</th>
                 <th>Product</th>
+                <th>Batch No.</th>
+                <th>Mfg. Date</th>
+                <th>Expiry Date</th>
                 <th>Unit Price</th>
                 <th>Qty</th>
-                ${sale.items?.some(i => i.discount > 0) ? '<th>Discount</th>' : ''}
+                ${sale.items?.some(i => i.discount > 0) ? '<th>Disc.</th>' : ''}
                 <th>Total</th>
               </tr>
             </thead>
@@ -115,6 +118,9 @@ const PrintInvoice = ({ sale }) => {
                 <tr>
                   <td style="color:#94a3b8">${i + 1}</td>
                   <td><strong>${item.product_name}</strong></td>
+                  <td style="color:#475569">${item.batch_no || '—'}</td>
+                  <td style="color:#475569">${item.mfg_date || '—'}</td>
+                  <td style="color:${item.expiry_date ? '#dc2626' : '#475569'};font-weight:${item.expiry_date ? '700' : '400'}">${item.expiry_date || '—'}</td>
                   <td>Rs. ${item.unit_price?.toLocaleString()}</td>
                   <td>${item.quantity}</td>
                   ${sale.items?.some(i => i.discount > 0) ? `<td>Rs. ${item.discount?.toLocaleString() || 0}</td>` : ''}
@@ -136,9 +142,29 @@ const PrintInvoice = ({ sale }) => {
             </div>
           </div>
 
+          <div style="display:flex;justify-content:space-between;margin-top:32px;margin-bottom:24px;gap:24px">
+            <div style="flex:1;text-align:center">
+              <div style="border-top:2px solid #1e40af;padding-top:8px;margin-top:40px">
+                <div style="font-size:13px;font-weight:700;color:#1e293b">Pharmacist Signature</div>
+                <div style="font-size:11px;color:#64748b;margin-top:2px">Licensed Pharmacist</div>
+              </div>
+            </div>
+            <div style="flex:1;text-align:center">
+              <div style="border-top:2px solid #1e40af;padding-top:8px;margin-top:40px">
+                <div style="font-size:13px;font-weight:700;color:#1e293b">Manager Signature</div>
+                <div style="font-size:11px;color:#64748b;margin-top:2px">Authorized Signatory</div>
+              </div>
+            </div>
+            <div style="flex:1;text-align:center">
+              <div style="border-top:2px solid #1e40af;padding-top:8px;margin-top:40px">
+                <div style="font-size:13px;font-weight:700;color:#1e293b">Customer Signature</div>
+                <div style="font-size:11px;color:#64748b;margin-top:2px">Received By</div>
+              </div>
+            </div>
+          </div>
           <div class="footer">
             <p>Thank you for your business! &nbsp;|&nbsp; <strong>ProBiz ERP</strong> &nbsp;|&nbsp; probiz-erp-poru.vercel.app</p>
-            <p style="margin-top:4px">This is a computer-generated invoice. No signature required.</p>
+            <p style="margin-top:4px;font-size:10px">This is a computer-generated invoice. Valid subject to authorized signatures above.</p>
           </div>
         </div>
         <script>window.onload = () => { window.print(); }</script>

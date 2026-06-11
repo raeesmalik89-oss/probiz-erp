@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import SubscriptionGuard from './SubscriptionGuard';
 import {
   LayoutDashboard, Package, ShoppingCart, Truck, Users, Building2,
   BookOpen, UserCheck, BarChart3, Settings, LogOut, Menu, X,
@@ -118,7 +119,9 @@ export default function Layout() {
 
         {/* Page content */}
         <main style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
-          <Outlet />
+          <SubscriptionGuard>
+            <Outlet />
+          </SubscriptionGuard>
         </main>
       </div>
     </div>

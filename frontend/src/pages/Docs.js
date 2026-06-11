@@ -2,12 +2,93 @@ import React, { useState } from 'react';
 import {
   BookOpen, LayoutDashboard, Package, ShoppingCart, Truck, Users,
   Building2, UserCheck, BarChart3, Settings, Shield, ChevronRight,
-  ChevronDown, Zap, Lock, RefreshCw, Globe, Database, AlertTriangle,
-  CheckCircle, FileText, DollarSign, Clock, Hash, ArrowRight, Search,
-  TrendingUp, Layers
+  Zap, Lock, RefreshCw, Globe, AlertTriangle,
+  CheckCircle, FileText, DollarSign, Clock, Hash, Search,
+  TrendingUp, Layers, Crown, Play, Star, Phone
 } from 'lucide-react';
 
 const sections = [
+  // ─── GETTING STARTED ───────────────────────────────────────────────────────
+  {
+    id: 'start', icon: Play, label: 'Getting Started', color: '#10b981',
+    content: {
+      title: 'Getting Started with ProBiz ERP',
+      subtitle: 'Set up your system in under 30 minutes — follow these steps in order.',
+      body: [
+        {
+          heading: 'Step 1 — Log In',
+          steps: [
+            'Open https://probiz-erp-poru.vercel.app in your browser',
+            'Enter your email and password',
+            'You will land on the Dashboard',
+            'Bookmark the URL so you can access it from any device',
+          ]
+        },
+        {
+          heading: 'Step 2 — Set Up Your Company',
+          steps: [
+            'Go to Settings from the sidebar',
+            'Update Company Name, Address, Phone, and Email',
+            'This information prints on all invoices',
+            'Click "Save All Settings"',
+          ]
+        },
+        {
+          heading: 'Step 3 — Add Your Products',
+          steps: [
+            'Go to Inventory → click "Add Product"',
+            'Enter Product Name, Category, Unit (strips/pcs/kg), Cost Price, Sale Price',
+            'Enter opening stock quantity',
+            'For medicines: add Batch No., Mfg. Date, Expiry Date',
+            'Repeat for all your products',
+          ]
+        },
+        {
+          heading: 'Step 4 — Add Customers & Suppliers',
+          steps: [
+            'Go to Customers → add your regular customers with credit limits',
+            'Go to Suppliers → add your medicine/product suppliers',
+            'Walk-in customers do not need to be added — use "Walk-in Customer" in POS',
+          ]
+        },
+        {
+          heading: 'Step 5 — Start Making Sales',
+          steps: [
+            'Go to Sales / POS → click "New Sale"',
+            'Select customer, add products, enter quantities',
+            'Select payment method (Cash / Credit)',
+            'Click "Complete Sale" — invoice is generated instantly',
+            'Click the print icon to print the invoice',
+          ]
+        },
+        {
+          heading: 'Quick Reference — Login Credentials',
+          table: {
+            headers: ['Role', 'Email', 'Password', 'Access Level'],
+            rows: [
+              ['Superadmin', 'raees.malik89@gmail.com', 'admin123', 'Full access — all modules'],
+              ['Admin', 'admin@probiz.pk', 'admin123', 'All modules except system settings'],
+              ['Manager', 'manager@probiz.pk', 'manager123', 'Inventory, Sales, Purchases, Reports'],
+              ['Cashier', 'cashier@probiz.pk', 'cashier123', 'Sales / POS only'],
+              ['Accountant', 'accountant@probiz.pk', 'acc123', 'Accounting and financial reports'],
+            ]
+          }
+        },
+        {
+          heading: 'Important Tips for First Use',
+          bullets: [
+            'Change your password immediately — go to Settings → Change Password',
+            'Reset demo data before entering real data — Settings → Reset to Clean Demo',
+            'Add product categories first (Medicines, Surgical, Vitamins etc.) then add products',
+            'Set minimum stock levels on every product so low-stock alerts work correctly',
+            'Use Chrome or Edge browser for the best experience',
+          ]
+        }
+      ]
+    }
+  },
+
+  // ─── SYSTEM OVERVIEW ───────────────────────────────────────────────────────
   {
     id: 'overview', icon: Zap, label: 'System Overview', color: '#1e40af',
     content: {
@@ -16,21 +97,21 @@ const sections = [
       body: [
         {
           heading: 'What is ProBiz ERP?',
-          text: `ProBiz ERP is an all-in-one business management platform that connects every part of your business — inventory, sales, purchasing, accounting, HR and payroll — into a single real-time system. Instead of running separate software for each department, everything talks to each other automatically.`
+          text: 'ProBiz ERP is an all-in-one business management platform that connects every part of your business — inventory, sales, purchasing, accounting, HR and payroll — into a single real-time system. Instead of running separate software for each department, everything talks to each other automatically. Built specifically for Pakistani pharmacies, hospitals, cash & carry stores, and wholesale businesses.'
         },
         {
-          heading: 'How it is Advanced',
+          heading: 'Key Capabilities',
           bullets: [
-            'Double-entry accounting engine — every transaction auto-posts to the correct ledger accounts',
+            'Pharmacy-ready — Batch No., Mfg. Date, Expiry Date on every product and invoice',
+            'Double-entry accounting engine — every transaction auto-posts to correct ledger accounts',
             'Real-time inventory — stock levels update instantly on every sale or purchase',
             'Multi-branch architecture — run Islamabad, Lahore, Karachi branches from one dashboard',
-            'Role-based access control — 5 roles with different permissions (superadmin, admin, manager, cashier, accountant)',
-            'JWT authentication — secure access tokens + refresh tokens for session management',
-            'RESTful API — every module exposed via FastAPI, documented at /docs',
-            'Cloud-hosted — accessible from any browser, any device, anywhere in Pakistan',
-            'Automated invoice numbering — INV-YYYYMM-XXXXX format with no gaps',
-            'Profit tracking — cost price vs sale price margin calculated per product and per invoice',
-            'Receivables & Payables — customer credit limits, outstanding balances, aging reports',
+            'Role-based access control — 5 roles with different permissions',
+            'JWT authentication — secure access tokens + refresh tokens',
+            'Cloud-hosted — access from any browser, any device, anywhere in Pakistan',
+            'Professional invoice printing with Pharmacist, Manager & Customer signature lines',
+            'SaaS subscription system — trial, basic, professional, enterprise plans',
+            'Profit tracking — cost vs sale price margin calculated per product and per invoice',
           ]
         },
         {
@@ -43,72 +124,83 @@ const sections = [
               ['Frontend', 'React 18', 'User interface, dashboards, forms'],
               ['Charts', 'Recharts', 'Sales charts, bar graphs, pie charts'],
               ['Auth', 'JWT (jose)', 'Secure login with access + refresh tokens'],
-              ['Hosting', 'Railway (backend)', 'Auto-deploy from GitHub, always online'],
-              ['Hosting', 'Vercel (frontend)', 'Global CDN, free tier, instant deploy'],
+              ['Backend Host', 'PythonAnywhere', 'Python API server, always online'],
+              ['Frontend Host', 'Vercel', 'Global CDN, instant deploy'],
             ]
           }
         },
         {
-          heading: 'Login Credentials',
-          table: {
-            headers: ['Role', 'Email', 'Password'],
-            rows: [
-              ['Superadmin', 'raees.malik89@gmail.com', 'admin123'],
-              ['Manager', 'manager@probiz.pk', 'manager123'],
-              ['Cashier', 'cashier@probiz.pk', 'cashier123'],
-              ['Accountant', 'accountant@probiz.pk', 'acc123'],
-            ]
-          }
+          heading: 'How Modules Connect',
+          bullets: [
+            'Sale completed → stock decreases → accounting journal entry created → dashboard updates',
+            'Purchase received → stock increases → supplier payable increases → accounting entry created',
+            'Payroll processed → employee salary expense recorded in accounting automatically',
+            'Credit sale → customer receivable balance increases → shows in receivables report',
+            'Credit purchase → supplier payable balance increases → shows in payables report',
+          ]
         }
       ]
     }
   },
+
+  // ─── DASHBOARD ─────────────────────────────────────────────────────────────
   {
     id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', color: '#3b82f6',
     content: {
       title: 'Dashboard',
-      subtitle: 'Real-time business overview at a glance.',
+      subtitle: 'Real-time business overview — everything important at one glance.',
       body: [
         {
-          heading: 'What you see on the Dashboard',
-          bullets: [
-            "Today's Sales — total revenue from all completed sales today",
-            'Month Revenue — cumulative sales for the current calendar month',
-            'Total Products — number of products in inventory with low-stock alert count',
-            'Customers — total customer accounts with total outstanding receivables',
-            'Suppliers — total suppliers with total outstanding payables',
-            'Employees — number of active staff members',
-          ]
+          heading: 'KPI Cards (Top Row)',
+          table: {
+            headers: ['Card', 'What it Shows'],
+            rows: [
+              ["Today's Sales", 'Total revenue from all completed sales today'],
+              ['Month Revenue', 'Cumulative sales for the current calendar month'],
+              ['Total Products', 'Number of products in inventory + low-stock alert count'],
+              ['Customers', 'Total customer accounts with total outstanding receivables (Rs.)'],
+              ['Suppliers', 'Total suppliers with total outstanding payables (Rs.)'],
+              ['Employees', 'Number of active staff members'],
+            ]
+          }
         },
         {
           heading: 'Charts',
           bullets: [
             'Sales — Last 7 Days: Area chart showing daily sales trend for the past week',
             'Top Products: Pie chart of best-selling products by revenue this month',
-            'Sales vs Purchases (6 Months): Bar chart comparing monthly sales and purchase totals',
+            'Sales vs Purchases (6 Months): Bar chart comparing monthly totals side by side',
             'Recent Sales: Live table of the latest invoices with customer, amount and status',
           ]
         },
         {
           heading: 'Low Stock Alerts',
-          text: 'If any product falls below its minimum stock level, a yellow warning panel appears at the bottom of the dashboard showing the product name, current stock, and minimum threshold. This lets you reorder before you run out.'
+          text: 'When any product falls below its minimum stock level, a yellow warning panel appears at the bottom of the dashboard showing the product name, current stock, and minimum threshold. Click on a product to go directly to its edit form and update the stock or reorder.'
+        },
+        {
+          heading: 'Data Refresh',
+          text: 'Dashboard data loads fresh every time you open it. To see the very latest numbers after making a sale, click the Dashboard link in the sidebar again to force a reload.'
         }
       ]
     }
   },
+
+  // ─── INVENTORY ─────────────────────────────────────────────────────────────
   {
     id: 'inventory', icon: Package, label: 'Inventory', color: '#10b981',
     content: {
       title: 'Inventory Management',
-      subtitle: 'Track every product, category and stock movement in real time.',
+      subtitle: 'Track every product, category, batch number and stock movement in real time.',
       body: [
         {
           heading: 'Adding a Product',
           steps: [
             'Go to Inventory from the sidebar',
             'Click the "Add Product" button (top right)',
-            'Fill in: Name, SKU (unique code), Category, Unit, Cost Price, Sale Price, Opening Stock, Minimum Stock',
-            'Save — the product is immediately available in POS and Purchase Order screens',
+            'Fill in Name, SKU (unique code), Category, Unit, Cost Price, Sale Price',
+            'Enter Opening Stock and Minimum Stock (alert threshold)',
+            'For medicines/pharmacy: fill in Batch No., Mfg. Date, Expiry Date',
+            'Click Save — the product is immediately available in POS',
           ]
         },
         {
@@ -116,82 +208,118 @@ const sections = [
           table: {
             headers: ['Field', 'Description', 'Example'],
             rows: [
-              ['SKU', 'Unique product code for quick lookup', 'MED001'],
-              ['Unit', 'How the product is measured/sold', 'strips, pcs, kg, box'],
-              ['Cost Price', 'What you paid to the supplier (Rs.)', 'Rs. 80'],
+              ['Name', 'Full product name', 'Panadol 500mg'],
+              ['SKU', 'Unique product code for quick lookup', 'MED-001'],
+              ['Barcode', 'Product barcode (optional, must be unique)', '6281234567890'],
+              ['Category', 'Product group for filtering and reports', 'Medicines'],
+              ['Unit', 'How the product is measured or sold', 'strips, pcs, kg, box'],
+              ['Cost Price', 'What you paid the supplier (Rs.)', 'Rs. 80'],
               ['Sale Price', 'What you charge the customer (Rs.)', 'Rs. 100'],
               ['Stock', 'Current quantity in stock', '50'],
               ['Min Stock', 'Alert threshold — warns when stock drops below this', '10'],
+              ['Batch No.', 'Manufacturer batch/lot number for traceability', 'B-2024-P01'],
+              ['Mfg. Date', 'Manufacturing date', '2024-01-15'],
+              ['Expiry Date', 'Expiry date — shown in red on invoices if set', '2026-06-01'],
             ]
           }
         },
         {
+          heading: 'Batch & Expiry Tracking (Pharmacy)',
+          bullets: [
+            'Every product can have a Batch No., Mfg. Date, and Expiry Date',
+            'These appear on printed invoices for full traceability',
+            'Expiry dates are shown in red bold on invoices as a visual alert',
+            'Helps with medicine recalls — you can find which customers received a specific batch',
+            'Keeps you compliant with DRAP (Drug Regulatory Authority Pakistan) requirements',
+          ]
+        },
+        {
           heading: 'How Stock Updates Automatically',
           bullets: [
-            'When a sale is made → stock decreases by the sold quantity instantly',
-            'When a purchase is received → stock increases by the received quantity instantly',
+            'Sale completed → stock decreases by sold quantity instantly',
+            'Purchase received → stock increases by received quantity instantly',
             'No manual stock adjustment needed for normal buy/sell operations',
-            'Low stock alert fires on dashboard when stock < min_stock',
+            'Low stock alert fires on dashboard when current stock < minimum stock',
           ]
         },
         {
           heading: 'Categories',
-          text: 'Products are organized into categories (Medicines, Surgical, Cosmetics, Vitamins etc.). You can filter the product list by category for faster searching. Categories also help in reports — you can see which category contributes most to revenue.'
+          text: 'Organize products into categories (Medicines, Surgical, Cosmetics, Vitamins, Baby Care etc.). Filter the product list by category for faster searching. Reports show revenue breakdown by category so you know which lines are most profitable.'
+        },
+        {
+          heading: 'Searching Products',
+          text: 'Use the search bar at the top of the Inventory page. You can search by product name, SKU, or barcode. Results appear instantly as you type — no need to press Enter.'
         }
       ]
     }
   },
+
+  // ─── SALES / POS ───────────────────────────────────────────────────────────
   {
     id: 'sales', icon: ShoppingCart, label: 'Sales / POS', color: '#f59e0b',
     content: {
-      title: 'Sales & Point of Sale',
-      subtitle: 'Process sales, generate invoices, track payments and manage customer credit.',
+      title: 'Sales & Point of Sale (POS)',
+      subtitle: 'Process sales, generate invoices, track payments and print professional receipts.',
       body: [
         {
           heading: 'Creating a Sale',
           steps: [
             'Go to Sales / POS from the sidebar',
             'Click "New Sale"',
-            'Select or search customer (or use "Walk-in Customer" for cash sales)',
-            'Add products by searching and entering quantity',
-            'Apply discount if any (per item or overall)',
+            'Select customer (or use "Walk-in Customer" for cash sales)',
+            'Search for products and enter quantity for each item',
+            'Apply discount if any (enter discount amount)',
             'Select payment method: Cash, Card, Bank Transfer, or Credit',
-            'Click Complete Sale — invoice is generated instantly',
+            'Click "Complete Sale" — invoice is generated instantly',
           ]
         },
         {
           heading: 'Invoice Numbering',
-          text: 'Every invoice gets a unique number in the format INV-YYYYMM-NNNNN (e.g. INV-202606-00001). This makes it easy to reference any invoice by date and sequence. Numbers never repeat or have gaps.'
+          text: 'Every invoice gets a unique number: INV-YYYYMM-NNNNN (e.g. INV-202606-00001). Numbers are sequential, never repeat and never have gaps — required for proper accounting records.'
         },
         {
           heading: 'Payment Methods',
           table: {
-            headers: ['Method', 'How it works'],
+            headers: ['Method', 'How it works', 'Balance after sale'],
             rows: [
-              ['Cash', 'Full payment received immediately. Balance = 0.'],
-              ['Card', 'Full payment by debit/credit card. Balance = 0.'],
-              ['Bank Transfer', 'Payment via bank. Balance = 0.'],
-              ['Credit', 'Sale on credit — added to customer receivables. Balance = full amount until paid.'],
+              ['Cash', 'Full payment received in cash immediately', 'Rs. 0 — fully paid'],
+              ['Card', 'Payment by debit or credit card', 'Rs. 0 — fully paid'],
+              ['Bank Transfer', 'Payment via online bank transfer', 'Rs. 0 — fully paid'],
+              ['Credit', 'Sale on credit — added to customer receivables', 'Full amount outstanding until paid'],
             ]
           }
         },
         {
-          heading: 'Sales on Credit',
-          text: 'If you select Credit as the payment method, the sale is recorded but the amount is added to the customer\'s outstanding balance. The customer\'s credit limit is checked — if they exceed it, a warning is shown. You can record partial payments against credit invoices later.'
+          heading: 'Invoice Printing — Pharmacy Format',
+          bullets: [
+            'Click the print icon (🖨️) on any completed invoice',
+            'Invoice shows: Business name, address, phone, invoice number, date',
+            'Product table includes: Name, Batch No., Mfg. Date, Expiry Date, Qty, Price, Total',
+            'Expiry dates shown in red bold as a safety alert',
+            'Three signature lines at the bottom: Pharmacist / Licensed Pharmacist, Manager / Authorized Signatory, Customer / Received By',
+            'Print-optimized layout — sidebar and headers are hidden automatically',
+          ]
         },
         {
-          heading: 'What Happens Behind the Scenes',
+          heading: 'Sales on Credit',
+          text: "When you select Credit as payment method, the sale is recorded but the full amount is added to the customer's outstanding balance. The system checks the customer's credit limit — if exceeded, a warning is shown. You can record payments against credit invoices from the customer's profile."
+        },
+        {
+          heading: 'What Happens Automatically',
           bullets: [
             'Stock of each sold product decreases immediately',
-            'Invoice is saved with all line items, prices, discounts and totals',
-            'If Credit: customer receivable balance increases',
-            'Profit margin is calculated (sale price − cost price × quantity)',
-            'Dashboard charts and stats update in real time',
+            'Invoice saved with all line items, prices, discounts and totals',
+            'Credit sale: customer receivable balance increases',
+            'Profit margin calculated: (sale price − cost price) × quantity',
+            'Accounting journal entry created automatically',
+            'Dashboard charts and KPIs update in real time',
           ]
         }
       ]
     }
   },
+
+  // ─── PURCHASES ─────────────────────────────────────────────────────────────
   {
     id: 'purchases', icon: Truck, label: 'Purchases', color: '#8b5cf6',
     content: {
@@ -203,10 +331,11 @@ const sections = [
           steps: [
             'Go to Purchases from the sidebar',
             'Click "New Purchase"',
-            'Select supplier',
-            'Add products and quantities being ordered',
-            'Enter cost prices (may differ from stock cost price)',
-            'Select payment method — Cash means paid now, Credit means payable later',
+            'Select the supplier',
+            'Add products and quantities being ordered/received',
+            'Enter cost prices for this purchase',
+            'Select payment method: Cash (paid now) or Credit (payable later)',
+            'Add notes if needed (e.g. invoice number from supplier)',
             'Save the purchase',
           ]
         },
@@ -214,120 +343,158 @@ const sections = [
           heading: 'What Happens When Purchase is Saved',
           bullets: [
             'Stock of each purchased product increases immediately',
-            'If Credit: supplier payable balance increases',
-            'Purchase order gets a PO number (PO-YYYYMM-NNNNN)',
-            'Cost prices can optionally update product cost prices for future margin calculations',
+            'Credit purchase: supplier payable balance increases',
+            'Purchase order gets a unique PO number (PO-YYYYMM-NNNNN)',
+            'Accounting journal entry created automatically (Inventory Dr / Cash or Payable Cr)',
           ]
         },
         {
           heading: 'Payables Tracking',
-          text: 'All credit purchases are tracked as Accounts Payable. You can see the total amount owed to each supplier on the Suppliers page. When you pay a supplier, you record the payment which reduces the payable balance.'
+          text: 'All credit purchases are tracked as Accounts Payable. You can see the total amount owed to each supplier on the Suppliers page. When you pay a supplier, record the payment to reduce the payable balance and create the correct journal entry.'
+        },
+        {
+          heading: 'Purchase History',
+          text: 'All purchase orders are listed with date, supplier, amount, payment status, and items received. Filter by date range or supplier to find any historical purchase.'
         }
       ]
     }
   },
+
+  // ─── CUSTOMERS ─────────────────────────────────────────────────────────────
   {
     id: 'customers', icon: Users, label: 'Customers', color: '#ef4444',
     content: {
       title: 'Customer Management',
-      subtitle: 'Maintain customer accounts, credit limits and payment history.',
+      subtitle: 'Maintain customer accounts, credit limits, outstanding balances and purchase history.',
       body: [
         {
           heading: 'Customer Fields',
           table: {
-            headers: ['Field', 'Description'],
+            headers: ['Field', 'Description', 'Example'],
             rows: [
-              ['Name', 'Full name of customer or business'],
-              ['Phone', 'Contact number'],
-              ['Email', 'Email address (optional)'],
-              ['City', 'City for delivery/records'],
-              ['Credit Limit', 'Maximum credit allowed (Rs.). 0 = no credit.'],
-              ['Balance', 'Current outstanding amount owed by customer'],
+              ['Name', 'Full name of customer or business', 'Ahmad Medical Store'],
+              ['Phone', 'Contact number', '0321-1234567'],
+              ['Email', 'Email address (optional)', 'ahmad@gmail.com'],
+              ['City', 'City for delivery and records', 'Islamabad'],
+              ['Credit Limit', 'Maximum credit allowed (Rs.). Set 0 for no credit.', 'Rs. 50,000'],
+              ['Balance', 'Current outstanding amount owed — auto-calculated', 'Rs. 12,500'],
             ]
           }
         },
         {
           heading: 'Credit Management',
           bullets: [
-            'Each customer has a credit limit you set',
-            'When a sale on credit is made, the balance increases',
-            'When payment is received, balance decreases',
-            'If a new credit sale would exceed the limit, a warning appears',
+            'Each customer has a credit limit you set when adding them',
+            'When a credit sale is made, their outstanding balance increases',
+            'When they make a payment, the balance decreases',
+            'If a new credit sale would exceed their limit, a warning is shown',
+            'You can still override and allow the sale if needed',
             'Receivables report shows all customers with outstanding balances',
           ]
         },
         {
           heading: 'Customer Purchase History',
-          text: 'Every invoice linked to a customer is visible in their record. You can see total purchases, total paid, and outstanding balance at any time.'
+          text: 'Every invoice linked to a customer is visible in their record. You can see total purchases, total paid, and outstanding balance at any time. This is useful when a customer disputes a balance — you can show them exactly which invoices are unpaid.'
+        },
+        {
+          heading: 'Walk-in Customers',
+          text: 'For cash sales to customers you do not track, simply select "Walk-in Customer" in the POS. No customer account is needed. The sale is recorded as a cash transaction with no receivable.'
         }
       ]
     }
   },
+
+  // ─── SUPPLIERS ─────────────────────────────────────────────────────────────
   {
     id: 'suppliers', icon: Building2, label: 'Suppliers', color: '#0ea5e9',
     content: {
       title: 'Supplier Management',
-      subtitle: 'Track all your suppliers, purchases and outstanding payables.',
+      subtitle: 'Track all your suppliers, purchase history and outstanding payables.',
       body: [
         {
           heading: 'Supplier Fields',
           table: {
             headers: ['Field', 'Description'],
             rows: [
-              ['Company Name', 'Supplier business name'],
+              ['Company Name', 'Supplier / distributor business name'],
               ['Contact Person', 'Main contact at the supplier'],
-              ['Phone / Email', 'Contact details'],
+              ['Phone / Email', 'Contact details for ordering and queries'],
               ['City', 'Supplier location'],
-              ['Balance', 'Amount currently owed to this supplier'],
+              ['Balance', 'Amount currently owed to this supplier (auto-calculated)'],
+              ['Notes', 'Any additional info — payment terms, minimum order etc.'],
             ]
           }
         },
         {
-          heading: 'Payables Tracking',
-          text: 'Every credit purchase from a supplier increases their payable balance. Record payments to reduce the balance. The Suppliers list shows total payable at a glance so you know who to pay first.'
+          heading: 'Payables Management',
+          text: 'Every credit purchase from a supplier increases their payable balance. When you pay the supplier, record the payment in the system to reduce the balance. The Suppliers list shows total payable at a glance so you always know who to pay and how much.'
+        },
+        {
+          heading: 'Supplier Purchase History',
+          text: 'View all purchases made from a supplier — dates, amounts, what was ordered, and payment status. Useful for checking delivery frequency, negotiating better prices, or resolving disputes.'
         }
       ]
     }
   },
+
+  // ─── ACCOUNTING ────────────────────────────────────────────────────────────
   {
     id: 'accounting', icon: BookOpen, label: 'Accounting', color: '#f97316',
     content: {
       title: 'Accounting Module',
-      subtitle: 'Double-entry bookkeeping, chart of accounts, and financial statements.',
+      subtitle: 'Double-entry bookkeeping, chart of accounts, journal entries and financial statements.',
       body: [
         {
-          heading: 'Chart of Accounts',
-          text: 'ProBiz uses a standard chart of accounts with 5 account types. Every financial transaction is recorded against two accounts (debit and credit) following double-entry bookkeeping principles — the cornerstone of professional accounting.'
+          heading: 'What is Double-Entry Accounting?',
+          text: 'Every financial transaction affects two accounts — one is debited and one is credited for the same amount. This ensures the books always balance (Assets = Liabilities + Equity). ProBiz automatically creates the correct journal entries for every sale, purchase and payment — you do not need to do this manually.'
         },
         {
           heading: 'Account Types',
           table: {
             headers: ['Type', 'Examples', 'Normal Balance'],
             rows: [
-              ['Asset', 'Cash, Bank, Inventory, Receivables', 'Debit'],
-              ['Liability', 'Accounts Payable, Loans', 'Credit'],
+              ['Asset', 'Cash, Bank, Inventory, Accounts Receivable', 'Debit'],
+              ['Liability', 'Accounts Payable, Loans Payable', 'Credit'],
               ['Equity', "Owner's Equity, Retained Earnings", 'Credit'],
               ['Income', 'Sales Revenue, Other Income', 'Credit'],
-              ['Expense', 'Cost of Goods Sold, Salaries, Rent', 'Debit'],
+              ['Expense', 'Cost of Goods Sold, Salaries, Rent, Utilities', 'Debit'],
             ]
           }
         },
         {
-          heading: 'Journal Entries',
-          text: 'Every sale, purchase, and payment automatically generates the correct journal entries. For example, a cash sale of Rs. 1,000 auto-creates: Debit Cash Rs. 1,000 / Credit Sales Revenue Rs. 1,000. You can also create manual journal entries for adjustments, depreciation, etc.'
+          heading: 'Automatic Journal Entries',
+          table: {
+            headers: ['Transaction', 'Debit', 'Credit'],
+            rows: [
+              ['Cash Sale Rs. 1,000', 'Cash Rs. 1,000', 'Sales Revenue Rs. 1,000'],
+              ['Credit Sale Rs. 1,000', 'Accounts Receivable Rs. 1,000', 'Sales Revenue Rs. 1,000'],
+              ['Cash Purchase Rs. 500', 'Inventory Rs. 500', 'Cash Rs. 500'],
+              ['Credit Purchase Rs. 500', 'Inventory Rs. 500', 'Accounts Payable Rs. 500'],
+              ['Customer Payment Rs. 1,000', 'Cash Rs. 1,000', 'Accounts Receivable Rs. 1,000'],
+              ['Supplier Payment Rs. 500', 'Accounts Payable Rs. 500', 'Cash Rs. 500'],
+            ]
+          }
+        },
+        {
+          heading: 'Manual Journal Entries',
+          text: 'For adjustments, depreciation, owner drawings or any non-standard transactions, you can create manual journal entries. Go to Accounting → Journal Entries → New Entry. Select debit account, credit account, amount, and description.'
         },
         {
           heading: 'Financial Reports Available',
           bullets: [
-            'Trial Balance — all account balances to verify books are balanced',
-            'Profit & Loss Statement — income minus expenses for any period',
-            'Balance Sheet — assets, liabilities and equity at any date',
-            'General Ledger — full transaction history for any account',
+            'Trial Balance — all account balances side by side to verify books are balanced',
+            'Profit & Loss Statement — total income minus total expenses for any period',
+            'Balance Sheet — snapshot of all assets, liabilities and equity at any date',
+            'General Ledger — full transaction history for any single account',
+            'Accounts Receivable Aging — who owes you money and for how long',
+            'Accounts Payable Aging — who you owe money to and for how long',
           ]
         }
       ]
     }
   },
+
+  // ─── PAYROLL ───────────────────────────────────────────────────────────────
   {
     id: 'payroll', icon: UserCheck, label: 'HR & Payroll', color: '#6366f1',
     content: {
@@ -335,81 +502,223 @@ const sections = [
       subtitle: 'Employee management, attendance tracking and automated payslip generation.',
       body: [
         {
-          heading: 'Employee Setup',
+          heading: 'Setting Up an Employee',
           steps: [
-            'Go to HR & Payroll',
-            'Add Employee — enter name, employee ID, department, designation',
-            'Set Basic Salary, Allowances and Deductions',
+            'Go to HR & Payroll from the sidebar',
+            'Click "Add Employee"',
+            'Enter: Full Name, Employee ID, Department, Designation, Phone, CNIC',
+            'Set Basic Salary, Allowances (house rent, medical, transport), Deductions (EOBI, tax)',
             'Assign to a branch',
-            'Mark as Active',
+            'Set Join Date and mark as Active',
+            'Save',
           ]
         },
         {
           heading: 'Salary Structure',
           table: {
-            headers: ['Component', 'Description'],
+            headers: ['Component', 'Description', 'Example'],
             rows: [
-              ['Basic Salary', 'Fixed monthly base pay'],
-              ['Allowances', 'House rent, transport, medical etc.'],
-              ['Deductions', 'EOBI, income tax, loan repayment etc.'],
-              ['Net Salary', 'Basic + Allowances − Deductions'],
+              ['Basic Salary', 'Fixed monthly base pay agreed with employee', 'Rs. 25,000'],
+              ['Allowances', 'House rent, transport, medical, other benefits', 'Rs. 8,000'],
+              ['Deductions', 'EOBI contribution, income tax, loan repayment', 'Rs. 1,200'],
+              ['Net Salary', 'Basic + Allowances − Deductions = amount to pay', 'Rs. 31,800'],
             ]
           }
         },
         {
-          heading: 'Payroll Processing',
+          heading: 'Processing Monthly Payroll',
           steps: [
-            'Go to HR & Payroll → Process Payroll',
+            'Go to HR & Payroll → click "Process Payroll"',
             'Select the month and year',
             'System calculates net salary for every active employee automatically',
-            'Review and confirm — payslips are generated for all employees',
-            'Payslips can be printed or shared with employees',
+            'Review the payroll summary — make adjustments if needed',
+            'Confirm and generate — payslips are created for all employees',
+            'Print payslips for each employee',
           ]
         },
         {
-          heading: 'Attendance',
-          text: 'Mark daily attendance for each employee (Present, Absent, Half Day, Leave). Attendance records are linked to payroll — absent days can be deducted from salary based on your policy.'
+          heading: 'Attendance Tracking',
+          text: 'Mark daily attendance for each employee: Present, Absent, Half Day, or Leave. Attendance records are stored per employee per day. Absent days can be used to calculate salary deductions for the month based on your company policy.'
+        },
+        {
+          heading: 'Departments',
+          text: 'Organize employees into departments (Pharmacy, Management, Accounts, Delivery etc.). Each department can be linked to a branch. Department-level payroll reports show total salary cost per department.'
         }
       ]
     }
   },
+
+  // ─── REPORTS ───────────────────────────────────────────────────────────────
   {
     id: 'reports', icon: BarChart3, label: 'Reports', color: '#ec4899',
     content: {
       title: 'Reports & Analytics',
-      subtitle: 'Every business metric you need, generated instantly.',
+      subtitle: 'Every business metric you need — generated instantly for any date range.',
       body: [
         {
           heading: 'Available Reports',
           table: {
-            headers: ['Report', 'What it shows'],
+            headers: ['Report', 'What it Shows', 'Key Filters'],
             rows: [
-              ['Sales Report', 'All invoices filtered by date range, customer, status'],
-              ['Purchase Report', 'All purchase orders filtered by date, supplier'],
-              ['Inventory Report', 'Current stock levels, low stock, stock valuation'],
-              ['Profit & Loss', 'Revenue, cost of goods, gross/net profit for a period'],
-              ['Balance Sheet', 'Assets, liabilities, equity snapshot'],
-              ['Receivables Report', 'Customers with outstanding balances and aging'],
-              ['Payables Report', 'Suppliers with outstanding payables and aging'],
-              ['Payroll Report', 'Monthly payroll summary per employee'],
-              ['Top Products', 'Best selling products by quantity and revenue'],
-              ['Sales by Customer', 'Revenue breakdown per customer'],
+              ['Sales Report', 'All invoices with customer, items, amounts, status', 'Date range, customer, payment method'],
+              ['Purchase Report', 'All purchase orders with supplier, items, amounts', 'Date range, supplier'],
+              ['Inventory Report', 'Current stock levels, value, low stock warnings', 'Category, low stock filter'],
+              ['Profit & Loss', 'Revenue minus costs = gross and net profit', 'Date range (month / year)'],
+              ['Balance Sheet', 'Assets, liabilities and equity snapshot', 'As of any date'],
+              ['Summary Report', 'Total sales, purchases, profit overview in one view', 'Date range'],
+              ['Receivables', 'Customers with outstanding balances and aging', 'Overdue filter'],
+              ['Payables', 'Suppliers with outstanding payables and aging', 'Overdue filter'],
+              ['Payroll Report', 'Monthly salary summary per employee', 'Month / year'],
+              ['Top Products', 'Best selling products by quantity and revenue', 'Date range'],
             ]
           }
         },
         {
-          heading: 'Date Range Filtering',
-          text: 'All reports can be filtered by custom date range — today, this week, this month, this year, or any custom from/to dates. This lets you generate reports for any time period your accountant or auditor requires.'
+          heading: 'Profit & Loss Statement',
+          bullets: [
+            'Total Revenue — sum of all sales for the period',
+            'Cost of Goods Sold — total cost price of all items sold',
+            'Gross Profit — Revenue minus Cost of Goods Sold',
+            'Operating Expenses — salaries, rent, utilities etc.',
+            'Net Profit — Gross Profit minus Operating Expenses',
+            'Print as PDF — optimized print layout with full page formatting',
+          ]
         },
         {
-          heading: 'Export',
-          text: 'Reports can be printed directly from the browser (File → Print → Save as PDF). Full CSV/Excel export feature is on the roadmap for the next version.'
+          heading: 'Summary Report',
+          text: 'The Summary Report gives you a complete business snapshot: total sales amount, total purchases, total profit, number of invoices, top customers, and top products — all in one screen with date range filtering. Ideal for daily or weekly review meetings.'
+        },
+        {
+          heading: 'Printing Reports',
+          text: 'Every report has a Print button. The print layout hides the sidebar and navigation for a clean output. Use your browser\'s Print function (Ctrl+P) to save as PDF or print to paper. Reports are formatted to fit on A4 pages.'
         }
       ]
     }
   },
+
+  // ─── SUBSCRIPTION ──────────────────────────────────────────────────────────
   {
-    id: 'security', icon: Shield, label: 'Security & Roles', color: '#64748b',
+    id: 'subscription', icon: Crown, label: 'Subscription & Plans', color: '#f59e0b',
+    content: {
+      title: 'Subscription & Plans',
+      subtitle: 'Free trial, plan activation, and how the billing system works.',
+      body: [
+        {
+          heading: 'Free Trial',
+          text: 'Every new ProBiz installation starts with a 14-day free trial. You get full access to all features — no credit card required, no limitations. The trial banner at the top of the screen shows how many days remain. When the trial ends, the system shows a paywall — you need to activate a paid plan to continue.'
+        },
+        {
+          heading: 'Available Plans',
+          table: {
+            headers: ['Plan', 'Price', 'Branches', 'Users', 'Best For'],
+            rows: [
+              ['Free Trial', 'Free / 14 days', '1', '3', 'Evaluation and testing'],
+              ['Basic', 'Rs. 2,500/month', '1', '3', 'Single pharmacy or small shop'],
+              ['Professional', 'Rs. 5,000/month', '3', '10', 'Clinic + pharmacy, small chain'],
+              ['Enterprise', 'Rs. 15,000/month', 'Unlimited', 'Unlimited', 'Hospital, large wholesale, chain stores'],
+            ]
+          }
+        },
+        {
+          heading: 'How to Activate a Plan',
+          steps: [
+            'Contact us: WhatsApp 0316-8818693 or raees.malik89@gmail.com',
+            'Tell us which plan you want and for how many months',
+            'Make payment via JazzCash / EasyPaisa / Bank Transfer',
+            'Send payment screenshot on WhatsApp',
+            'We activate your plan within minutes — system unlocks immediately',
+          ]
+        },
+        {
+          heading: 'For System Administrators (Superadmin)',
+          bullets: [
+            'Go to Settings → Subscription Management to see the current plan status',
+            'Dashboard shows: plan name, days remaining, expiry date, max users',
+            'Activate Paid Plan: select plan and months → click Activate',
+            'Extend Free Trial: add 3, 7, 14, or 30 extra days for evaluation',
+            'Demo Requests: see all leads from the landing page, mark as contacted or activated',
+          ]
+        },
+        {
+          heading: 'What Happens When Trial Expires',
+          bullets: [
+            'A full-screen paywall appears with the 3 plan options',
+            'Users cannot access any module until a plan is activated',
+            'All data is preserved — nothing is deleted when trial expires',
+            'Superadmin can still log in and activate a plan from Settings',
+            'After activation, the paywall disappears and full access is restored instantly',
+          ]
+        }
+      ]
+    }
+  },
+
+  // ─── SETTINGS ──────────────────────────────────────────────────────────────
+  {
+    id: 'settings', icon: Settings, label: 'Settings', color: '#64748b',
+    content: {
+      title: 'Settings',
+      subtitle: 'Company configuration, user management, password change and system tools.',
+      body: [
+        {
+          heading: 'Company Information',
+          text: 'Update your business name, address, phone number and email. This information is printed on every invoice and purchase order, so make sure it is accurate before making your first sale.'
+        },
+        {
+          heading: 'Change Password',
+          steps: [
+            'Go to Settings from the sidebar',
+            'Scroll to the "Change Password" section',
+            'Enter your Current Password',
+            'Enter New Password (minimum 6 characters)',
+            'Confirm New Password (must match)',
+            'Click "Change Password"',
+            'A success message confirms the change — use the new password next time you log in',
+          ]
+        },
+        {
+          heading: 'Financial Settings',
+          bullets: [
+            'Default Tax Rate (%) — applied to invoices if GST is applicable',
+            'Fiscal Year Start — choose January, July, or April based on your business year',
+            'Invoice Prefix — customize invoice numbering prefix (default: INV-)',
+            'PO Prefix — customize purchase order prefix (default: PO-)',
+          ]
+        },
+        {
+          heading: 'Notifications',
+          bullets: [
+            'Low stock alerts — get notified when products fall below minimum stock',
+            'New sale notifications — alert for each new sale',
+            'Payroll reminders — reminder when payroll is due',
+          ]
+        },
+        {
+          heading: 'Reset to Demo Data',
+          text: '⚠️ WARNING: This wipes ALL current data (sales, inventory, customers, purchases, employees, accounting records) and replaces it with a small demo dataset. Use this ONLY when setting up a fresh installation or for testing. Your admin login is preserved. This action cannot be undone.'
+        },
+        {
+          heading: 'Role Permissions Reference',
+          table: {
+            headers: ['Permission', 'Superadmin', 'Admin', 'Manager', 'Cashier', 'Accountant'],
+            rows: [
+              ['View Dashboard', '✅', '✅', '✅', '✅', '✅'],
+              ['Manage Inventory', '✅', '✅', '✅', '❌', '❌'],
+              ['Process Sales', '✅', '✅', '✅', '✅', '❌'],
+              ['Manage Purchases', '✅', '✅', '✅', '❌', '❌'],
+              ['View Accounting', '✅', '✅', '❌', '❌', '✅'],
+              ['Manage Payroll', '✅', '✅', '❌', '❌', '❌'],
+              ['System Settings', '✅', '❌', '❌', '❌', '❌'],
+            ]
+          }
+        }
+      ]
+    }
+  },
+
+  // ─── SECURITY ──────────────────────────────────────────────────────────────
+  {
+    id: 'security', icon: Shield, label: 'Security & Roles', color: '#dc2626',
     content: {
       title: 'Security & Role-Based Access',
       subtitle: 'Five roles with carefully designed permissions so each user sees only what they need.',
@@ -419,62 +728,82 @@ const sections = [
           table: {
             headers: ['Role', 'Who it is for', 'Key Permissions'],
             rows: [
-              ['Superadmin', 'Business owner', 'Full access — all modules, settings, reset, user management'],
-              ['Admin', 'General manager', 'All modules except system reset and security settings'],
-              ['Manager', 'Branch manager', 'Inventory, sales, purchases, reports — no payroll or accounts'],
+              ['Superadmin', 'Business owner / IT admin', 'Full access — all modules, settings, reset, user management, subscriptions'],
+              ['Admin', 'General manager', 'All modules except system reset and subscription management'],
+              ['Manager', 'Branch manager', 'Inventory, sales, purchases, HR, reports — no accounting settings'],
               ['Cashier', 'Sales counter staff', 'Create sales and view own invoices only'],
-              ['Accountant', 'Finance staff', 'Accounting module and financial reports only'],
+              ['Accountant', 'Finance staff', 'Accounting module, journal entries, financial reports'],
             ]
           }
         },
         {
-          heading: 'Authentication',
+          heading: 'Authentication System',
           bullets: [
-            'JWT (JSON Web Token) authentication — industry standard',
+            'JWT (JSON Web Token) authentication — industry standard for web security',
             'Access token expires after 1 hour — forces re-login for abandoned sessions',
-            'Refresh token — automatically refreshes access without requiring password again',
-            'Passwords are hashed using bcrypt — never stored in plain text',
+            'Refresh token silently refreshes the session without requiring password re-entry',
+            'Passwords hashed with bcrypt — never stored in plain text, never readable',
             'All API endpoints require a valid Bearer token — direct URL access is blocked',
           ]
         },
         {
           heading: 'API Security',
-          text: 'Every API endpoint requires authentication. Role checks are enforced server-side — even if someone bypasses the frontend UI, they cannot call restricted endpoints without the correct role token. CORS is configured to only allow your specific frontend domain.'
+          text: 'Role checks are enforced server-side (on the backend). Even if someone bypasses the frontend UI, they cannot call restricted endpoints without the correct role token. CORS is configured to only allow requests from your specific Vercel frontend domain.'
+        },
+        {
+          heading: 'Best Practices',
+          bullets: [
+            'Change the default admin password immediately after setup',
+            'Use strong passwords (8+ characters, mix of letters, numbers, symbols)',
+            'Do not share your superadmin login — create separate accounts for each staff member',
+            'Assign the lowest role needed — cashiers do not need admin access',
+            'Log out when leaving your computer unattended',
+          ]
         }
       ]
     }
   },
+
+  // ─── MULTI-BRANCH ──────────────────────────────────────────────────────────
   {
     id: 'multibranch', icon: Layers, label: 'Multi-Branch', color: '#14b8a6',
     content: {
       title: 'Multi-Branch Management',
-      subtitle: 'Run multiple business locations from a single ProBiz account.',
+      subtitle: 'Run multiple business locations — pharmacies, branches, warehouses — from one account.',
       body: [
         {
           heading: 'How Multi-Branch Works',
-          text: 'Every record in ProBiz (products, sales, purchases, employees) is linked to a branch. A superadmin can see data from all branches in consolidated reports. Branch managers and cashiers only see data for their own branch.'
+          text: 'Every record in ProBiz (products, sales, purchases, employees) is linked to a branch. Superadmin can see consolidated data from all branches in reports. Branch managers and cashiers only see data for their own branch — they cannot access another branch\'s data.'
         },
         {
-          heading: 'Branch-Level Data',
+          heading: 'What is Tracked Per Branch',
           bullets: [
-            'Each branch has its own inventory stock levels',
-            'Sales and purchases are recorded per branch',
-            'Employees and payroll are per branch',
-            'Consolidated reports combine all branches for the owner',
+            'Inventory stock levels — each branch maintains its own stock',
+            'Sales and revenue — daily and monthly totals per branch',
+            'Purchases — each branch orders from suppliers independently',
+            'Employees — staff are assigned to specific branches',
+            'Payroll — processed per branch or consolidated for all',
           ]
         },
         {
           heading: 'Setting Up a New Branch',
           steps: [
-            'Go to Settings (superadmin only)',
-            'Add branch with name, city, address, phone',
+            'Go to Settings → Branches (superadmin only)',
+            'Add branch with name, city, address, and phone',
             'Create user accounts assigned to the new branch',
-            'Add products and opening stock for the new branch',
+            'Add products with opening stock for the new branch',
+            'Assign a manager to the branch',
           ]
+        },
+        {
+          heading: 'Consolidated Reporting',
+          text: 'As superadmin, Reports show data from all branches combined. You can also filter any report by branch to see one location at a time. This lets you compare performance between branches and identify which location is most profitable.'
         }
       ]
     }
   },
+
+  // ─── FAQ ───────────────────────────────────────────────────────────────────
   {
     id: 'faq', icon: Hash, label: 'FAQ', color: '#a855f7',
     content: {
@@ -483,32 +812,113 @@ const sections = [
       body: [
         {
           heading: 'Can I use ProBiz on my mobile phone?',
-          text: 'Yes. ProBiz ERP is a web application accessible from any browser including Chrome on Android and Safari on iPhone. The layout is responsive — it works on both desktop and mobile, though desktop gives the best experience for data entry.'
+          text: 'Yes. ProBiz ERP is a web application accessible from any browser including Chrome on Android and Safari on iPhone. The layout works on both desktop and mobile, though desktop gives the best experience for data entry and reports.'
         },
         {
           heading: 'What happens to my data if I close the browser?',
-          text: 'All data is saved to the cloud database on Railway servers instantly when you click Save or Complete. Closing the browser has no effect — your data is always there when you log back in.'
+          text: 'All data is saved to the cloud database instantly when you click Save or Complete Sale. Closing the browser has no effect — your data is always there when you log back in from any device.'
         },
         {
-          heading: 'Can multiple users log in at the same time?',
-          text: 'Yes. ProBiz supports concurrent users. A cashier can be making a sale while the accountant is running reports and the manager is checking inventory — all at the same time with no conflicts.'
+          heading: 'Can multiple staff log in at the same time?',
+          text: 'Yes. ProBiz supports concurrent users. A cashier can be making sales while the accountant runs reports and the manager checks inventory — all simultaneously with no conflicts.'
         },
         {
           heading: 'How do I add my real products and remove demo data?',
-          text: 'Go to Settings → "Reset to Clean Demo" — this wipes all demo records and gives you a clean system with just 3 sample records to show you how it works. Then go to Inventory and add your real products one by one, or contact us to help you bulk import from Excel.'
+          text: 'Go to Settings → "Reset to Clean Demo" → confirm. This wipes all demo records and gives you a clean system. Then add your real products via Inventory → Add Product. Contact us if you need bulk import from an Excel file.'
         },
         {
-          heading: 'Is my data backed up?',
-          text: 'Data is stored on Railway\'s cloud infrastructure. For additional safety, we recommend setting up a PostgreSQL database (instead of the default SQLite) which includes automatic daily backups. Contact us to upgrade your database.'
+          heading: 'Why is the barcode field not accepting my input?',
+          text: 'Barcode must be unique across all products. If you see an error, the barcode is already used by another product. Leave the barcode field empty if you do not use barcodes — the system works perfectly without them.'
         },
         {
-          heading: 'Can I print invoices?',
-          text: 'Yes. Open any sale invoice and use your browser\'s Print function (Ctrl+P or Cmd+P). A print-optimized layout hides the sidebar and header. Full PDF invoice generation with your logo and letterhead is on the roadmap.'
+          heading: 'How do I print an invoice?',
+          text: 'Open the sale record and click the print icon (🖨️). A print-optimized view opens automatically. Press Ctrl+P (Windows) or Cmd+P (Mac) to print or save as PDF. The invoice includes product details, batch numbers, expiry dates, and three signature lines.'
         },
         {
           heading: 'What is the difference between Cost Price and Sale Price?',
-          text: 'Cost Price is what you paid the supplier to buy the product. Sale Price is what you charge your customer. The difference is your profit margin. ProBiz tracks both so it can calculate your real profit per sale automatically.'
+          text: 'Cost Price is what you paid the supplier. Sale Price is what you charge the customer. The difference (Sale Price − Cost Price) × Quantity = your profit on that item. ProBiz tracks both so it calculates real profit per sale automatically.'
         },
+        {
+          heading: 'How do I record a payment from a customer?',
+          text: 'Go to Customers → find the customer → click on their record → record payment. Enter the amount received, date, and payment method (cash/bank). This reduces their outstanding balance and creates the correct accounting entry.'
+        },
+        {
+          heading: 'Can I give a discount on a sale?',
+          text: 'Yes. When creating a sale in POS, there is a discount field. Enter the discount amount and it is deducted from the total before recording the sale.'
+        },
+        {
+          heading: 'How do I change my password?',
+          text: 'Go to Settings → scroll to "Change Password" section → enter current password → enter new password twice → click Change Password. The new password takes effect immediately.'
+        },
+        {
+          heading: 'What happens when my trial expires?',
+          text: 'A paywall screen appears. All your data is preserved — nothing is deleted. Contact us on 0316-8818693 or WhatsApp to activate a paid plan. Your account is unlocked within minutes after payment confirmation.'
+        },
+        {
+          heading: 'Is my data backed up?',
+          text: 'Data is stored on PythonAnywhere\'s cloud servers. For business-critical data, we recommend upgrading to a PostgreSQL database which includes automatic daily backups. Contact us to set this up.'
+        },
+        {
+          heading: 'Can I export data to Excel?',
+          text: 'Currently, reports can be printed as PDF via the browser print function (Ctrl+P → Save as PDF). Full CSV/Excel export is on the roadmap for the next version. Contact us if you need a data export urgently — we can do it manually.'
+        },
+      ]
+    }
+  },
+
+  // ─── CONTACT / SUPPORT ─────────────────────────────────────────────────────
+  {
+    id: 'support', icon: Phone, label: 'Contact & Support', color: '#16a34a',
+    content: {
+      title: 'Contact & Support',
+      subtitle: 'Get help, request features, or upgrade your plan.',
+      body: [
+        {
+          heading: 'Contact Information',
+          table: {
+            headers: ['Channel', 'Details', 'Best For'],
+            rows: [
+              ['WhatsApp', '0316-8818693', 'Fastest response — plan activation, urgent issues'],
+              ['Phone', '0316-8818693', 'Direct call for complex questions'],
+              ['Email', 'raees.malik89@gmail.com', 'Non-urgent queries, data export requests'],
+              ['Office', 'House 124, Street 39, I-14/3, Islamabad', 'In-person training and setup'],
+            ]
+          }
+        },
+        {
+          heading: 'Support Hours',
+          bullets: [
+            'Monday – Saturday: 9:00 AM – 9:00 PM (Pakistan Standard Time)',
+            'Sunday: 10:00 AM – 6:00 PM',
+            'Emergency support for active paid plans: WhatsApp any time',
+          ]
+        },
+        {
+          heading: 'What We Can Help With',
+          bullets: [
+            'Plan activation and upgrades',
+            'Initial setup and data migration from Excel',
+            'Staff training (in-person or via Zoom/WhatsApp video)',
+            'Custom reports or features for your business',
+            'Technical issues or bugs',
+            'Bulk product import from your existing records',
+            'Adding your business logo to invoices',
+          ]
+        },
+        {
+          heading: 'Requesting a Feature',
+          text: 'ProBiz ERP is actively developed. If you need a specific feature (e.g. Urdu invoices, SMS notifications, online ordering integration), WhatsApp us with the details. New features are added regularly based on customer feedback.'
+        },
+        {
+          heading: 'Reporting a Problem',
+          steps: [
+            'Take a screenshot of the error or unexpected behavior',
+            'Note what you were doing when the problem occurred',
+            'WhatsApp the screenshot to 0316-8818693',
+            'Include your business name and the time of the problem',
+            'Most issues are resolved within 2–4 hours during support hours',
+          ]
+        }
       ]
     }
   },
@@ -520,7 +930,7 @@ function ContentRenderer({ body }) {
       {body.map((block, i) => (
         <div key={i} style={{ marginBottom: 32 }}>
           <h3 style={{ fontSize: 17, fontWeight: 700, color: '#1e293b', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ width: 4, height: 18, background: '#1e40af', borderRadius: 2, display: 'inline-block' }} />
+            <span style={{ width: 4, height: 18, background: '#1e40af', borderRadius: 2, display: 'inline-block', flexShrink: 0 }} />
             {block.heading}
           </h3>
           {block.text && <p style={{ color: '#475569', fontSize: 14, lineHeight: 1.8, margin: 0 }}>{block.text}</p>}
@@ -573,12 +983,16 @@ function ContentRenderer({ body }) {
 }
 
 export default function Docs() {
-  const [active, setActive] = useState('overview');
+  const [active, setActive] = useState('start');
   const [search, setSearch] = useState('');
   const current = sections.find(s => s.id === active);
 
   const filtered = search
-    ? sections.filter(s => s.label.toLowerCase().includes(search.toLowerCase()) || s.content.title.toLowerCase().includes(search.toLowerCase()))
+    ? sections.filter(s =>
+        s.label.toLowerCase().includes(search.toLowerCase()) ||
+        s.content.title.toLowerCase().includes(search.toLowerCase()) ||
+        s.content.body.some(b => b.heading?.toLowerCase().includes(search.toLowerCase()))
+      )
     : sections;
 
   return (
@@ -603,7 +1017,7 @@ export default function Docs() {
               />
             </div>
           </div>
-          <nav style={{ padding: '8px 8px' }}>
+          <nav style={{ padding: '8px 8px', maxHeight: '70vh', overflowY: 'auto' }}>
             {filtered.map(({ id, icon: Icon, label, color }) => (
               <button key={id} onClick={() => { setActive(id); setSearch(''); }}
                 style={{
@@ -640,6 +1054,24 @@ export default function Docs() {
                 </div>
               </div>
               <ContentRenderer body={current.content.body} />
+
+              {/* Next section navigation */}
+              {(() => {
+                const idx = sections.findIndex(s => s.id === active);
+                const next = sections[idx + 1];
+                if (!next) return null;
+                return (
+                  <div style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid #f1f5f9' }}>
+                    <button onClick={() => setActive(next.id)} style={{
+                      display: 'flex', alignItems: 'center', gap: 10, padding: '12px 20px',
+                      background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10,
+                      cursor: 'pointer', color: '#1e40af', fontWeight: 600, fontSize: 14,
+                    }}>
+                      Next: {next.label} →
+                    </button>
+                  </div>
+                );
+              })()}
             </>
           ) : (
             <div style={{ textAlign: 'center', padding: '60px 0', color: '#94a3b8' }}>

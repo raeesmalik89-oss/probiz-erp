@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import API from '../api/client';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { BarChart3, TrendingUp, Package, DollarSign, Printer } from 'lucide-react';
+import { BarChart3, TrendingUp, Package, DollarSign, Printer, FileText } from 'lucide-react';
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#0ea5e9'];
 
 export default function Reports() {
-  const [tab, setTab] = useState('profit');
+  const [tab, setTab] = useState('summary');
   const [salesChart, setSalesChart] = useState([]);
   const [monthlyData, setMonthlyData] = useState([]);
   const [topProducts, setTopProducts] = useState([]);
   const [stats, setStats] = useState(null);
+  const [salesList, setSalesList] = useState([]);
+  const [purchasesList, setPurchasesList] = useState([]);
+  const [fromDate, setFromDate] = useState(() => { const d = new Date(); d.setDate(1); return d.toISOString().slice(0,10); });
+  const [toDate, setToDate] = useState(() => new Date().toISOString().slice(0,10));
+  const [summaryLoading, setSummaryLoading] = useState(false);
+
+  const pkt = (utcStr) => {
+    if (!utcStr) return '-';
+    const d = new Date(new Date(utcStr).getTime() + 5*60*60*1000);
+    return d.toLocaleDateString('en-PK');
+  };
 
   useEffect(() => {
     Promise.all([
@@ -26,11 +37,82 @@ export default function Reports() {
     });
   }, []);
 
+  const loadSummary = async () => {
+    setSummaryLoading(true);
+    try {
+      const [sRes, pRes] = await Promise.all([
+        API.get('/api/sales/', { params: { from_date: fromDate, to_date: toDate, limit: 200 } }),
+        API.get('/api/purchases/', { params: { from_date: fromDate, to_date: toDate, limit: 200 } }),
+      ]);
+      setSalesList(sRes.data.sales || []);
+      setPurchasesList(pRes.data.purchases || []);
+    } finally { setSummaryLoading(false); }
+  };
+
+  useEffect(() => { loadSummary(); }, [fromDate, toDate]);
+
+  const printSummary = () => {
+    const totalSales = salesList.reduce((s, i) => s + (i.total || 0), 0);
+    const totalPurchases = purchasesList.reduce((s, i) => s + (i.total || 0), 0);
+    const profit = totalSales - totalPurchases;
+    const w = window.open('', '_blank');
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"/><title>Summary Report</title>
+    <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;color:#1e293b;font-size:13px}
+    .page{width:210mm;min-height:297mm;margin:0 auto;padding:15mm}
+    .header{border-bottom:3px solid #1e40af;padding-bottom:14px;margin-bottom:20px;display:flex;justify-content:space-between}
+    .brand{font-size:24px;font-weight:900;color:#1e40af}.sub{font-size:11px;color:#64748b;margin-top:2px}
+    .kpi{display:flex;gap:12px;margin-bottom:20px}
+    .kpi-box{flex:1;border-radius:8px;padding:14px;text-align:center}
+    .kpi-val{font-size:18px;font-weight:900;margin-bottom:2px}.kpi-lbl{font-size:10px;color:#64748b}
+    h3{font-size:13px;font-weight:800;background:#1e40af;color:#fff;padding:7px 12px;border-radius:6px 6px 0 0;margin-top:16px}
+    table{width:100%;border-collapse:collapse;margin-bottom:4px}
+    th{background:#f1f5f9;padding:7px 10px;text-align:left;font-size:11px;font-weight:700;color:#475569}
+    th:last-child,td:last-child{text-align:right}
+    td{padding:7px 10px;border-bottom:1px solid #f8fafc;font-size:12px}
+    tr:nth-child(even) td{background:#fafafa}
+    .tfoot td{font-weight:800;background:#f1f5f9;border-top:2px solid #e2e8f0}
+    .profit-box{display:flex;justify-content:flex-end;margin-top:16px}
+    .profit-inner{width:260px;border-radius:8px;overflow:hidden}
+    .pr{display:flex;justify-content:space-between;padding:9px 14px;font-size:13px;border-bottom:1px solid #e2e8f0}
+    .pr-final{display:flex;justify-content:space-between;padding:11px 14px;font-size:16px;font-weight:900;background:#1e40af;color:#fff}
+    .footer{text-align:center;border-top:2px solid #e2e8f0;padding-top:12px;font-size:10px;color:#94a3b8;margin-top:20px}
+    @media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}</style></head>
+    <body><div class="page">
+    <div class="header">
+      <div><div class="brand">ProBiz ERP</div><div class="sub">Advanced Pharmacy & Business Management</div><div class="sub">📍 House 124, Street 39, I-14/3, Islamabad &nbsp;|&nbsp; 📞 0316-8818693</div></div>
+      <div style="text-align:right"><div style="font-size:20px;font-weight:900;color:#1e40af">SUMMARY REPORT</div><div style="font-size:11px;color:#64748b;margin-top:4px">Period: ${fromDate} to ${toDate}</div><div style="font-size:11px;color:#64748b">Generated: ${new Date(Date.now()+5*3600000).toLocaleString('en-PK')}</div></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-box" style="background:#dbeafe"><div class="kpi-val" style="color:#1e40af">Rs. ${totalSales.toLocaleString()}</div><div class="kpi-lbl">Total Sales (${salesList.length} invoices)</div></div>
+      <div class="kpi-box" style="background:#fef3c7"><div class="kpi-val" style="color:#d97706">Rs. ${totalPurchases.toLocaleString()}</div><div class="kpi-lbl">Total Purchases (${purchasesList.length} orders)</div></div>
+      <div class="kpi-box" style="background:${profit>=0?'#d1fae5':'#fee2e2'}"><div class="kpi-val" style="color:${profit>=0?'#065f46':'#991b1b'}">Rs. ${profit.toLocaleString()}</div><div class="kpi-lbl">${profit>=0?'Gross Profit':'Net Loss'}</div></div>
+    </div>
+    <h3>📦 SALES DETAIL</h3>
+    <table><thead><tr><th>#</th><th>Invoice No</th><th>Customer</th><th>Date</th><th>Payment</th><th>Status</th><th>Total</th></tr></thead>
+    <tbody>${salesList.map((s,i)=>`<tr><td style="color:#94a3b8">${i+1}</td><td style="color:#1e40af;font-weight:700">${s.invoice_no}</td><td>${s.customer||'Walk-in'}</td><td>${pkt(s.created_at)}</td><td>${(s.payment_method||'').replace('_',' ')}</td><td>${s.status||''}</td><td>Rs. ${(s.total||0).toLocaleString()}</td></tr>`).join('')}
+    <tr class="tfoot"><td colspan="6" style="text-align:right;padding-right:10px">TOTAL SALES</td><td>Rs. ${totalSales.toLocaleString()}</td></tr>
+    </tbody></table>
+    <h3>🛒 PURCHASES DETAIL</h3>
+    <table><thead><tr><th>#</th><th>PO Number</th><th>Supplier</th><th>Date</th><th>Payment</th><th>Status</th><th>Total</th></tr></thead>
+    <tbody>${purchasesList.map((p,i)=>`<tr><td style="color:#94a3b8">${i+1}</td><td style="color:#1e40af;font-weight:700">${p.po_number}</td><td>${p.supplier||''}</td><td>${pkt(p.created_at)}</td><td>${(p.payment_method||'').replace('_',' ')}</td><td>${p.status||''}</td><td>Rs. ${(p.total||0).toLocaleString()}</td></tr>`).join('')}
+    <tr class="tfoot"><td colspan="6" style="text-align:right;padding-right:10px">TOTAL PURCHASES</td><td>Rs. ${totalPurchases.toLocaleString()}</td></tr>
+    </tbody></table>
+    <div class="profit-box"><div class="profit-inner">
+      <div class="pr"><span>Total Sales</span><span style="color:#10b981;font-weight:700">Rs. ${totalSales.toLocaleString()}</span></div>
+      <div class="pr"><span>Total Purchases</span><span style="color:#ef4444;font-weight:700">Rs. ${totalPurchases.toLocaleString()}</span></div>
+      <div class="pr-final"><span>${profit>=0?'GROSS PROFIT':'NET LOSS'}</span><span>Rs. ${profit.toLocaleString()}</span></div>
+    </div></div>
+    <div class="footer"><p>ProBiz ERP &nbsp;|&nbsp; probiz-erp-poru.vercel.app &nbsp;|&nbsp; Confidential — Superadmin Report</p></div>
+    </div><script>window.onload=()=>window.print()</script></body></html>`);
+    w.document.close();
+  };
+
   const tabs = [
+    { id: 'summary', label: 'Summary Report', icon: FileText },
     { id: 'profit', label: 'Profit & Loss', icon: DollarSign },
-    { id: 'sales', label: 'Sales Report', icon: TrendingUp },
+    { id: 'sales', label: 'Sales Chart', icon: TrendingUp },
     { id: 'inventory', label: 'Inventory', icon: Package },
-    { id: 'comparison', label: 'Monthly Comparison', icon: BarChart3 },
+    { id: 'comparison', label: 'Monthly', icon: BarChart3 },
   ];
 
   const printPL = () => {
@@ -42,26 +124,26 @@ export default function Reports() {
     const w = window.open('', '_blank');
     w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"/><title>Profit & Loss Report</title>
     <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;color:#1e293b}
-    .page{width:210mm;min-height:297mm;margin:0 auto;padding:20mm}
-    .header{border-bottom:3px solid #1e40af;padding-bottom:16px;margin-bottom:28px;display:flex;justify-content:space-between;align-items:flex-start}
-    .brand{font-size:26px;font-weight:900;color:#1e40af}.sub{font-size:11px;color:#64748b;margin-top:3px}
-    .title{text-align:right}.title h2{font-size:24px;font-weight:900;color:#1e40af}
-    .title p{font-size:12px;color:#64748b;margin-top:4px}
-    .section{margin-bottom:24px}.section h3{font-size:14px;font-weight:700;background:#1e40af;color:#fff;padding:8px 14px;border-radius:6px;margin-bottom:0}
-    .row{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid #f1f5f9;font-size:14px}
+    .page{width:210mm;min-height:297mm;margin:0 auto;padding:12mm 16mm}
+    .header{border-bottom:3px solid #1e40af;padding-bottom:10px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+    .brand{font-size:22px;font-weight:900;color:#1e40af}.sub{font-size:10px;color:#64748b;margin-top:2px}
+    .title{text-align:right}.title h2{font-size:20px;font-weight:900;color:#1e40af;line-height:1.2}
+    .title p{font-size:11px;color:#64748b;margin-top:3px}
+    .section{margin-bottom:16px}.section h3{font-size:13px;font-weight:700;background:#1e40af;color:#fff;padding:6px 12px;border-radius:6px;margin-bottom:0}
+    .row{display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:13px}
     .row:nth-child(even){background:#f8fafc}
-    .row-total{display:flex;justify-content:space-between;padding:12px 14px;font-size:16px;font-weight:800;background:#1e40af;color:#fff;border-radius:0 0 6px 6px;margin-bottom:16px}
+    .row-total{display:flex;justify-content:space-between;padding:10px 12px;font-size:14px;font-weight:800;background:#1e40af;color:#fff;border-radius:0 0 6px 6px;margin-bottom:12px}
     .profit{color:#10b981}.loss{color:#ef4444}
-    .kpi{display:flex;gap:16px;margin-bottom:24px}
-    .kpi-box{flex:1;border-radius:8px;padding:16px;text-align:center}
-    .kpi-box .val{font-size:22px;font-weight:900;margin-bottom:4px}
-    .kpi-box .lbl{font-size:11px;color:#64748b}
-    .footer{text-align:center;border-top:2px solid #e2e8f0;padding-top:14px;font-size:11px;color:#94a3b8;margin-top:24px}
+    .kpi{display:flex;gap:12px;margin-bottom:16px}
+    .kpi-box{flex:1;border-radius:8px;padding:12px;text-align:center}
+    .kpi-box .val{font-size:18px;font-weight:900;margin-bottom:3px}
+    .kpi-box .lbl{font-size:10px;color:#64748b}
+    .footer{text-align:center;border-top:2px solid #e2e8f0;padding-top:10px;font-size:10px;color:#94a3b8;margin-top:16px}
     @media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}</style></head>
     <body><div class="page">
     <div class="header">
-      <div><div class="brand">ProBiz ERP</div><div class="sub">Advanced Pharmacy & Business Management</div><div class="sub">📍 House 124, Street 39, I-14/3, Islamabad | 📞 0316-8818693</div></div>
-      <div class="title"><h2>PROFIT & LOSS STATEMENT</h2><p>This Month &nbsp;|&nbsp; Generated: ${new Date().toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' })}</p></div>
+      <div><div class="brand">ProBiz ERP</div><div class="sub">Advanced Pharmacy & Business Management</div><div class="sub">House 124, Street 39, I-14/3, Islamabad &nbsp;|&nbsp; 0316-8818693</div></div>
+      <div class="title"><h2>PROFIT & LOSS<br/>STATEMENT</h2><p>This Month &nbsp;|&nbsp; Generated: ${new Date().toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' })}</p></div>
     </div>
     <div class="kpi">
       <div class="kpi-box" style="background:#dbeafe"><div class="val" style="color:#1e40af">Rs. ${revenue.toLocaleString()}</div><div class="lbl">Total Revenue</div></div>
@@ -127,6 +209,135 @@ export default function Reports() {
           <button key={id} onClick={() => setTab(id)} style={{ padding: '8px 20px', borderRadius: 8, border: 'none', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: tab === id ? '#fff' : 'transparent', color: tab === id ? '#1e40af' : '#64748b', boxShadow: tab === id ? '0 1px 4px rgba(0,0,0,0.1)' : 'none' }}>{label}</button>
         ))}
       </div>
+
+      {tab === 'summary' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+          {/* Date Filter */}
+          <div style={{ background: '#fff', borderRadius: 12, padding: '16px 20px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+            <span style={{ fontWeight: 700, color: '#1e293b' }}>📅 Period:</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <label style={{ fontSize: 13, color: '#64748b' }}>From</label>
+              <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} style={{ padding: '7px 10px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 13 }} />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <label style={{ fontSize: 13, color: '#64748b' }}>To</label>
+              <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} style={{ padding: '7px 10px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 13 }} />
+            </div>
+            <button onClick={printSummary} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 18px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: 'pointer', marginLeft: 'auto' }}>
+              <Printer size={14} /> Print Summary
+            </button>
+          </div>
+
+          {/* KPI Cards */}
+          {(() => {
+            const totalSales = salesList.reduce((s, i) => s + (i.total || 0), 0);
+            const totalPurchases = purchasesList.reduce((s, i) => s + (i.total || 0), 0);
+            const profit = totalSales - totalPurchases;
+            return (
+              <>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
+                  {[
+                    { label: `Total Sales`, sub: `${salesList.length} invoices`, value: `Rs. ${totalSales.toLocaleString()}`, color: '#1e40af', bg: '#dbeafe' },
+                    { label: `Total Purchases`, sub: `${purchasesList.length} orders`, value: `Rs. ${totalPurchases.toLocaleString()}`, color: '#d97706', bg: '#fef3c7' },
+                    { label: profit >= 0 ? 'Gross Profit' : 'Net Loss', sub: totalSales > 0 ? `${((profit/totalSales)*100).toFixed(1)}% margin` : '', value: `Rs. ${profit.toLocaleString()}`, color: profit >= 0 ? '#065f46' : '#991b1b', bg: profit >= 0 ? '#d1fae5' : '#fee2e2' },
+                  ].map(({ label, sub, value, color, bg }) => (
+                    <div key={label} style={{ background: bg, borderRadius: 14, padding: '20px 22px' }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>{label}</div>
+                      <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 8 }}>{sub}</div>
+                      <div style={{ fontSize: 24, fontWeight: 900, color }}>{value}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Sales Table */}
+                <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0', overflow: 'hidden' }}>
+                  <div style={{ background: 'linear-gradient(135deg,#1e40af,#3b82f6)', padding: '12px 20px' }}>
+                    <h3 style={{ color: '#fff', fontWeight: 800, fontSize: 15 }}>📦 Sales — {salesList.length} Invoices &nbsp;|&nbsp; Total: Rs. {totalSales.toLocaleString()}</h3>
+                  </div>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                    <thead><tr style={{ background: '#f8fafc' }}>
+                      {['#', 'Invoice No', 'Customer', 'Date', 'Payment', 'Status', 'Total'].map(h => (
+                        <th key={h} style={{ padding: '10px 14px', textAlign: h === 'Total' ? 'right' : 'left', fontWeight: 600, fontSize: 12, color: '#64748b' }}>{h}</th>
+                      ))}
+                    </tr></thead>
+                    <tbody>
+                      {summaryLoading ? <tr><td colSpan={7} style={{ textAlign: 'center', padding: 30, color: '#94a3b8' }}>Loading...</td></tr>
+                        : salesList.length === 0 ? <tr><td colSpan={7} style={{ textAlign: 'center', padding: 30, color: '#94a3b8' }}>No sales in this period</td></tr>
+                        : salesList.map((s, i) => (
+                          <tr key={s.id} style={{ borderBottom: '1px solid #f8fafc', background: i % 2 === 0 ? '#fff' : '#fafafa' }}>
+                            <td style={{ padding: '9px 14px', color: '#94a3b8' }}>{i + 1}</td>
+                            <td style={{ padding: '9px 14px', color: '#1e40af', fontWeight: 700 }}>{s.invoice_no}</td>
+                            <td style={{ padding: '9px 14px' }}>{s.customer || 'Walk-in'}</td>
+                            <td style={{ padding: '9px 14px', color: '#64748b' }}>{pkt(s.created_at)}</td>
+                            <td style={{ padding: '9px 14px' }}><span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: 20, fontSize: 11 }}>{s.payment_method}</span></td>
+                            <td style={{ padding: '9px 14px' }}><span style={{ background: '#d1fae5', color: '#065f46', padding: '2px 8px', borderRadius: 20, fontSize: 11, fontWeight: 700 }}>{s.status}</span></td>
+                            <td style={{ padding: '9px 14px', fontWeight: 700, textAlign: 'right', color: '#10b981' }}>Rs. {s.total?.toLocaleString()}</td>
+                          </tr>
+                        ))}
+                      <tr style={{ background: '#dbeafe', borderTop: '2px solid #1e40af' }}>
+                        <td colSpan={6} style={{ padding: '10px 14px', fontWeight: 800, textAlign: 'right', color: '#1e40af' }}>TOTAL SALES</td>
+                        <td style={{ padding: '10px 14px', fontWeight: 900, textAlign: 'right', color: '#1e40af', fontSize: 15 }}>Rs. {totalSales.toLocaleString()}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Purchases Table */}
+                <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0', overflow: 'hidden' }}>
+                  <div style={{ background: 'linear-gradient(135deg,#d97706,#f59e0b)', padding: '12px 20px' }}>
+                    <h3 style={{ color: '#fff', fontWeight: 800, fontSize: 15 }}>🛒 Purchases — {purchasesList.length} Orders &nbsp;|&nbsp; Total: Rs. {totalPurchases.toLocaleString()}</h3>
+                  </div>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                    <thead><tr style={{ background: '#f8fafc' }}>
+                      {['#', 'PO Number', 'Supplier', 'Date', 'Payment', 'Status', 'Total'].map(h => (
+                        <th key={h} style={{ padding: '10px 14px', textAlign: h === 'Total' ? 'right' : 'left', fontWeight: 600, fontSize: 12, color: '#64748b' }}>{h}</th>
+                      ))}
+                    </tr></thead>
+                    <tbody>
+                      {summaryLoading ? <tr><td colSpan={7} style={{ textAlign: 'center', padding: 30, color: '#94a3b8' }}>Loading...</td></tr>
+                        : purchasesList.length === 0 ? <tr><td colSpan={7} style={{ textAlign: 'center', padding: 30, color: '#94a3b8' }}>No purchases in this period</td></tr>
+                        : purchasesList.map((p, i) => (
+                          <tr key={p.id} style={{ borderBottom: '1px solid #f8fafc', background: i % 2 === 0 ? '#fff' : '#fafafa' }}>
+                            <td style={{ padding: '9px 14px', color: '#94a3b8' }}>{i + 1}</td>
+                            <td style={{ padding: '9px 14px', color: '#d97706', fontWeight: 700 }}>{p.po_number}</td>
+                            <td style={{ padding: '9px 14px' }}>{p.supplier}</td>
+                            <td style={{ padding: '9px 14px', color: '#64748b' }}>{pkt(p.created_at)}</td>
+                            <td style={{ padding: '9px 14px' }}><span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: 20, fontSize: 11 }}>{p.payment_method}</span></td>
+                            <td style={{ padding: '9px 14px' }}><span style={{ background: '#d1fae5', color: '#065f46', padding: '2px 8px', borderRadius: 20, fontSize: 11, fontWeight: 700 }}>{p.status}</span></td>
+                            <td style={{ padding: '9px 14px', fontWeight: 700, textAlign: 'right', color: '#ef4444' }}>Rs. {p.total?.toLocaleString()}</td>
+                          </tr>
+                        ))}
+                      <tr style={{ background: '#fef3c7', borderTop: '2px solid #d97706' }}>
+                        <td colSpan={6} style={{ padding: '10px 14px', fontWeight: 800, textAlign: 'right', color: '#d97706' }}>TOTAL PURCHASES</td>
+                        <td style={{ padding: '10px 14px', fontWeight: 900, textAlign: 'right', color: '#d97706', fontSize: 15 }}>Rs. {totalPurchases.toLocaleString()}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Net Summary */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <div style={{ width: 300, borderRadius: 12, overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', fontSize: 14 }}>
+                      <span style={{ color: '#64748b' }}>Total Sales</span>
+                      <span style={{ fontWeight: 700, color: '#10b981' }}>Rs. {totalSales.toLocaleString()}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', fontSize: 14, borderTop: '1px solid #e2e8f0' }}>
+                      <span style={{ color: '#64748b' }}>Total Purchases</span>
+                      <span style={{ fontWeight: 700, color: '#ef4444' }}>Rs. {totalPurchases.toLocaleString()}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 16px', background: profit >= 0 ? '#1e40af' : '#ef4444', fontSize: 18, fontWeight: 900, color: '#fff' }}>
+                      <span>{profit >= 0 ? 'GROSS PROFIT' : 'NET LOSS'}</span>
+                      <span>Rs. {profit.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      )}
 
       {tab === 'profit' && stats && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>

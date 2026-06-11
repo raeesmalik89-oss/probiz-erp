@@ -56,12 +56,12 @@ export default function Inventory() {
 
   useEffect(() => { load(); }, [search, catFilter, lowStockOnly]);
 
-  const openAdd = () => { setEditProduct(null); setForm({ name: '', sku: '', barcode: '', category_id: '', unit: 'pcs', cost_price: '', sale_price: '', stock: '', min_stock: '10', description: '' }); setShowModal(true); };
-  const openEdit = (p) => { setEditProduct(p); setForm({ name: p.name, sku: p.sku || '', barcode: p.barcode || '', category_id: p.category_id || '', unit: p.unit, cost_price: p.cost_price, sale_price: p.sale_price, stock: p.stock, min_stock: p.min_stock, description: '' }); setShowModal(true); };
+  const openAdd = () => { setEditProduct(null); setForm({ name: '', sku: '', barcode: '', category_id: '', unit: 'pcs', cost_price: '', sale_price: '', stock: '', min_stock: '10', description: '', batch_no: '', mfg_date: '', expiry_date: '' }); setShowModal(true); };
+  const openEdit = (p) => { setEditProduct(p); setForm({ name: p.name, sku: p.sku || '', barcode: p.barcode || '', category_id: p.category_id || '', unit: p.unit, cost_price: p.cost_price, sale_price: p.sale_price, stock: p.stock, min_stock: p.min_stock, description: '', batch_no: p.batch_no || '', mfg_date: p.mfg_date || '', expiry_date: p.expiry_date || '' }); setShowModal(true); };
 
   const handleSave = async () => {
     try {
-      const data = { ...form, category_id: form.category_id || null, cost_price: parseFloat(form.cost_price) || 0, sale_price: parseFloat(form.sale_price) || 0, stock: parseFloat(form.stock) || 0, min_stock: parseFloat(form.min_stock) || 0 };
+      const data = { ...form, category_id: form.category_id || null, barcode: form.barcode || null, sku: form.sku || null, cost_price: parseFloat(form.cost_price) || 0, sale_price: parseFloat(form.sale_price) || 0, stock: parseFloat(form.stock) || 0, min_stock: parseFloat(form.min_stock) || 0 };
       if (editProduct) { await API.put(`/api/inventory/products/${editProduct.id}`, data); toast.success('Product updated'); }
       else { await API.post('/api/inventory/products', data); toast.success('Product added'); }
       setShowModal(false); load();
@@ -170,6 +170,13 @@ export default function Inventory() {
             <Input label="Sale Price (Rs.)" type="number" value={form.sale_price} onChange={e => setForm({ ...form, sale_price: e.target.value })} />
             <Input label="Opening Stock" type="number" value={form.stock} onChange={e => setForm({ ...form, stock: e.target.value })} />
             <Input label="Min Stock Alert" type="number" value={form.min_stock} onChange={e => setForm({ ...form, min_stock: e.target.value })} />
+          </div>
+          <div style={{ height: 1, background: '#f1f5f9', margin: '4px 0 12px' }} />
+          <p style={{ fontSize: 12, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>🧪 Batch / Expiry Info</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+            <Input label="Batch No." value={form.batch_no} onChange={e => setForm({ ...form, batch_no: e.target.value })} placeholder="e.g. B-2024-01" />
+            <Input label="Mfg. Date" type="date" value={form.mfg_date} onChange={e => setForm({ ...form, mfg_date: e.target.value })} />
+            <Input label="Expiry Date" type="date" value={form.expiry_date} onChange={e => setForm({ ...form, expiry_date: e.target.value })} />
           </div>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end', marginTop: 8 }}>
             <button onClick={() => setShowModal(false)} style={{ padding: '10px 20px', border: '1px solid #e2e8f0', borderRadius: 8, background: '#fff', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>

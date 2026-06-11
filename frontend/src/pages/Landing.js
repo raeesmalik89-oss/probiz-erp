@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+const API_BASE = process.env.REACT_APP_API_URL || 'https://raees1989.pythonanywhere.com';
 import {
   Package, ShoppingCart, BookOpen, UserCheck, BarChart3, Shield,
   CheckCircle, Phone, Mail, MapPin, Menu, X,
@@ -56,9 +58,18 @@ export default function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', business: '', phone: '', email: '', industry: '' });
   const [formSent, setFormSent] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
 
-  const handleDemo = (e) => {
+  const handleDemo = async (e) => {
     e.preventDefault();
+    setFormLoading(true);
+    try {
+      await axios.post(`${API_BASE}/api/demo/request`, formData);
+    } catch (err) {
+      // Still show success even if API fails (don't block user)
+      console.error('Demo request error:', err);
+    }
+    setFormLoading(false);
     setFormSent(true);
   };
 
@@ -343,11 +354,11 @@ export default function Landing() {
                     <option value="" disabled>Select Your Industry</option>
                     {industries.map(i => <option key={i}>{i}</option>)}
                   </select>
-                  <button type="submit" style={{
+                  <button type="submit" disabled={formLoading} style={{
                     width: '100%', padding: '13px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)',
-                    color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: 15, cursor: 'pointer',
+                    color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: 15, cursor: formLoading ? 'not-allowed' : 'pointer', opacity: formLoading ? 0.8 : 1,
                   }}>
-                    Request Free Demo →
+                    {formLoading ? '⏳ Sending...' : 'Request Free Demo →'}
                   </button>
                 </form>
               </>

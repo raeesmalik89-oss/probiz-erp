@@ -250,6 +250,33 @@ class Notification(Base):
     is_read = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
+class Subscription(Base):
+    __tablename__ = "subscriptions"
+    id = Column(Integer, primary_key=True, index=True)
+    business_name = Column(String(200), default="My Business")
+    contact_email = Column(String(100), nullable=True)
+    contact_phone = Column(String(30), nullable=True)
+    plan = Column(String(50), default="trial")  # trial, basic, professional, enterprise
+    status = Column(String(30), default="active")  # active, expired, suspended
+    trial_start = Column(String(20), nullable=True)
+    trial_end = Column(String(20), nullable=True)
+    paid_until = Column(String(20), nullable=True)
+    max_users = Column(Integer, default=3)
+    max_branches = Column(Integer, default=1)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class DemoRequest(Base):
+    __tablename__ = "demo_requests"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(200))
+    business = Column(String(200))
+    phone = Column(String(50))
+    email = Column(String(200))
+    industry = Column(String(100), nullable=True)
+    message = Column(Text, nullable=True)
+    status = Column(String(30), default="new")  # new, contacted, activated, closed
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
 class AuditLog(Base):
     __tablename__ = "audit_logs"
     id = Column(Integer, primary_key=True, index=True)

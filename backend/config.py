@@ -4,7 +4,7 @@ import os
 
 class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite:///./probiz_erp.db"
-    SECRET_KEY: str = "probiz-erp-super-secret-key-change-this-in-production"
+    SECRET_KEY: str = ""
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 480
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
     ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:80,http://localhost"
