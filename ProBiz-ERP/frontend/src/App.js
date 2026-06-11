@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import SubscriptionGuard from './components/SubscriptionGuard';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Layout from './components/Layout';
@@ -15,6 +16,8 @@ import Customers from './pages/Customers';
 import Suppliers from './pages/Suppliers';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import Docs from './pages/Docs';
+import Attendance from './pages/Attendance';
 
 function PrivateRoute({ children }) {
   const { user } = useAuth();
@@ -37,8 +40,10 @@ function AppRoutes() {
         <Route path="suppliers" element={<Suppliers />} />
         <Route path="accounting" element={<Accounting />} />
         <Route path="payroll" element={<Payroll />} />
+        <Route path="attendance" element={<Attendance />} />
         <Route path="reports" element={<Reports />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="docs" element={<Docs />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

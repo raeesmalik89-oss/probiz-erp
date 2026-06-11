@@ -1,36 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import API from '../api/client';
 import toast from 'react-hot-toast';
-import { Plus, Search, Building2, Edit2, X } from 'lucide-react';
-
-const Modal = ({ title, onClose, children }) => (
-  <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-    <div style={{ background: '#fff', borderRadius: 16, padding: 28, width: '100%', maxWidth: 480 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <h3 style={{ fontWeight: 700, fontSize: 18 }}>{title}</h3>
-        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={20} /></button>
-      </div>
-      {children}
-    </div>
-  </div>
-);
-
-const Input = ({ label, ...props }) => (
-  <div style={{ marginBottom: 14 }}>
-    <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 5 }}>{label}</label>
-    <input {...props} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 14, outline: 'none', fontFamily: 'Inter, sans-serif' }} />
-  </div>
-);
+import Modal from '../components/ui/Modal';
+import Pagination, { usePagination } from '../components/ui/Pagination';
+import { PageSpinner } from '../components/ui/Spinner';
+import { exportCSV } from '../utils/csvExport';
+import { Plus, Search, Building2, Edit2, Download, DollarSign, Truck } from 'lucide-react';
 
 const defaultForm = { name: '', contact_person: '', email: '', phone: '', city: '', address: '' };
 
 export default function Suppliers() {
   const [suppliers, setSuppliers] = useState([]);
-  const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [editSupplier, setEditSupplier] = useState(null);
-  const [form, setForm] = useState(defaultForm);
+  const [search, setSearch]       = useState('');
+  const [loading, setLoading]     = useState(true);
+  const [modal, setModal]         = useState(null);
+  const [form, setForm]           = useState(defaultForm);
+  const [saving, setSaving]       = useState(false);
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const { page, setPage, paginated, total, pageSize } = usePagination(suppliers, 20);
 
   const load = async () => {
     setLoading(true);
@@ -42,83 +30,130 @@ export default function Suppliers() {
 
   useEffect(() => { load(); }, [search]);
 
-  const openAdd = () => { setEditSupplier(null); setForm(defaultForm); setShowModal(true); };
-  const openEdit = (s) => { setEditSupplier(s); setForm({ name: s.name, contact_person: s.contact_person || '', email: '', phone: s.phone || '', city: s.city || '', address: '' }); setShowModal(true); };
+  const openAdd  = () => { setForm(defaultForm); setModal('add'); };
+  const openEdit = (s) => { setForm({ name: s.name, contact_person: s.contact_person || '', email: '', phone: s.phone || '', city: s.city || '', address: '', _id: s.id }); setModal('edit'); };
 
   const handleSave = async () => {
     if (!form.name || !form.phone) { toast.error('Name and phone are required'); return; }
+    setSaving(true);
     try {
-      if (editSupplier) { await API.put(`/api/inventory/suppliers/${editSupplier.id}`, form); toast.success('Supplier updated'); }
+      if (modal === 'edit') { await API.put(`/api/inventory/suppliers/${form._id}`, form); toast.success('Supplier updated'); }
       else { await API.post('/api/inventory/suppliers', form); toast.success('Supplier added'); }
-      setShowModal(false); load();
+      setModal(null); load();
     } catch (e) { toast.error(e.response?.data?.detail || 'Error'); }
+    finally { setSaving(false); }
   };
 
   const totalPayable = suppliers.reduce((s, sup) => s + (sup.balance || 0), 0);
 
+  if (loading) return <PageSpinner text="Loading suppliers..." />;
+
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <div><h1 style={{ fontSize: 26, fontWeight: 800 }}>Suppliers</h1><p style={{ color: '#64748b', marginTop: 2 }}>Manage supplier accounts and payables</p></div>
-        <button onClick={openAdd} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 600, cursor: 'pointer' }}>
-          <Plus size={18} /> Add Supplier
-        </button>
+    <div className="space-y-5">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h1 className="page-title">Suppliers</h1>
+          <p className="page-subtitle">Manage supplier accounts and payables</p>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={() => exportCSV(suppliers.map(s => ({ Name: s.name, Contact: s.contact_person, Phone: s.phone, City: s.city, 'Balance Due': s.balance })), 'suppliers.csv')} className="btn-secondary text-xs">
+            <Download size={13} /> Export
+          </button>
+          <button onClick={openAdd} className="btn-primary text-xs">
+            <Plus size={14} /> Add Supplier
+          </button>
+        </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
+      {/* Summary cards */}
+      <div className="grid grid-cols-3 gap-4">
         {[
-          ['Total Suppliers', suppliers.length, '#3b82f6'],
-          ['Total Payable', `Rs. ${totalPayable.toLocaleString()}`, '#ef4444'],
-          ['Active Suppliers', suppliers.length, '#10b981'],
-        ].map(([label, value, color]) => (
-          <div key={label} style={{ background: '#fff', borderRadius: 12, padding: '18px 20px', border: '1px solid #e2e8f0' }}>
-            <div style={{ fontSize: 13, color: '#64748b', marginBottom: 4 }}>{label}</div>
-            <div style={{ fontSize: 22, fontWeight: 800, color }}>{value}</div>
+          { label: 'Total Suppliers', value: suppliers.length, icon: Building2, iconCls: 'text-blue-600', bgCls: 'bg-blue-50' },
+          { label: 'Total Payable', value: `Rs. ${totalPayable.toLocaleString()}`, icon: DollarSign, iconCls: 'text-red-500', bgCls: 'bg-red-50' },
+          { label: 'Active Suppliers', value: suppliers.length, icon: Truck, iconCls: 'text-emerald-600', bgCls: 'bg-emerald-50' },
+        ].map(c => (
+          <div key={c.label} className="card p-4 flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-xl ${c.bgCls} flex items-center justify-center shrink-0`}>
+              <c.icon size={18} className={c.iconCls} />
+            </div>
+            <div>
+              <p className="text-xl font-bold text-gray-900">{c.value}</p>
+              <p className="text-xs text-gray-500">{c.label}</p>
+            </div>
           </div>
         ))}
       </div>
 
-      <div style={{ position: 'relative', marginBottom: 20, maxWidth: 400 }}>
-        <Search size={16} color="#94a3b8" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} />
-        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search suppliers..." style={{ width: '100%', padding: '10px 12px 10px 36px', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 14, outline: 'none' }} />
-      </div>
+      {/* Search + Table */}
+      <div className="card overflow-hidden">
+        <div className="p-4 border-b border-gray-50">
+          <div className="relative max-w-xs">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input className="input pl-8 text-sm" placeholder="Search suppliers..." value={search} onChange={e => setSearch(e.target.value)} />
+          </div>
+        </div>
 
-      <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
-          <thead><tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-            {['Supplier Name', 'Contact Person', 'Phone', 'City', 'Balance Due', ''].map(h => (
-              <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontWeight: 600, fontSize: 12, color: '#64748b' }}>{h}</th>
-            ))}
-          </tr></thead>
-          <tbody>
-            {loading ? <tr><td colSpan={6} style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>Loading...</td></tr>
-              : suppliers.length === 0 ? <tr><td colSpan={6} style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}><Building2 size={40} style={{ margin: '0 auto 12px', display: 'block', opacity: 0.3 }} />No suppliers found</td></tr>
-              : suppliers.map(s => (
-                <tr key={s.id} style={{ borderBottom: '1px solid #f8fafc' }}>
-                  <td style={{ padding: '12px 16px', fontWeight: 600 }}>{s.name}</td>
-                  <td style={{ padding: '12px 16px', color: '#64748b' }}>{s.contact_person || '-'}</td>
-                  <td style={{ padding: '12px 16px', color: '#64748b' }}>{s.phone}</td>
-                  <td style={{ padding: '12px 16px', color: '#64748b' }}>{s.city || '-'}</td>
-                  <td style={{ padding: '12px 16px', fontWeight: 700, color: s.balance > 0 ? '#ef4444' : '#10b981' }}>Rs. {s.balance?.toLocaleString()}</td>
-                  <td style={{ padding: '12px 16px' }}>
-                    <button onClick={() => openEdit(s)} style={{ padding: '6px', border: '1px solid #e2e8f0', borderRadius: 6, background: '#fff', cursor: 'pointer' }}><Edit2 size={14} color="#3b82f6" /></button>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr>
+                {['Supplier Name', 'Contact Person', 'Phone', 'City', 'Balance Due', ''].map(h => (
+                  <th key={h} className="table-header">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {paginated.length === 0 ? (
+                <tr><td colSpan={6} className="text-center py-12 text-gray-400">
+                  <Building2 size={36} className="mx-auto mb-2 opacity-30" />No suppliers found
+                </td></tr>
+              ) : paginated.map(s => (
+                <tr key={s.id} className="table-row">
+                  <td className="table-cell font-semibold text-gray-900">{s.name}</td>
+                  <td className="table-cell">{s.contact_person || '—'}</td>
+                  <td className="table-cell">{s.phone}</td>
+                  <td className="table-cell">{s.city || '—'}</td>
+                  <td className="table-cell font-bold">
+                    <span className={s.balance > 0 ? 'text-red-500' : 'text-emerald-600'}>
+                      Rs. {s.balance?.toLocaleString()}
+                    </span>
+                  </td>
+                  <td className="table-cell">
+                    <button onClick={() => openEdit(s)} className="p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                      <Edit2 size={13} className="text-blue-500" />
+                    </button>
                   </td>
                 </tr>
               ))}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
+        <Pagination page={page} total={total} pageSize={pageSize} onChange={setPage} />
       </div>
 
-      {showModal && (
-        <Modal title={editSupplier ? 'Edit Supplier' : 'Add Supplier'} onClose={() => setShowModal(false)}>
-          <Input label="Supplier Name *" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
-          <Input label="Contact Person" value={form.contact_person} onChange={e => setForm({ ...form, contact_person: e.target.value })} />
-          <Input label="Phone *" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} />
-          <Input label="Email" type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
-          <Input label="City" value={form.city} onChange={e => setForm({ ...form, city: e.target.value })} />
-          <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 8 }}>
-            <button onClick={() => setShowModal(false)} style={{ padding: '10px 20px', border: '1px solid #e2e8f0', borderRadius: 8, background: '#fff', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
-            <button onClick={handleSave} style={{ padding: '10px 24px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>Save</button>
+      {/* Modal */}
+      {modal && (
+        <Modal
+          title={modal === 'edit' ? 'Edit Supplier' : 'Add Supplier'}
+          onClose={() => setModal(null)}
+          size="sm"
+          footer={
+            <div className="flex gap-2 justify-end">
+              <button onClick={() => setModal(null)} className="btn-secondary text-xs">Cancel</button>
+              <button onClick={handleSave} disabled={saving} className="btn-primary text-xs">
+                {saving ? 'Saving...' : 'Save'}
+              </button>
+            </div>
+          }
+        >
+          <div className="space-y-3">
+            {[['Supplier Name *', 'name', 'text'], ['Contact Person', 'contact_person', 'text'], ['Phone *', 'phone', 'tel'], ['Email', 'email', 'email'], ['City', 'city', 'text']].map(([label, key, type]) => (
+              <div key={key}>
+                <label className="label">{label}</label>
+                <input type={type} className="input text-sm" value={form[key] || ''} onChange={e => set(key, e.target.value)} />
+              </div>
+            ))}
           </div>
         </Modal>
       )}

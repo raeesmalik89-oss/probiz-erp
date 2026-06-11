@@ -1,71 +1,84 @@
 import React, { useEffect, useState } from 'react';
 import API from '../api/client';
 import toast from 'react-hot-toast';
-import { Plus, Search, UserCheck, Edit2, X, CheckCircle } from 'lucide-react';
+import Modal from '../components/ui/Modal';
+import Pagination, { usePagination } from '../components/ui/Pagination';
+import { PageSpinner } from '../components/ui/Spinner';
+import { exportCSV } from '../utils/csvExport';
+import { Plus, Search, UserCheck, Edit2, Download, CheckCircle, DollarSign, Building2 } from 'lucide-react';
 
-const Modal = ({ title, onClose, children, wide }) => (
-  <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-    <div style={{ background: '#fff', borderRadius: 16, padding: 28, width: '100%', maxWidth: wide ? 680 : 460, maxHeight: '90vh', overflowY: 'auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <h3 style={{ fontWeight: 700, fontSize: 18 }}>{title}</h3>
-        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={20} /></button>
-      </div>
-      {children}
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function TabBar({ tabs, active, onChange }) {
+  return (
+    <div className="flex gap-1 bg-gray-100 p-1 rounded-xl w-fit">
+      {tabs.map(t => (
+        <button key={t} onClick={() => onChange(t)}
+          className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all capitalize ${active === t ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
+          {t}
+        </button>
+      ))}
     </div>
-  </div>
-);
-
-const Input = ({ label, ...props }) => (
-  <div style={{ marginBottom: 14 }}>
-    <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 5 }}>{label}</label>
-    <input {...props} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 14, outline: 'none', fontFamily: 'Inter, sans-serif' }} />
-  </div>
-);
+  );
+}
 
 export default function Payroll() {
-  const [tab, setTab] = useState('employees');
-  const [employees, setEmployees] = useState([]);
-  const [departments, setDepartments] = useState([]);
-  const [payslips, setPayslips] = useState([]);
-  const [search, setSearch] = useState('');
-  const [showEmpModal, setShowEmpModal] = useState(false);
-  const [showPayslipModal, setShowPayslipModal] = useState(false);
-  const [editEmp, setEditEmp] = useState(null);
-  const [empForm, setEmpForm] = useState({ name: '', employee_id: '', email: '', phone: '', cnic: '', department_id: '', designation: '', basic_salary: '', allowances: '', deductions: '' });
-  const [payslipForm, setPayslipForm] = useState({ employee_id: '', month: new Date().getMonth() + 1, year: new Date().getFullYear(), overtime: 0, extra_deductions: 0 });
+  const [tab, setTab]                   = useState('employees');
+  const [employees, setEmployees]       = useState([]);
+  const [departments, setDepartments]   = useState([]);
+  const [payslips, setPayslips]         = useState([]);
+  const [search, setSearch]             = useState('');
+  const [loading, setLoading]           = useState(true);
+  const [empModal, setEmpModal]         = useState(null);
+  const [payslipModal, setPayslipModal] = useState(false);
+  const [saving, setSaving]             = useState(false);
+  const [empForm, setEmpForm]           = useState({ name: '', employee_id: '', email: '', phone: '', cnic: '', department_id: '', designation: '', basic_salary: '', allowances: '', deductions: '' });
+  const [payslipForm, setPayslipForm]   = useState({ employee_id: '', month: new Date().getMonth() + 1, year: new Date().getFullYear(), overtime: 0, extra_deductions: 0 });
+  const setE = (k, v) => setEmpForm(f => ({ ...f, [k]: v }));
+  const setP = (k, v) => setPayslipForm(f => ({ ...f, [k]: v }));
+
+  const empPagination = usePagination(employees, 20);
+  const payPagination = usePagination(payslips, 20);
 
   const load = async () => {
-    const [eRes, dRes, pRes] = await Promise.all([
-      API.get('/api/payroll/employees', { params: search ? { search } : {} }),
-      API.get('/api/payroll/departments'),
-      API.get('/api/payroll/payslips'),
-    ]);
-    setEmployees(eRes.data);
-    setDepartments(dRes.data);
-    setPayslips(pRes.data);
+    setLoading(true);
+    try {
+      const [eRes, dRes, pRes] = await Promise.all([
+        API.get('/api/payroll/employees', { params: search ? { search } : {} }),
+        API.get('/api/payroll/departments'),
+        API.get('/api/payroll/payslips'),
+      ]);
+      setEmployees(eRes.data);
+      setDepartments(dRes.data);
+      setPayslips(pRes.data);
+    } finally { setLoading(false); }
   };
 
   useEffect(() => { load(); }, [search]);
 
-  const openAddEmp = () => { setEditEmp(null); setEmpForm({ name: '', employee_id: `EMP-${String(employees.length + 1).padStart(3, '0')}`, email: '', phone: '', cnic: '', department_id: '', designation: '', basic_salary: '', allowances: 0, deductions: 0 }); setShowEmpModal(true); };
-  const openEditEmp = (e) => { setEditEmp(e); setEmpForm({ name: e.name, employee_id: e.employee_id, email: '', phone: e.phone || '', cnic: '', department_id: e.department_id || '', designation: e.designation || '', basic_salary: e.basic_salary, allowances: e.allowances, deductions: '' }); setShowEmpModal(true); };
+  const openAddEmp  = () => { setEmpForm({ name: '', employee_id: `EMP-${String(employees.length + 1).padStart(3, '0')}`, email: '', phone: '', cnic: '', department_id: '', designation: '', basic_salary: '', allowances: 0, deductions: 0 }); setEmpModal('add'); };
+  const openEditEmp = (e) => { setEmpForm({ name: e.name, employee_id: e.employee_id, email: '', phone: e.phone || '', cnic: '', department_id: e.department_id || '', designation: e.designation || '', basic_salary: e.basic_salary, allowances: e.allowances, deductions: '', _id: e.id }); setEmpModal('edit'); };
 
   const saveEmployee = async () => {
     if (!empForm.name || !empForm.employee_id) { toast.error('Name and Employee ID required'); return; }
+    setSaving(true);
     try {
       const data = { ...empForm, department_id: empForm.department_id || null, basic_salary: parseFloat(empForm.basic_salary) || 0, allowances: parseFloat(empForm.allowances) || 0, deductions: parseFloat(empForm.deductions) || 0 };
-      if (editEmp) { await API.put(`/api/payroll/employees/${editEmp.id}`, data); toast.success('Employee updated'); }
+      if (empModal === 'edit') { await API.put(`/api/payroll/employees/${empForm._id}`, data); toast.success('Employee updated'); }
       else { await API.post('/api/payroll/employees', data); toast.success('Employee added'); }
-      setShowEmpModal(false); load();
+      setEmpModal(null); load();
     } catch (e) { toast.error(e.response?.data?.detail || 'Error'); }
+    finally { setSaving(false); }
   };
 
   const generatePayslip = async () => {
     if (!payslipForm.employee_id) { toast.error('Select employee'); return; }
+    setSaving(true);
     try {
       await API.post('/api/payroll/payslips/generate', { ...payslipForm, employee_id: parseInt(payslipForm.employee_id) });
-      toast.success('Payslip generated'); setShowPayslipModal(false); load();
+      toast.success('Payslip generated'); setPayslipModal(false); load();
     } catch (e) { toast.error(e.response?.data?.detail || 'Error'); }
+    finally { setSaving(false); }
   };
 
   const markPaid = async (id) => {
@@ -73,159 +86,211 @@ export default function Payroll() {
     catch { toast.error('Error'); }
   };
 
-  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const totalPayroll = employees.reduce((s, e) => s + e.basic_salary + e.allowances, 0);
 
+  if (loading) return <PageSpinner text="Loading HR data..." />;
+
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <div><h1 style={{ fontSize: 26, fontWeight: 800 }}>HR & Payroll</h1><p style={{ color: '#64748b', marginTop: 2 }}>Employees, attendance and salary management</p></div>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <button onClick={() => setShowPayslipModal(true)} style={{ padding: '10px 16px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 10, fontWeight: 600, fontSize: 14, cursor: 'pointer' }}>Generate Payslip</button>
-          <button onClick={openAddEmp} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 600, cursor: 'pointer' }}><Plus size={18} /> Add Employee</button>
+    <div className="space-y-5">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h1 className="page-title">HR & Payroll</h1>
+          <p className="page-subtitle">Employees, departments and salary management</p>
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          <button onClick={() => exportCSV(employees.map(e => ({ ID: e.employee_id, Name: e.name, Designation: e.designation, Department: e.department, 'Basic Salary': e.basic_salary, Allowances: e.allowances, Total: e.basic_salary + e.allowances })), 'employees.csv')} className="btn-secondary text-xs">
+            <Download size={13} /> Export
+          </button>
+          <button onClick={() => setPayslipModal(true)} className="btn-secondary text-xs">
+            Generate Payslip
+          </button>
+          <button onClick={openAddEmp} className="btn-primary text-xs">
+            <Plus size={14} /> Add Employee
+          </button>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
-        {[['Total Staff', employees.length, '#3b82f6'], ['Monthly Payroll', `Rs. ${totalPayroll.toLocaleString()}`, '#8b5cf6'], ['Departments', departments.length, '#10b981'], ['Payslips This Month', payslips.filter(p => p.month === new Date().getMonth() + 1).length, '#f59e0b']].map(([label, value, color]) => (
-          <div key={label} style={{ background: '#fff', borderRadius: 12, padding: '18px 20px', border: '1px solid #e2e8f0' }}>
-            <div style={{ fontSize: 12, color: '#64748b', marginBottom: 4 }}>{label}</div>
-            <div style={{ fontSize: 22, fontWeight: 800, color }}>{value}</div>
+      {/* Summary cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { label: 'Total Staff',           value: employees.length,         icon: UserCheck,   iconCls: 'text-blue-600',   bgCls: 'bg-blue-50' },
+          { label: 'Monthly Payroll',       value: `Rs. ${totalPayroll.toLocaleString()}`, icon: DollarSign, iconCls: 'text-violet-600', bgCls: 'bg-violet-50' },
+          { label: 'Departments',           value: departments.length,       icon: Building2,   iconCls: 'text-emerald-600',bgCls: 'bg-emerald-50' },
+          { label: 'Payslips This Month',   value: payslips.filter(p => p.month === new Date().getMonth() + 1).length, icon: CheckCircle, iconCls: 'text-amber-600', bgCls: 'bg-amber-50' },
+        ].map(c => (
+          <div key={c.label} className="card p-4 flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-xl ${c.bgCls} flex items-center justify-center shrink-0`}>
+              <c.icon size={18} className={c.iconCls} />
+            </div>
+            <div>
+              <p className="text-xl font-bold text-gray-900">{c.value}</p>
+              <p className="text-xs text-gray-500">{c.label}</p>
+            </div>
           </div>
         ))}
       </div>
 
-      <div style={{ display: 'flex', gap: 4, background: '#f1f5f9', padding: 4, borderRadius: 10, marginBottom: 24, width: 'fit-content' }}>
-        {['employees', 'payslips', 'departments'].map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{ padding: '8px 20px', borderRadius: 8, border: 'none', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: tab === t ? '#fff' : 'transparent', color: tab === t ? '#1e40af' : '#64748b', textTransform: 'capitalize', boxShadow: tab === t ? '0 1px 4px rgba(0,0,0,0.1)' : 'none' }}>{t}</button>
-        ))}
-      </div>
+      <TabBar tabs={['employees', 'payslips', 'departments']} active={tab} onChange={setTab} />
 
+      {/* Employees tab */}
       {tab === 'employees' && (
-        <>
-          <div style={{ position: 'relative', marginBottom: 20, maxWidth: 400 }}>
-            <Search size={16} color="#94a3b8" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} />
-            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search employees..." style={{ width: '100%', padding: '10px 12px 10px 36px', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 14, outline: 'none' }} />
+        <div className="card overflow-hidden">
+          <div className="p-4 border-b border-gray-50">
+            <div className="relative max-w-xs">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input className="input pl-8 text-sm" placeholder="Search employees..." value={search} onChange={e => setSearch(e.target.value)} />
+            </div>
           </div>
-          <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0', overflow: 'hidden' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
-              <thead><tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                {['Emp ID', 'Name', 'Designation', 'Department', 'Basic Salary', 'Allowances', 'Total', ''].map(h => <th key={h} style={{ padding: '12px 14px', textAlign: 'left', fontWeight: 600, fontSize: 12, color: '#64748b' }}>{h}</th>)}
-              </tr></thead>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr>{['Emp ID', 'Name', 'Designation', 'Department', 'Basic Salary', 'Allowances', 'Total', ''].map(h => <th key={h} className="table-header">{h}</th>)}</tr>
+              </thead>
               <tbody>
-                {employees.length === 0 ? <tr><td colSpan={8} style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}><UserCheck size={40} style={{ margin: '0 auto 12px', display: 'block', opacity: 0.3 }} />No employees found</td></tr>
-                  : employees.map(e => (
-                    <tr key={e.id} style={{ borderBottom: '1px solid #f8fafc' }}>
-                      <td style={{ padding: '11px 14px', fontFamily: 'monospace', color: '#64748b', fontSize: 12 }}>{e.employee_id}</td>
-                      <td style={{ padding: '11px 14px', fontWeight: 600 }}>{e.name}</td>
-                      <td style={{ padding: '11px 14px', color: '#475569' }}>{e.designation || '-'}</td>
-                      <td style={{ padding: '11px 14px' }}>{e.department ? <span style={{ background: '#dbeafe', color: '#1e40af', padding: '2px 8px', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>{e.department}</span> : '-'}</td>
-                      <td style={{ padding: '11px 14px', fontWeight: 600 }}>Rs. {e.basic_salary?.toLocaleString()}</td>
-                      <td style={{ padding: '11px 14px', color: '#10b981' }}>Rs. {e.allowances?.toLocaleString()}</td>
-                      <td style={{ padding: '11px 14px', fontWeight: 700, color: '#1e40af' }}>Rs. {(e.basic_salary + e.allowances).toLocaleString()}</td>
-                      <td style={{ padding: '11px 14px' }}><button onClick={() => openEditEmp(e)} style={{ padding: '6px', border: '1px solid #e2e8f0', borderRadius: 6, background: '#fff', cursor: 'pointer' }}><Edit2 size={14} color="#3b82f6" /></button></td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        </>
-      )}
-
-      {tab === 'payslips' && (
-        <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0', overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
-            <thead><tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-              {['Employee', 'Month/Year', 'Basic', 'Allowances', 'Overtime', 'Deductions', 'Tax', 'Net Salary', 'Status', ''].map(h => <th key={h} style={{ padding: '12px 14px', textAlign: 'left', fontWeight: 600, fontSize: 12, color: '#64748b' }}>{h}</th>)}
-            </tr></thead>
-            <tbody>
-              {payslips.length === 0 ? <tr><td colSpan={10} style={{ textAlign: 'center', padding: 40, color: '#94a3b8' }}>No payslips generated yet</td></tr>
-                : payslips.map(p => (
-                  <tr key={p.id} style={{ borderBottom: '1px solid #f8fafc' }}>
-                    <td style={{ padding: '10px 14px', fontWeight: 600 }}>{p.employee}</td>
-                    <td style={{ padding: '10px 14px', color: '#64748b' }}>{MONTHS[p.month - 1]} {p.year}</td>
-                    <td style={{ padding: '10px 14px' }}>Rs. {p.basic_salary?.toLocaleString()}</td>
-                    <td style={{ padding: '10px 14px', color: '#10b981' }}>Rs. {p.allowances?.toLocaleString()}</td>
-                    <td style={{ padding: '10px 14px' }}>Rs. {p.overtime?.toLocaleString()}</td>
-                    <td style={{ padding: '10px 14px', color: '#ef4444' }}>Rs. {p.deductions?.toLocaleString()}</td>
-                    <td style={{ padding: '10px 14px', color: '#ef4444' }}>Rs. {p.tax?.toLocaleString()}</td>
-                    <td style={{ padding: '10px 14px', fontWeight: 700, color: '#1e40af' }}>Rs. {p.net_salary?.toLocaleString()}</td>
-                    <td style={{ padding: '10px 14px' }}>
-                      <span style={{ background: p.status === 'paid' ? '#d1fae5' : '#fef3c7', color: p.status === 'paid' ? '#065f46' : '#92400e', padding: '3px 9px', borderRadius: 20, fontSize: 11, fontWeight: 700 }}>{p.status.toUpperCase()}</span>
-                    </td>
-                    <td style={{ padding: '10px 14px' }}>
-                      {p.status === 'pending' && <button onClick={() => markPaid(p.id)} style={{ padding: '5px 10px', background: '#d1fae5', border: 'none', borderRadius: 6, color: '#065f46', fontWeight: 600, fontSize: 12, cursor: 'pointer' }}>Mark Paid</button>}
+                {empPagination.paginated.length === 0 ? (
+                  <tr><td colSpan={8} className="text-center py-12 text-gray-400"><UserCheck size={36} className="mx-auto mb-2 opacity-30" />No employees found</td></tr>
+                ) : empPagination.paginated.map(e => (
+                  <tr key={e.id} className="table-row">
+                    <td className="table-cell font-mono text-xs text-gray-500">{e.employee_id}</td>
+                    <td className="table-cell font-semibold">{e.name}</td>
+                    <td className="table-cell text-gray-600">{e.designation || '—'}</td>
+                    <td className="table-cell">{e.department ? <span className="badge-blue">{e.department}</span> : '—'}</td>
+                    <td className="table-cell font-semibold">Rs. {e.basic_salary?.toLocaleString()}</td>
+                    <td className="table-cell text-emerald-600">Rs. {e.allowances?.toLocaleString()}</td>
+                    <td className="table-cell font-bold text-blue-700">Rs. {(e.basic_salary + e.allowances).toLocaleString()}</td>
+                    <td className="table-cell">
+                      <button onClick={() => openEditEmp(e)} className="p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <Edit2 size={13} className="text-blue-500" />
+                      </button>
                     </td>
                   </tr>
                 ))}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
+          <Pagination page={empPagination.page} total={empPagination.total} pageSize={empPagination.pageSize} onChange={empPagination.setPage} />
         </div>
       )}
 
+      {/* Payslips tab */}
+      {tab === 'payslips' && (
+        <div className="card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr>{['Employee', 'Month/Year', 'Basic', 'Allowances', 'Overtime', 'Deductions', 'Net Salary', 'Status', ''].map(h => <th key={h} className="table-header">{h}</th>)}</tr>
+              </thead>
+              <tbody>
+                {payPagination.paginated.length === 0 ? (
+                  <tr><td colSpan={9} className="text-center py-12 text-gray-400">No payslips generated yet</td></tr>
+                ) : payPagination.paginated.map(p => (
+                  <tr key={p.id} className="table-row">
+                    <td className="table-cell font-semibold">{p.employee}</td>
+                    <td className="table-cell text-gray-500">{MONTHS[p.month - 1]} {p.year}</td>
+                    <td className="table-cell">Rs. {p.basic_salary?.toLocaleString()}</td>
+                    <td className="table-cell text-emerald-600">Rs. {p.allowances?.toLocaleString()}</td>
+                    <td className="table-cell">Rs. {p.overtime?.toLocaleString()}</td>
+                    <td className="table-cell text-red-500">Rs. {p.deductions?.toLocaleString()}</td>
+                    <td className="table-cell font-bold text-blue-700">Rs. {p.net_salary?.toLocaleString()}</td>
+                    <td className="table-cell">
+                      <span className={p.status === 'paid' ? 'badge-green' : 'badge-yellow'}>{p.status?.toUpperCase()}</span>
+                    </td>
+                    <td className="table-cell">
+                      {p.status === 'pending' && (
+                        <button onClick={() => markPaid(p.id)} className="px-3 py-1 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-lg text-xs font-semibold hover:bg-emerald-100 transition-colors">
+                          Mark Paid
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Pagination page={payPagination.page} total={payPagination.total} pageSize={payPagination.pageSize} onChange={payPagination.setPage} />
+        </div>
+      )}
+
+      {/* Departments tab */}
       {tab === 'departments' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 16 }}>
-          {departments.map(d => (
-            <div key={d.id} style={{ background: '#fff', borderRadius: 12, padding: 20, border: '1px solid #e2e8f0' }}>
-              <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 6 }}>{d.name}</div>
-              <div style={{ color: '#64748b', fontSize: 13, marginBottom: 12 }}>{d.description || 'No description'}</div>
-              <div style={{ background: '#dbeafe', color: '#1e40af', padding: '4px 12px', borderRadius: 20, fontSize: 13, fontWeight: 600, display: 'inline-block' }}>{d.employee_count} employees</div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {departments.length === 0 ? (
+            <div className="col-span-full text-center py-12 text-gray-400">No departments added yet</div>
+          ) : departments.map(d => (
+            <div key={d.id} className="card p-5">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-3">
+                <Building2 size={18} className="text-blue-600" />
+              </div>
+              <p className="font-bold text-gray-900 mb-1">{d.name}</p>
+              <p className="text-xs text-gray-500 mb-3">{d.description || 'No description'}</p>
+              <span className="badge-blue">{d.employee_count} employees</span>
             </div>
           ))}
         </div>
       )}
 
-      {showEmpModal && (
-        <Modal title={editEmp ? 'Edit Employee' : 'Add Employee'} onClose={() => setShowEmpModal(false)} wide>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 16px' }}>
-            <Input label="Full Name *" value={empForm.name} onChange={e => setEmpForm({ ...empForm, name: e.target.value })} />
-            <Input label="Employee ID *" value={empForm.employee_id} onChange={e => setEmpForm({ ...empForm, employee_id: e.target.value })} />
-            <Input label="Phone" value={empForm.phone} onChange={e => setEmpForm({ ...empForm, phone: e.target.value })} />
-            <Input label="Email" type="email" value={empForm.email} onChange={e => setEmpForm({ ...empForm, email: e.target.value })} />
-            <Input label="CNIC" value={empForm.cnic} onChange={e => setEmpForm({ ...empForm, cnic: e.target.value })} />
-            <Input label="Designation" value={empForm.designation} onChange={e => setEmpForm({ ...empForm, designation: e.target.value })} />
-            <div style={{ marginBottom: 14 }}>
-              <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 5 }}>Department</label>
-              <select value={empForm.department_id} onChange={e => setEmpForm({ ...empForm, department_id: e.target.value })} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 14, background: '#fff' }}>
+      {/* Employee Modal */}
+      {empModal && (
+        <Modal title={empModal === 'edit' ? 'Edit Employee' : 'Add Employee'} onClose={() => setEmpModal(null)} size="lg"
+          footer={<div className="flex gap-2 justify-end"><button onClick={() => setEmpModal(null)} className="btn-secondary text-xs">Cancel</button><button onClick={saveEmployee} disabled={saving} className="btn-primary text-xs">{saving ? 'Saving...' : 'Save Employee'}</button></div>}>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+            {[['Full Name *', 'name', 'text'], ['Employee ID *', 'employee_id', 'text'], ['Phone', 'phone', 'tel'], ['Email', 'email', 'email'], ['CNIC', 'cnic', 'text'], ['Designation', 'designation', 'text']].map(([label, key, type]) => (
+              <div key={key}>
+                <label className="label">{label}</label>
+                <input type={type} className="input text-sm" value={empForm[key] || ''} onChange={e => setE(key, e.target.value)} />
+              </div>
+            ))}
+            <div>
+              <label className="label">Department</label>
+              <select className="input text-sm" value={empForm.department_id} onChange={e => setE('department_id', e.target.value)}>
                 <option value="">Select Department</option>
                 {departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
               </select>
             </div>
             <div />
-            <Input label="Basic Salary (Rs.)" type="number" value={empForm.basic_salary} onChange={e => setEmpForm({ ...empForm, basic_salary: e.target.value })} />
-            <Input label="Allowances (Rs.)" type="number" value={empForm.allowances} onChange={e => setEmpForm({ ...empForm, allowances: e.target.value })} />
-            <Input label="Deductions (Rs.)" type="number" value={empForm.deductions} onChange={e => setEmpForm({ ...empForm, deductions: e.target.value })} />
-          </div>
-          <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 8 }}>
-            <button onClick={() => setShowEmpModal(false)} style={{ padding: '10px 20px', border: '1px solid #e2e8f0', borderRadius: 8, background: '#fff', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
-            <button onClick={saveEmployee} style={{ padding: '10px 24px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>Save Employee</button>
+            {[['Basic Salary (Rs.)', 'basic_salary'], ['Allowances (Rs.)', 'allowances'], ['Deductions (Rs.)', 'deductions']].map(([label, key]) => (
+              <div key={key}>
+                <label className="label">{label}</label>
+                <input type="number" className="input text-sm" value={empForm[key] || ''} onChange={e => setE(key, e.target.value)} />
+              </div>
+            ))}
           </div>
         </Modal>
       )}
 
-      {showPayslipModal && (
-        <Modal title="Generate Payslip" onClose={() => setShowPayslipModal(false)}>
-          <div style={{ marginBottom: 14 }}>
-            <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 5 }}>Employee *</label>
-            <select value={payslipForm.employee_id} onChange={e => setPayslipForm({ ...payslipForm, employee_id: e.target.value })} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 14, background: '#fff' }}>
-              <option value="">Select Employee</option>
-              {employees.map(e => <option key={e.id} value={e.id}>{e.name} ({e.employee_id})</option>)}
-            </select>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            <div style={{ marginBottom: 14 }}>
-              <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 5 }}>Month</label>
-              <select value={payslipForm.month} onChange={e => setPayslipForm({ ...payslipForm, month: parseInt(e.target.value) })} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 14, background: '#fff' }}>
-                {MONTHS.map((m, i) => <option key={i} value={i + 1}>{m}</option>)}
+      {/* Payslip Modal */}
+      {payslipModal && (
+        <Modal title="Generate Payslip" onClose={() => setPayslipModal(false)} size="sm"
+          footer={<div className="flex gap-2 justify-end"><button onClick={() => setPayslipModal(false)} className="btn-secondary text-xs">Cancel</button><button onClick={generatePayslip} disabled={saving} className="btn-primary text-xs">{saving ? 'Generating...' : 'Generate'}</button></div>}>
+          <div className="space-y-3">
+            <div>
+              <label className="label">Employee *</label>
+              <select className="input text-sm" value={payslipForm.employee_id} onChange={e => setP('employee_id', e.target.value)}>
+                <option value="">Select Employee</option>
+                {employees.map(e => <option key={e.id} value={e.id}>{e.name} ({e.employee_id})</option>)}
               </select>
             </div>
-            <Input label="Year" type="number" value={payslipForm.year} onChange={e => setPayslipForm({ ...payslipForm, year: parseInt(e.target.value) })} />
-          </div>
-          <Input label="Overtime (Rs.)" type="number" value={payslipForm.overtime} onChange={e => setPayslipForm({ ...payslipForm, overtime: parseFloat(e.target.value) || 0 })} />
-          <Input label="Extra Deductions (Rs.)" type="number" value={payslipForm.extra_deductions} onChange={e => setPayslipForm({ ...payslipForm, extra_deductions: parseFloat(e.target.value) || 0 })} />
-          <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 8 }}>
-            <button onClick={() => setShowPayslipModal(false)} style={{ padding: '10px 20px', border: '1px solid #e2e8f0', borderRadius: 8, background: '#fff', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
-            <button onClick={generatePayslip} style={{ padding: '10px 24px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>Generate</button>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="label">Month</label>
+                <select className="input text-sm" value={payslipForm.month} onChange={e => setP('month', parseInt(e.target.value))}>
+                  {MONTHS.map((m, i) => <option key={i} value={i + 1}>{m}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="label">Year</label>
+                <input type="number" className="input text-sm" value={payslipForm.year} onChange={e => setP('year', parseInt(e.target.value))} />
+              </div>
+            </div>
+            <div>
+              <label className="label">Overtime (Rs.)</label>
+              <input type="number" className="input text-sm" value={payslipForm.overtime} onChange={e => setP('overtime', parseFloat(e.target.value) || 0)} />
+            </div>
+            <div>
+              <label className="label">Extra Deductions (Rs.)</label>
+              <input type="number" className="input text-sm" value={payslipForm.extra_deductions} onChange={e => setP('extra_deductions', parseFloat(e.target.value) || 0)} />
+            </div>
           </div>
         </Modal>
       )}

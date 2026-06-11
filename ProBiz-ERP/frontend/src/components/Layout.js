@@ -1,123 +1,177 @@
 import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import SubscriptionGuard from './SubscriptionGuard';
 import {
   LayoutDashboard, Package, ShoppingCart, Truck, Users, Building2,
   BookOpen, UserCheck, BarChart3, Settings, LogOut, Menu, X,
-  Bell, ChevronDown, Briefcase, TrendingUp
+  Briefcase, FileText, ChevronRight, CalendarDays
 } from 'lucide-react';
 
 const navItems = [
-  { to: '/app/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/app/inventory', icon: Package, label: 'Inventory' },
-  { to: '/app/sales', icon: ShoppingCart, label: 'Sales / POS' },
-  { to: '/app/purchases', icon: Truck, label: 'Purchases' },
-  { to: '/app/customers', icon: Users, label: 'Customers' },
-  { to: '/app/suppliers', icon: Building2, label: 'Suppliers' },
-  { to: '/app/accounting', icon: BookOpen, label: 'Accounting' },
-  { to: '/app/payroll', icon: UserCheck, label: 'HR & Payroll' },
-  { to: '/app/reports', icon: BarChart3, label: 'Reports' },
-  { to: '/app/settings', icon: Settings, label: 'Settings' },
+  { to: '/app/dashboard',  icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/app/inventory',  icon: Package,         label: 'Inventory' },
+  { to: '/app/sales',      icon: ShoppingCart,    label: 'Sales / POS' },
+  { to: '/app/purchases',  icon: Truck,           label: 'Purchases' },
+  { to: '/app/customers',  icon: Users,           label: 'Customers' },
+  { to: '/app/suppliers',  icon: Building2,       label: 'Suppliers' },
+  { to: '/app/accounting', icon: BookOpen,        label: 'Accounting' },
+  { to: '/app/payroll',    icon: UserCheck,       label: 'HR & Payroll' },
+  { to: '/app/attendance', icon: CalendarDays,    label: 'Attendance' },
+  { to: '/app/reports',    icon: BarChart3,       label: 'Reports' },
+  { to: '/app/docs',       icon: FileText,        label: 'Documentation' },
+  { to: '/app/settings',   icon: Settings,        label: 'Settings' },
 ];
+
+function NavItem({ to, icon: Icon, label, collapsed }) {
+  return (
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `flex items-center gap-3 px-3 py-2.5 rounded-xl mb-0.5 text-sm font-medium transition-all duration-150 group relative
+        ${isActive
+          ? 'bg-white/20 text-white shadow-sm'
+          : 'text-white/65 hover:bg-white/10 hover:text-white'
+        }`
+      }
+      title={collapsed ? label : undefined}
+    >
+      <Icon size={18} className="shrink-0" />
+      {!collapsed && <span className="truncate">{label}</span>}
+      {collapsed && (
+        <span className="absolute left-full ml-3 px-2 py-1 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50">
+          {label}
+        </span>
+      )}
+    </NavLink>
+  );
+}
 
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = () => { logout(); navigate('/login'); };
 
-  return (
-    <div style={{ display: 'flex', height: '100vh', background: 'var(--bg)', overflow: 'hidden' }}>
-      {/* Sidebar */}
-      <aside style={{
-        width: sidebarOpen ? '260px' : '70px',
-        background: 'linear-gradient(180deg, #1e3a8a 0%, #1e40af 60%, #2563eb 100%)',
-        display: 'flex', flexDirection: 'column',
-        transition: 'width 0.3s ease', overflow: 'hidden',
-        boxShadow: '4px 0 20px rgba(0,0,0,0.15)', zIndex: 100, flexShrink: 0,
-      }}>
-        {/* Logo */}
-        <div style={{ padding: '20px 16px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 38, height: 38, borderRadius: 10, background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Briefcase size={20} color="#fff" />
+  const Sidebar = ({ mobile = false }) => (
+    <aside className={`
+      flex flex-col h-full
+      bg-gradient-to-b from-blue-900 via-blue-800 to-blue-700
+      ${mobile ? 'w-72' : collapsed ? 'w-[70px]' : 'w-64'}
+      transition-all duration-300
+    `}>
+      {/* Logo */}
+      <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10">
+        <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
+          <Briefcase size={18} className="text-white" />
+        </div>
+        {(!collapsed || mobile) && (
+          <div>
+            <div className="text-white font-bold text-lg leading-none">ProBiz</div>
+            <div className="text-white/50 text-[11px] mt-0.5">ERP System</div>
           </div>
-          {sidebarOpen && (
-            <div>
-              <div style={{ color: '#fff', fontWeight: 700, fontSize: 18, lineHeight: 1 }}>ProBiz</div>
-              <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 11 }}>ERP System</div>
-            </div>
-          )}
-        </div>
+        )}
+      </div>
 
-        {/* Nav */}
-        <nav style={{ flex: 1, padding: '12px 8px', overflowY: 'auto' }}>
-          {navItems.map(({ to, icon: Icon, label }) => (
-            <NavLink key={to} to={to} style={({ isActive }) => ({
-              display: 'flex', alignItems: 'center', gap: 12,
-              padding: '10px 12px', borderRadius: 10, marginBottom: 4,
-              textDecoration: 'none', color: isActive ? '#fff' : 'rgba(255,255,255,0.65)',
-              background: isActive ? 'rgba(255,255,255,0.2)' : 'transparent',
-              fontWeight: isActive ? 600 : 400, fontSize: 14,
-              transition: 'all 0.2s', whiteSpace: 'nowrap', overflow: 'hidden',
-            })}
-              onMouseEnter={e => { if (!e.currentTarget.style.background.includes('0.2')) e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
-              onMouseLeave={e => { if (!e.currentTarget.className.includes('active')) e.currentTarget.style.background = 'transparent'; }}
+      {/* Nav */}
+      <nav className="flex-1 px-2 py-3 overflow-y-auto scrollbar-thin">
+        {navItems.map(item => (
+          <NavItem key={item.to} {...item} collapsed={collapsed && !mobile} />
+        ))}
+      </nav>
+
+      {/* User + Logout */}
+      <div className="px-2 py-3 border-t border-white/10 space-y-1">
+        {(!collapsed || mobile) && (
+          <div className="px-3 py-2.5 bg-white/10 rounded-xl mb-2">
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-full bg-white/30 flex items-center justify-center text-white font-bold text-xs shrink-0">
+                {user?.name?.charAt(0)}
+              </div>
+              <div className="min-w-0">
+                <div className="text-white text-sm font-semibold truncate">{user?.name}</div>
+                <div className="text-white/50 text-[11px] capitalize">{user?.role}</div>
+              </div>
+            </div>
+          </div>
+        )}
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-300 hover:text-red-200 text-sm font-medium transition-colors"
+        >
+          <LogOut size={17} className="shrink-0" />
+          {(!collapsed || mobile) && 'Logout'}
+        </button>
+      </div>
+    </aside>
+  );
+
+  return (
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
+      {/* Desktop sidebar */}
+      <div className="hidden md:flex shrink-0" style={{ width: collapsed ? 70 : 256, transition: 'width 0.3s' }}>
+        <Sidebar />
+      </div>
+
+      {/* Mobile overlay sidebar */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} />
+          <div className="relative flex h-full w-72">
+            <Sidebar mobile />
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="absolute top-4 right-[-48px] w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-lg"
             >
-              <Icon size={19} style={{ flexShrink: 0 }} />
-              {sidebarOpen && <span>{label}</span>}
-            </NavLink>
-          ))}
-        </nav>
-
-        {/* User info */}
-        <div style={{ padding: '12px 8px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-          {sidebarOpen && (
-            <div style={{ padding: '10px 12px', background: 'rgba(255,255,255,0.1)', borderRadius: 10, marginBottom: 8 }}>
-              <div style={{ color: '#fff', fontWeight: 600, fontSize: 13 }}>{user?.name}</div>
-              <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 11, textTransform: 'capitalize' }}>{user?.role}</div>
-            </div>
-          )}
-          <button onClick={handleLogout} style={{
-            display: 'flex', alignItems: 'center', gap: 12,
-            width: '100%', padding: '10px 12px', borderRadius: 10,
-            background: 'rgba(239,68,68,0.2)', border: 'none',
-            color: '#fca5a5', cursor: 'pointer', fontSize: 14, fontWeight: 500,
-          }}>
-            <LogOut size={18} style={{ flexShrink: 0 }} />
-            {sidebarOpen && 'Logout'}
-          </button>
+              <X size={16} />
+            </button>
+          </div>
         </div>
-      </aside>
+      )}
 
-      {/* Main content */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      {/* Main */}
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Header */}
-        <header style={{
-          height: 60, background: '#fff', borderBottom: '1px solid var(--border)',
-          display: 'flex', alignItems: 'center', padding: '0 20px', gap: 12,
-          boxShadow: '0 1px 4px rgba(0,0,0,0.06)', flexShrink: 0,
-        }}>
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{
-            width: 36, height: 36, borderRadius: 8, border: '1px solid var(--border)',
-            background: '#f8fafc', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            {sidebarOpen ? <X size={18} color="#64748b" /> : <Menu size={18} color="#64748b" />}
+        <header className="h-14 bg-white border-b border-gray-100 flex items-center px-4 gap-3 shadow-sm shrink-0">
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            <Menu size={18} className="text-gray-600" />
           </button>
-          <div style={{ flex: 1 }} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8,
-            padding: '6px 12px', background: '#f1f5f9', borderRadius: 8,
-            cursor: 'pointer', fontSize: 14, color: 'var(--text)' }}>
-            <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13 }}>
+
+          {/* Desktop collapse */}
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="hidden md:flex p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            {collapsed ? <ChevronRight size={18} className="text-gray-500" /> : <Menu size={18} className="text-gray-500" />}
+          </button>
+
+          <div className="flex-1" />
+
+          {/* User badge */}
+          <div className="flex items-center gap-2.5 px-3 py-1.5 bg-gray-50 rounded-xl border border-gray-100">
+            <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xs">
               {user?.name?.charAt(0)}
             </div>
-            <span style={{ fontWeight: 500 }}>{user?.name}</span>
+            <div className="hidden sm:block">
+              <div className="text-sm font-semibold text-gray-800 leading-none">{user?.name}</div>
+              <div className="text-[11px] text-gray-400 capitalize mt-0.5">{user?.role}</div>
+            </div>
           </div>
         </header>
 
         {/* Page content */}
-        <main style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
-          <Outlet />
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 scrollbar-thin">
+          <SubscriptionGuard>
+            <div className="animate-fade-in">
+              <Outlet />
+            </div>
+          </SubscriptionGuard>
         </main>
       </div>
     </div>
