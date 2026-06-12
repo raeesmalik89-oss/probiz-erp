@@ -1,7 +1,8 @@
 [build]
 builder = "dockerfile"
 dockerfilePath = "Dockerfile"
-buildArgs = { REACT_APP_API_URL = "https://web-production-aded4.up.railway.app" }
+buildArgs = { REACT_APP_API_URL = "https://probiz-erp-production.up.railway.app" }
 
 [deploy]
+startCommand = "serve -s build -l 3000"
 restartPolicyType = "on_failure"
