@@ -47,3 +47,15 @@ WPS Cloud Files/
 Saved Games/
 Favorites/
 Links/
+
+# --- Project ---
+!.env.example
+node_modules/
+frontend/build/
+frontend/android/app/build/
+frontend/android/.gradle/
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.db

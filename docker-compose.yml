@@ -1,4 +1,6 @@
-version: '3.8'
+# ProBiz ERP: local / self-hosted stack
+# 1. cp .env.example .env   2. fill in the values   3. docker compose up -d --build
+# App: http://localhost   API: http://localhost:8000   API docs: http://localhost:8000/docs (DEBUG=true)
 
 services:
 
@@ -8,15 +10,13 @@ services:
     container_name: probiz_db
     restart: always
     environment:
-      POSTGRES_DB: probiz_db
-      POSTGRES_USER: probiz_user
-      POSTGRES_PASSWORD: probiz_secure_pass_2024
+      POSTGRES_DB: ${POSTGRES_DB:-probiz_db}
+      POSTGRES_USER: ${POSTGRES_USER:-probiz_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U probiz_user -d probiz_db"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -30,29 +30,30 @@ services:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql://probiz_user:probiz_secure_pass_2024@db:5432/probiz_db
-      SECRET_KEY: probiz-erp-super-secret-change-in-production-raees2024
+      DATABASE_URL: postgresql://${POSTGRES_USER:-probiz_user}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-probiz_db}
+      SECRET_KEY: ${SECRET_KEY:?Set SECRET_KEY in .env}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@probiz.pk}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-}
+      SEED_DEMO_PASSWORD: ${SEED_DEMO_PASSWORD:-}
       ACCESS_TOKEN_EXPIRE_MINUTES: 480
       REFRESH_TOKEN_EXPIRE_DAYS: 30
-      ALLOWED_ORIGINS: http://localhost,http://localhost:80
-      DEBUG: "false"
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost,http://localhost:80}
+      DEBUG: ${DEBUG:-false}
     ports:
       - "8000:8000"
-    command: >
-      sh -c "python seed.py && uvicorn main:app --host 0.0.0.0 --port 8000"
 
-  # React frontend (nginx)
+  # React frontend (static build served on port 3000 inside the container)
   frontend:
     build:
       context: ./frontend
       args:
-        REACT_APP_API_URL: http://localhost:8000
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:8000}
     container_name: probiz_frontend
     restart: always
     depends_on:
       - backend
     ports:
-      - "80:80"
+      - "80:3000"
 
 volumes:
   postgres_data:

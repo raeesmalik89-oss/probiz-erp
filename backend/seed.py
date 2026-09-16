@@ -3,6 +3,14 @@ from database import engine, SessionLocal
 import models
 from auth import get_password_hash
 from datetime import datetime
+import os
+import secrets
+
+
+def _password(env_name):
+    """Use the password from the environment, or generate a random one."""
+    value = os.getenv(env_name, "").strip()
+    return value if value else secrets.token_urlsafe(12)
 
 def seed():
     models.Base.metadata.create_all(bind=engine)
@@ -20,17 +28,20 @@ def seed():
     branch = models.Branch(
         name="Main Branch",
         city="Islamabad",
-        address="House 124, Street 39, I-14/3, Islamabad",
-        phone="0316-8818693"
+        address="Blue Area, Islamabad",
+        phone="051-0000000"
     )
     db.add(branch)
     db.flush()
 
     # Users
+    admin_email = os.getenv("SEED_ADMIN_EMAIL", "").strip() or "admin@probiz.pk"
+    admin_password = _password("SEED_ADMIN_PASSWORD")
+    demo_password = _password("SEED_DEMO_PASSWORD")
     users = [
-        models.User(name="Dr Muhammad Raees RPh", email="raees.malik89@gmail.com", hashed_password=get_password_hash("admin123"), role="superadmin", branch_id=branch.id),
-        models.User(name="Manager", email="manager@probiz.pk", hashed_password=get_password_hash("manager123"), role="manager", branch_id=branch.id),
-        models.User(name="Cashier", email="cashier@probiz.pk", hashed_password=get_password_hash("cashier123"), role="cashier", branch_id=branch.id),
+        models.User(name="Administrator", email=admin_email, hashed_password=get_password_hash(admin_password), role="superadmin", branch_id=branch.id),
+        models.User(name="Manager", email="manager@probiz.pk", hashed_password=get_password_hash(demo_password), role="manager", branch_id=branch.id),
+        models.User(name="Cashier", email="cashier@probiz.pk", hashed_password=get_password_hash(demo_password), role="cashier", branch_id=branch.id),
     ]
     db.add_all(users)
     db.flush()
@@ -109,10 +120,10 @@ def seed():
 
     db.commit()
     print("Clean demo database seeded successfully!")
-    print("\nLogin credentials:")
-    print("  Admin:    raees.malik89@gmail.com / admin123")
-    print("  Manager:  manager@probiz.pk / manager123")
-    print("  Cashier:  cashier@probiz.pk / cashier123")
+    print("\nLogin credentials (shown once; set SEED_ADMIN_PASSWORD / SEED_DEMO_PASSWORD to choose your own):")
+    print(f"  Admin:    {admin_email} / {admin_password}")
+    print(f"  Manager:  manager@probiz.pk / {demo_password}")
+    print(f"  Cashier:  cashier@probiz.pk / {demo_password}")
     db.close()
 
 if __name__ == "__main__":
