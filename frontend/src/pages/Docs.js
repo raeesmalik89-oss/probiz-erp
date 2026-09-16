@@ -66,11 +66,9 @@ const sections = [
           table: {
             headers: ['Role', 'Email', 'Password', 'Access Level'],
             rows: [
-              ['Superadmin', 'raees.malik89@gmail.com', 'admin123', 'Full access — all modules'],
-              ['Admin', 'admin@probiz.pk', 'admin123', 'All modules except system settings'],
-              ['Manager', 'manager@probiz.pk', 'manager123', 'Inventory, Sales, Purchases, Reports'],
-              ['Cashier', 'cashier@probiz.pk', 'cashier123', 'Sales / POS only'],
-              ['Accountant', 'accountant@probiz.pk', 'acc123', 'Accounting and financial reports'],
+              ['Superadmin', 'SEED_ADMIN_EMAIL (default admin@probiz.pk)', 'Set by your administrator', 'Full access — all modules'],
+              ['Manager', 'manager@probiz.pk', 'Set by your administrator', 'Inventory, Sales, Purchases, Reports'],
+              ['Cashier', 'cashier@probiz.pk', 'Set by your administrator', 'Sales / POS only'],
             ]
           }
         },

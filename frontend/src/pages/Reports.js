@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import API from '../api/client';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { BarChart3, TrendingUp, Package, DollarSign, Printer, FileText } from 'lucide-react';
+import { BarChart3, TrendingUp, Package, DollarSign, Printer, FileText, Download } from 'lucide-react';
+import { exportCSV } from '../utils/csvExport';
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#0ea5e9'];
 
@@ -224,9 +225,17 @@ export default function Reports() {
               <label style={{ fontSize: 13, color: '#64748b' }}>To</label>
               <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} style={{ padding: '7px 10px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 13 }} />
             </div>
-            <button onClick={printSummary} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 18px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: 'pointer', marginLeft: 'auto' }}>
-              <Printer size={14} /> Print Summary
-            </button>
+            <div style={{ display: 'flex', gap: 8, marginLeft: 'auto' }}>
+              <button onClick={() => exportCSV(salesList.map(s => ({ Invoice: s.invoice_no, Customer: s.customer, Date: s.date, Total: s.total, Status: s.status })), 'sales-report.csv')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', background: '#f1f5f9', color: '#374151', border: '1px solid #e2e8f0', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
+                <Download size={14} /> Export Sales CSV
+              </button>
+              <button onClick={() => exportCSV(purchasesList.map(p => ({ PO: p.po_number, Supplier: p.supplier, Date: p.date, Total: p.total, Status: p.status })), 'purchases-report.csv')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', background: '#f1f5f9', color: '#374151', border: '1px solid #e2e8f0', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
+                <Download size={14} /> Export Purchases CSV
+              </button>
+              <button onClick={printSummary} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 18px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+                <Printer size={14} /> Print Summary
+              </button>
+            </div>
           </div>
 
           {/* KPI Cards */}
