@@ -38,10 +38,6 @@ WPS Cloud Files/
 .gitconfig
 .wslconfig
 
-# Claude internal config
-.claude.json
-.claude.json.backup
-.claude/
 
 # Personal folders
 Saved Games/
