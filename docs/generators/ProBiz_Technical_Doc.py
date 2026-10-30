@@ -1194,7 +1194,7 @@ bullet('Barcode scanner support — scan product barcodes to add to sale.')
 bullet('Custom logo and letterhead on invoices.')
 bullet('Mobile app (React Native) — same codebase, runs as Android app.')
 bullet('Multi-tenant SaaS — one codebase, many clients on same server with data isolation.')
-bullet('Analytics dashboard with AI insights — which products to reorder, peak sales times.')
+bullet('Smarter analytics dashboard — reorder suggestions from sales history, peak-hours report.')
 
 h2('16.3  Technical Scaling')
 tbl(

@@ -3,10 +3,14 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from database import get_db
 import models
-from auth import verify_password, get_password_hash, create_access_token, create_refresh_token, decode_token, get_current_user
+from auth import verify_password, get_password_hash, create_access_token, create_refresh_token, decode_token, get_current_user, require_roles
 from jose import JWTError
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
+
+# Roles a new account may be assigned. "superadmin" is intentionally excluded —
+# the bootstrap superadmin is created by seed.py, not through the API.
+ASSIGNABLE_ROLES = {"admin", "manager", "cashier", "accountant", "hr"}
 
 class LoginRequest(BaseModel):
     email: str
@@ -42,7 +46,17 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
     }
 
 @router.post("/register")
-def register(request: RegisterRequest, db: Session = Depends(get_db)):
+def register(
+    request: RegisterRequest,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(require_roles("admin")),
+):
+    # Only admins and superadmins may create accounts (require_roles also allows superadmin).
+    if request.role not in ASSIGNABLE_ROLES:
+        raise HTTPException(status_code=400, detail="Invalid role")
+    # A plain admin cannot mint another admin — only a superadmin can.
+    if request.role == "admin" and current_user.role != "superadmin":
+        raise HTTPException(status_code=403, detail="Only a superadmin can create admin accounts")
     existing = db.query(models.User).filter(models.User.email == request.email).first()
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -70,7 +84,7 @@ def get_me(current_user: models.User = Depends(get_current_user)):
     }
 
 @router.get("/users")
-def list_users(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+def list_users(db: Session = Depends(get_db), current_user: models.User = Depends(require_roles("admin", "manager"))):
     users = db.query(models.User).all()
     return [{"id": u.id, "name": u.name, "email": u.email, "role": u.role, "is_active": u.is_active} for u in users]
 
