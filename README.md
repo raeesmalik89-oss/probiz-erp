@@ -10,7 +10,7 @@ in Docker, and as an Android app.
 
 | Layer | Technology |
 |-------|------------|
-| Backend | Python 3.11, FastAPI, SQLAlchemy, Alembic, JWT (python-jose) + bcrypt, ReportLab (PDF), openpyxl (Excel) |
+| Backend | Python 3.11, FastAPI, SQLAlchemy, JWT (python-jose) + bcrypt, ReportLab (PDF), openpyxl (Excel) |
 | Database | PostgreSQL 16 (Docker / production), SQLite (local development) |
 | Frontend | React 18, React Router, Tailwind CSS 3, Recharts, Axios |
 | Mobile | Capacitor 8 (Android) |
