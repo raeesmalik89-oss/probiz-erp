@@ -78,8 +78,8 @@ export default function Customers() {
               <c.icon size={18} className={c.iconCls} />
             </div>
             <div>
-              <p className="text-xl font-bold text-gray-900">{c.value}</p>
-              <p className="text-xs text-gray-500">{c.label}</p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white">{c.value}</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400">{c.label}</p>
             </div>
           </div>
         ))}
@@ -89,7 +89,7 @@ export default function Customers() {
       <div className="card overflow-hidden">
         <div className="p-4 border-b border-gray-50">
           <div className="relative max-w-xs">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
             <input className="input pl-8 text-sm" placeholder="Search customers..." value={search} onChange={e => setSearch(e.target.value)} />
           </div>
         </div>
@@ -105,12 +105,12 @@ export default function Customers() {
             </thead>
             <tbody>
               {paginated.length === 0 ? (
-                <tr><td colSpan={6} className="text-center py-12 text-gray-400">
+                <tr><td colSpan={6} className="text-center py-12 text-gray-400 dark:text-slate-500">
                   <Users size={36} className="mx-auto mb-2 opacity-30" />No customers found
                 </td></tr>
               ) : paginated.map(c => (
                 <tr key={c.id} className="table-row">
-                  <td className="table-cell font-semibold text-gray-900">{c.name}</td>
+                  <td className="table-cell font-semibold text-gray-900 dark:text-white">{c.name}</td>
                   <td className="table-cell">{c.phone || '—'}</td>
                   <td className="table-cell">{c.city || '—'}</td>
                   <td className="table-cell font-semibold text-blue-600">Rs. {c.credit_limit?.toLocaleString()}</td>
@@ -120,7 +120,7 @@ export default function Customers() {
                     </span>
                   </td>
                   <td className="table-cell">
-                    <button onClick={() => openEdit(c)} className="p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <button onClick={() => openEdit(c)} className="p-1.5 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
                       <Edit2 size={13} className="text-blue-500" />
                     </button>
                   </td>

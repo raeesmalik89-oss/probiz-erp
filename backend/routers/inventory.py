@@ -92,6 +92,22 @@ def get_products(
         } for p in products]
     }
 
+@router.get("/products/by-barcode/{barcode}")
+def get_product_by_barcode(barcode: str, db: Session = Depends(get_db), _=Depends(get_current_user)):
+    """Exact-match lookup for POS barcode scanning."""
+    p = db.query(models.Product).filter(
+        models.Product.barcode == barcode,
+        models.Product.is_active == True,
+    ).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="No product with that barcode")
+    return {
+        "id": p.id, "name": p.name, "barcode": p.barcode, "sku": p.sku,
+        "category": p.category.name if p.category else None,
+        "unit": p.unit, "sale_price": p.sale_price, "stock": p.stock,
+    }
+
+
 @router.get("/products/{product_id}")
 def get_product(product_id: int, db: Session = Depends(get_db), _=Depends(get_current_user)):
     p = db.query(models.Product).filter(models.Product.id == product_id).first()

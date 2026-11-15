@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import SubscriptionGuard from './SubscriptionGuard';
 import {
   LayoutDashboard, Package, ShoppingCart, Truck, Users, Building2,
   BookOpen, UserCheck, BarChart3, Settings, LogOut, Menu, X,
-  Briefcase, FileText, ChevronRight, CalendarDays
+  Briefcase, FileText, ChevronRight, CalendarDays, Sun, Moon
 } from 'lucide-react';
 
 const navItems = [
@@ -49,6 +50,7 @@ function NavItem({ to, icon: Icon, label, collapsed }) {
 
 export default function Layout() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -109,7 +111,7 @@ export default function Layout() {
   );
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
+    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden">
       {/* Desktop sidebar */}
       <div className="hidden md:flex shrink-0" style={{ width: collapsed ? 70 : 256, transition: 'width 0.3s' }}>
         <Sidebar />
@@ -134,33 +136,43 @@ export default function Layout() {
       {/* Main */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Header */}
-        <header className="h-14 bg-white border-b border-gray-100 flex items-center px-4 gap-3 shadow-sm shrink-0">
+        <header className="h-14 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 flex items-center px-4 gap-3 shadow-sm shrink-0">
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(true)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
-            <Menu size={18} className="text-gray-600" />
+            <Menu size={18} className="text-slate-600 dark:text-slate-300" />
           </button>
 
           {/* Desktop collapse */}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="hidden md:flex p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="hidden md:flex p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
-            {collapsed ? <ChevronRight size={18} className="text-gray-500" /> : <Menu size={18} className="text-gray-500" />}
+            {collapsed ? <ChevronRight size={18} className="text-slate-500 dark:text-slate-400" /> : <Menu size={18} className="text-slate-500 dark:text-slate-400" />}
           </button>
 
           <div className="flex-1" />
 
+          {/* Theme toggle */}
+          <button
+            onClick={toggleTheme}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            aria-label="Toggle theme"
+            className="p-2 rounded-lg text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+
           {/* User badge */}
-          <div className="flex items-center gap-2.5 px-3 py-1.5 bg-gray-50 rounded-xl border border-gray-100">
+          <div className="flex items-center gap-2.5 px-3 py-1.5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700">
             <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xs">
               {user?.name?.charAt(0)}
             </div>
             <div className="hidden sm:block">
-              <div className="text-sm font-semibold text-gray-800 leading-none">{user?.name}</div>
-              <div className="text-[11px] text-gray-400 capitalize mt-0.5">{user?.role}</div>
+              <div className="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-none">{user?.name}</div>
+              <div className="text-[11px] text-slate-400 dark:text-slate-500 capitalize mt-0.5">{user?.role}</div>
             </div>
           </div>
         </header>

@@ -48,6 +48,7 @@ Links/
 !.env.example
 node_modules/
 frontend/build/
+frontend/dist/
 frontend/android/app/build/
 frontend/android/.gradle/
 __pycache__/
