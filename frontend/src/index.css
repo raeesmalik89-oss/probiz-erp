@@ -20,6 +20,32 @@
     --border: #e2e8f0;
     --bg: #f8fafc;
     --text: #1e293b;
+
+    /* Semantic theme tokens for inline-styled pages. Light values match the
+       original hard-coded colors, so light mode is unchanged; the dark block
+       below flips them when <html> has the `dark` class. */
+    --panel: #ffffff;        /* card / surface background */
+    --panel-2: #f8fafc;      /* subtle panel / table header */
+    --panel-3: #f1f5f9;      /* tab track / chips */
+    --line: #e2e8f0;         /* borders */
+    --line-2: #f1f5f9;       /* thin dividers */
+    --ink: #1e293b;          /* primary text */
+    --ink-2: #475569;        /* secondary text */
+    --ink-muted: #64748b;    /* muted text */
+    --ink-faint: #94a3b8;    /* faint text */
+    --ink-label: #374151;    /* form labels */
+  }
+  html.dark {
+    --panel: #0f172a;
+    --panel-2: #1e293b;
+    --panel-3: #334155;
+    --line: #334155;
+    --line-2: #1e293b;
+    --ink: #e2e8f0;
+    --ink-2: #cbd5e1;
+    --ink-muted: #94a3b8;
+    --ink-faint: #64748b;
+    --ink-label: #cbd5e1;
   }
 }
 
