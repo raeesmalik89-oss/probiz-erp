@@ -3,7 +3,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.probiz.erp',
   appName: 'ProBiz ERP',
-  webDir: 'build',
+  webDir: 'dist',
   server: {
     // Allow mixed HTTP/HTTPS for local dev; production uses pythonanywhere
     allowNavigation: ['raees1989.pythonanywhere.com'],
