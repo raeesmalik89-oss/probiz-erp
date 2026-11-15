@@ -1,49 +1,32 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-const API_BASE = process.env.REACT_APP_API_URL || 'https://raees1989.pythonanywhere.com';
 import {
   Package, ShoppingCart, BookOpen, UserCheck, BarChart3, Shield,
   CheckCircle, Phone, Mail, MapPin, Menu, X,
   TrendingUp, Building2, Zap, Globe, ArrowRight,
-  Play, Clock, ChevronRight, Layers, RefreshCw, FileText
+  Layers, RefreshCw, FileText
 } from 'lucide-react';
 
+const API_BASE = process.env.REACT_APP_API_URL || 'https://raees1989.pythonanywhere.com';
+
 const features = [
-  { icon: Package, title: 'Inventory Management', desc: 'Real-time stock tracking, low-stock alerts, product categories and multi-branch inventory control.', color: '#3b82f6' },
-  { icon: ShoppingCart, title: 'POS & Sales', desc: 'Fast point-of-sale system with invoice generation, customer accounts and payment tracking.', color: '#10b981' },
-  { icon: BookOpen, title: 'Accounting', desc: 'Complete chart of accounts, double-entry bookkeeping, P&L statements and balance sheet reports.', color: '#f59e0b' },
-  { icon: UserCheck, title: 'HR & Payroll', desc: 'Employee management, attendance tracking, automated salary calculation and payslip generation.', color: '#8b5cf6' },
-  { icon: BarChart3, title: 'Analytics & Reports', desc: 'Business dashboards, sales trends, profit analysis and exportable reports for informed decisions.', color: '#ef4444' },
-  { icon: Shield, title: 'Role-Based Access', desc: 'Superadmin, manager, cashier and accountant roles with fine-grained permission control.', color: '#0ea5e9' },
-  { icon: Building2, title: 'Multi-Branch', desc: 'Manage multiple branches from a single platform with centralized data and reporting.', color: '#f97316' },
-  { icon: Globe, title: 'Cloud-Based', desc: 'Access your business data securely from any device, anywhere — no installation required.', color: '#6366f1' },
+  { icon: Package, title: 'Inventory Management', desc: 'Real-time stock tracking, low-stock alerts, product categories and multi-branch inventory control.', color: 'text-blue-600 bg-blue-50' },
+  { icon: ShoppingCart, title: 'POS & Sales', desc: 'Fast point-of-sale system with invoice generation, customer accounts and payment tracking.', color: 'text-emerald-600 bg-emerald-50' },
+  { icon: BookOpen, title: 'Accounting', desc: 'Complete chart of accounts, double-entry bookkeeping, P&L statements and balance sheet reports.', color: 'text-amber-600 bg-amber-50' },
+  { icon: UserCheck, title: 'HR & Payroll', desc: 'Employee management, attendance tracking, automated salary calculation and payslip generation.', color: 'text-violet-600 bg-violet-50' },
+  { icon: BarChart3, title: 'Analytics & Reports', desc: 'Business dashboards, sales trends, profit analysis and exportable reports for informed decisions.', color: 'text-red-500 bg-red-50' },
+  { icon: Shield, title: 'Role-Based Access', desc: 'Superadmin, manager, cashier and accountant roles with fine-grained permission control.', color: 'text-sky-600 bg-sky-50' },
+  { icon: Building2, title: 'Multi-Branch', desc: 'Manage multiple branches from a single platform with centralized data and reporting.', color: 'text-orange-600 bg-orange-50' },
+  { icon: Globe, title: 'Cloud-Based', desc: 'Access your business data securely from any device, anywhere — no installation required.', color: 'text-indigo-600 bg-indigo-50' },
 ];
 
 const industries = ['Pharmacies', 'Hospitals', 'Cash & Carry', 'Garment Stores', 'Spare Parts', 'Supermarkets', 'Clinics', 'Wholesale'];
 
 const plans = [
-  {
-    name: 'Starter',
-    price: '2,999',
-    period: 'month',
-    features: ['1 Branch', 'Up to 3 Users', 'Inventory & Sales', 'Basic Reports', 'Email Support'],
-    popular: false
-  },
-  {
-    name: 'Business',
-    price: '7,999',
-    period: 'month',
-    features: ['Up to 3 Branches', 'Up to 10 Users', 'All Modules', 'Advanced Analytics', 'Priority Support', 'HR & Payroll'],
-    popular: true
-  },
-  {
-    name: 'Enterprise',
-    price: 'Custom',
-    period: '',
-    features: ['Unlimited Branches', 'Unlimited Users', 'All Modules', 'Custom Reports', 'Dedicated Support', 'API Access'],
-    popular: false
-  },
+  { name: 'Starter', price: '2,999', period: 'month', features: ['1 Branch', 'Up to 3 Users', 'Inventory & Sales', 'Basic Reports', 'Email Support'], popular: false },
+  { name: 'Business', price: '7,999', period: 'month', features: ['Up to 3 Branches', 'Up to 10 Users', 'All Modules', 'Advanced Analytics', 'Priority Support', 'HR & Payroll'], popular: true },
+  { name: 'Enterprise', price: 'Custom', period: '', features: ['Unlimited Branches', 'Unlimited Users', 'All Modules', 'Custom Reports', 'Dedicated Support', 'API Access'], popular: false },
 ];
 
 const whyUs = [
@@ -52,6 +35,8 @@ const whyUs = [
   { icon: RefreshCw, title: 'Real-Time Data', desc: 'Every transaction updates instantly across all modules. No manual reconciliation, no data lag.' },
   { icon: FileText, title: 'Instant Reports', desc: 'Generate profit & loss, balance sheet, stock valuation and payroll reports in seconds — not hours.' },
 ];
+
+const navLinks = ['Features', 'Industries', 'Pricing', 'Contact'];
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -66,110 +51,95 @@ export default function Landing() {
     try {
       await axios.post(`${API_BASE}/api/demo/request`, formData);
     } catch (err) {
-      // Still show success even if API fails (don't block user)
       console.error('Demo request error:', err);
     }
     setFormLoading(false);
     setFormSent(true);
   };
 
-  return (
-    <div style={{ fontFamily: "'Inter', sans-serif", color: '#1e293b', overflowX: 'hidden' }}>
+  const inputCls = 'w-full px-3.5 py-3 border border-slate-200 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition';
 
+  return (
+    <div className="font-sans text-slate-800 overflow-x-hidden bg-white">
       {/* Navbar */}
-      <nav style={{
-        position: 'sticky', top: 0, zIndex: 1000,
-        background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid #e2e8f0', padding: '0 5%',
-        display: 'flex', alignItems: 'center', height: 68,
-        boxShadow: '0 1px 8px rgba(0,0,0,0.06)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1 }}>
-          <div style={{ width: 36, height: 36, background: 'linear-gradient(135deg,#1e40af,#3b82f6)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <TrendingUp size={20} color="#fff" />
+      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div className="max-w-6xl mx-auto px-5 h-[68px] flex items-center">
+          <div className="flex items-center gap-2.5 flex-1">
+            <div className="w-9 h-9 rounded-[10px] bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+              <TrendingUp size={20} className="text-white" />
+            </div>
+            <span className="font-extrabold text-[22px] text-blue-800">ProBiz</span>
+            <span className="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-widest">ERP</span>
           </div>
-          <span style={{ fontWeight: 800, fontSize: 22, color: '#1e40af' }}>ProBiz</span>
-          <span style={{ background: '#dbeafe', color: '#1e40af', fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 20, letterSpacing: 1 }}>ERP</span>
+          <div className="hidden md:flex gap-8 items-center">
+            {navLinks.map(item => (
+              <a key={item} href={`#${item.toLowerCase()}`} className="text-slate-600 font-medium text-[15px] hover:text-blue-700 transition-colors">{item}</a>
+            ))}
+            <button onClick={() => navigate('/login')} className="px-5 py-2.5 bg-gradient-to-br from-blue-700 to-blue-500 text-white rounded-lg font-semibold text-sm hover:shadow-lg hover:shadow-blue-600/25 transition-all">
+              Login to ERP
+            </button>
+          </div>
+          <button onClick={() => setMenuOpen(o => !o)} className="md:hidden p-2 rounded-lg hover:bg-slate-100" aria-label="Menu">
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
-        <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
-          {['Features', 'Industries', 'Pricing', 'Contact'].map(item => (
-            <a key={item} href={`#${item.toLowerCase()}`} style={{ textDecoration: 'none', color: '#475569', fontWeight: 500, fontSize: 15 }}
-              onMouseEnter={e => e.target.style.color = '#1e40af'}
-              onMouseLeave={e => e.target.style.color = '#475569'}
-            >{item}</a>
-          ))}
-          <button onClick={() => navigate('/login')} style={{
-            padding: '9px 22px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)',
-            color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600,
-            fontSize: 14, cursor: 'pointer',
-          }}>Login to ERP</button>
-        </div>
+        {/* Mobile menu */}
+        {menuOpen && (
+          <div className="md:hidden border-t border-slate-100 bg-white px-5 py-4 flex flex-col gap-1">
+            {navLinks.map(item => (
+              <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setMenuOpen(false)} className="py-2.5 text-slate-700 font-medium hover:text-blue-700">{item}</a>
+            ))}
+            <button onClick={() => navigate('/login')} className="mt-2 px-5 py-2.5 bg-gradient-to-br from-blue-700 to-blue-500 text-white rounded-lg font-semibold text-sm">
+              Login to ERP
+            </button>
+          </div>
+        )}
       </nav>
 
       {/* Hero */}
-      <section style={{
-        minHeight: '88vh', display: 'flex', alignItems: 'center',
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #1e40af 100%)',
-        padding: '80px 5%', position: 'relative', overflow: 'hidden',
-      }}>
-        <div style={{ position: 'absolute', top: -200, left: -200, width: 600, height: 600, borderRadius: '50%', background: 'rgba(59,130,246,0.1)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: -100, right: -100, width: 400, height: 400, borderRadius: '50%', background: 'rgba(139,92,246,0.08)', pointerEvents: 'none' }} />
-
-        <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%', display: 'flex', alignItems: 'center', gap: 60, flexWrap: 'wrap' }}>
-          <div style={{ flex: '1 1 480px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 24, padding: '6px 16px', marginBottom: 28 }}>
-              <Zap size={14} color="#fbbf24" fill="#fbbf24" />
-              <span style={{ color: '#e2e8f0', fontSize: 13, fontWeight: 500 }}>Complete Business Management for Pakistan</span>
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-blue-800 px-5 py-20 md:py-28">
+        <div className="absolute -top-48 -left-48 w-[600px] h-[600px] rounded-full bg-blue-500/10 pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-violet-500/10 pointer-events-none" />
+        <div className="relative max-w-6xl mx-auto flex items-center gap-14 flex-wrap">
+          <div className="flex-1 min-w-[320px]">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-7">
+              <Zap size={14} className="text-amber-400 fill-amber-400" />
+              <span className="text-slate-200 text-[13px] font-medium">Complete Business Management for Pakistan</span>
             </div>
-            <h1 style={{ fontSize: 'clamp(34px, 4.5vw, 60px)', fontWeight: 900, color: '#fff', lineHeight: 1.15, marginBottom: 24 }}>
+            <h1 className="text-[clamp(34px,5vw,58px)] font-black text-white leading-[1.12] mb-6">
               Run Your Business<br />
-              <span style={{ background: 'linear-gradient(90deg,#60a5fa,#a78bfa,#34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                Smarter & Faster
-              </span>
+              <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">Smarter &amp; Faster</span>
             </h1>
-            <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.72)', lineHeight: 1.75, marginBottom: 40, maxWidth: 500 }}>
+            <p className="text-[17px] text-white/70 leading-relaxed mb-10 max-w-lg">
               ProBiz ERP is a complete business management platform built for Pakistani businesses.
               Manage inventory, sales, accounting, payroll and analytics — all in one place.
             </p>
-            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-              <button onClick={() => navigate('/login')} style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                padding: '13px 30px', background: '#fff',
-                color: '#1e40af', border: 'none', borderRadius: 10,
-                fontWeight: 700, fontSize: 15, cursor: 'pointer',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
-              }}>
+            <div className="flex gap-4 flex-wrap">
+              <button onClick={() => navigate('/login')} className="flex items-center gap-2 px-7 py-3.5 bg-white text-blue-800 rounded-xl font-bold text-[15px] shadow-xl shadow-black/20 hover:-translate-y-0.5 transition-transform">
                 Try Free Demo <ArrowRight size={17} />
               </button>
-              <a href="#contact" style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                padding: '13px 26px', background: 'rgba(255,255,255,0.08)',
-                color: '#fff', border: '1px solid rgba(255,255,255,0.25)',
-                borderRadius: 10, fontWeight: 600, fontSize: 15, cursor: 'pointer',
-                textDecoration: 'none',
-              }}>
+              <a href="#contact" className="flex items-center gap-2 px-6 py-3.5 bg-white/10 text-white border border-white/25 rounded-xl font-semibold text-[15px] hover:bg-white/20 transition-colors">
                 <Phone size={15} /> Contact Sales
               </a>
             </div>
           </div>
 
-          {/* Feature highlights card */}
-          <div style={{ flex: '1 1 340px', display: 'flex', justifyContent: 'center' }}>
-            <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 20, padding: 28, width: '100%', maxWidth: 400, backdropFilter: 'blur(12px)' }}>
-              <div style={{ color: '#94a3b8', fontSize: 12, fontWeight: 600, letterSpacing: 1, marginBottom: 20 }}>WHAT'S INCLUDED</div>
+          <div className="flex-1 min-w-[300px] flex justify-center">
+            <div className="bg-white/[0.06] border border-white/15 rounded-3xl p-7 w-full max-w-sm backdrop-blur-md">
+              <div className="text-slate-400 text-xs font-semibold tracking-widest mb-5">WHAT'S INCLUDED</div>
               {[
-                ['Inventory & Stock Control', '#3b82f6'],
-                ['POS & Sales Management', '#10b981'],
-                ['Double-Entry Accounting', '#f59e0b'],
-                ['HR & Payroll Module', '#8b5cf6'],
-                ['Multi-Branch Support', '#f97316'],
-                ['Role-Based Access Control', '#0ea5e9'],
-                ['Analytics & Reports', '#ef4444'],
-              ].map(([label, color]) => (
-                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '9px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: color, flexShrink: 0 }} />
-                  <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: 14 }}>{label}</span>
-                  <CheckCircle size={14} color="#34d399" style={{ marginLeft: 'auto' }} />
+                ['Inventory & Stock Control', 'bg-blue-500'],
+                ['POS & Sales Management', 'bg-emerald-500'],
+                ['Double-Entry Accounting', 'bg-amber-500'],
+                ['HR & Payroll Module', 'bg-violet-500'],
+                ['Multi-Branch Support', 'bg-orange-500'],
+                ['Role-Based Access Control', 'bg-sky-500'],
+                ['Analytics & Reports', 'bg-red-500'],
+              ].map(([label, dot]) => (
+                <div key={label} className="flex items-center gap-3 py-2.5 border-b border-white/[0.06] last:border-0">
+                  <span className={`w-2 h-2 rounded-full shrink-0 ${dot}`} />
+                  <span className="text-white/80 text-sm flex-1">{label}</span>
+                  <CheckCircle size={14} className="text-emerald-400" />
                 </div>
               ))}
             </div>
@@ -178,21 +148,17 @@ export default function Landing() {
       </section>
 
       {/* Why ProBiz */}
-      <section style={{ padding: '90px 5%', background: '#fff' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <div style={{ display: 'inline-block', background: '#dbeafe', color: '#1e40af', padding: '4px 16px', borderRadius: 20, fontSize: 13, fontWeight: 600, marginBottom: 16 }}>WHY PROBIZ</div>
-            <h2 style={{ fontSize: 38, fontWeight: 800, marginBottom: 14 }}>Designed for How You Work</h2>
-            <p style={{ fontSize: 17, color: '#64748b', maxWidth: 520, margin: '0 auto' }}>Built from the ground up for Pakistani business operations.</p>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 28 }}>
+      <section className="py-20 md:py-24 px-5 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <SectionHeading tag="WHY PROBIZ" title="Designed for How You Work" subtitle="Built from the ground up for Pakistani business operations." />
+          <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
             {whyUs.map(({ icon: Icon, title, desc }) => (
-              <div key={title} style={{ background: '#f8fafc', borderRadius: 16, padding: 28, border: '1px solid #e2e8f0' }}>
-                <div style={{ width: 48, height: 48, background: '#dbeafe', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
-                  <Icon size={24} color="#1e40af" />
+              <div key={title} className="bg-slate-50 rounded-2xl p-7 border border-slate-200">
+                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                  <Icon size={24} className="text-blue-700" />
                 </div>
-                <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 10 }}>{title}</h3>
-                <p style={{ color: '#64748b', fontSize: 14, lineHeight: 1.65 }}>{desc}</p>
+                <h3 className="text-[17px] font-bold mb-2.5">{title}</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -200,24 +166,17 @@ export default function Landing() {
       </section>
 
       {/* Features */}
-      <section id="features" style={{ padding: '90px 5%', background: '#f8fafc' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <div style={{ display: 'inline-block', background: '#dbeafe', color: '#1e40af', padding: '4px 16px', borderRadius: 20, fontSize: 13, fontWeight: 600, marginBottom: 16 }}>FEATURES</div>
-            <h2 style={{ fontSize: 38, fontWeight: 800, marginBottom: 14 }}>Everything Your Business Needs</h2>
-            <p style={{ fontSize: 17, color: '#64748b', maxWidth: 520, margin: '0 auto' }}>A complete suite of tools built for businesses of all sizes across Pakistan.</p>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24 }}>
+      <section id="features" className="py-20 md:py-24 px-5 bg-slate-50">
+        <div className="max-w-6xl mx-auto">
+          <SectionHeading tag="FEATURES" title="Everything Your Business Needs" subtitle="A complete suite of tools built for businesses of all sizes across Pakistan." />
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {features.map(({ icon: Icon, title, desc, color }) => (
-              <div key={title} style={{ background: '#fff', borderRadius: 16, padding: 28, border: '1px solid #e2e8f0', transition: 'all 0.25s', cursor: 'default' }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 36px rgba(0,0,0,0.08)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
-              >
-                <div style={{ width: 50, height: 50, background: color + '18', borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
-                  <Icon size={24} color={color} />
+              <div key={title} className="bg-white rounded-2xl p-7 border border-slate-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/60 transition-all">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${color}`}>
+                  <Icon size={24} />
                 </div>
-                <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 10 }}>{title}</h3>
-                <p style={{ color: '#64748b', fontSize: 14, lineHeight: 1.65 }}>{desc}</p>
+                <h3 className="text-[17px] font-bold mb-2.5">{title}</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -225,18 +184,14 @@ export default function Landing() {
       </section>
 
       {/* Industries */}
-      <section id="industries" style={{ padding: '80px 5%', background: 'linear-gradient(135deg,#1e3a8a,#1e40af)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: 36, fontWeight: 800, color: '#fff', marginBottom: 14 }}>Suitable for Your Industry</h2>
-          <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 16, marginBottom: 48 }}>ProBiz ERP adapts to the workflow of different business types</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, justifyContent: 'center' }}>
+      <section id="industries" className="py-20 px-5 bg-gradient-to-br from-blue-900 to-blue-700">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-3.5">Suitable for Your Industry</h2>
+          <p className="text-white/65 text-base mb-12">ProBiz ERP adapts to the workflow of different business types</p>
+          <div className="flex flex-wrap gap-3.5 justify-center">
             {industries.map(ind => (
-              <div key={ind} style={{
-                background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.18)',
-                borderRadius: 50, padding: '11px 22px', color: '#fff',
-                fontWeight: 600, fontSize: 14, display: 'flex', alignItems: 'center', gap: 8,
-              }}>
-                <CheckCircle size={15} color="#34d399" /> {ind}
+              <div key={ind} className="bg-white/10 border border-white/20 rounded-full px-5 py-2.5 text-white font-semibold text-sm flex items-center gap-2">
+                <CheckCircle size={15} className="text-emerald-400" /> {ind}
               </div>
             ))}
           </div>
@@ -244,68 +199,51 @@ export default function Landing() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" style={{ padding: '90px 5%', background: '#f8fafc' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <div style={{ display: 'inline-block', background: '#dbeafe', color: '#1e40af', padding: '4px 16px', borderRadius: 20, fontSize: 13, fontWeight: 600, marginBottom: 16 }}>PRICING</div>
-            <h2 style={{ fontSize: 38, fontWeight: 800, marginBottom: 14 }}>Simple, Transparent Pricing</h2>
-            <p style={{ color: '#64748b', fontSize: 17 }}>No hidden charges. No setup fees. Cancel anytime.</p>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 28, alignItems: 'center' }}>
-            {plans.map(({ name, price, period, features, popular }) => (
-              <div key={name} style={{
-                background: popular ? 'linear-gradient(135deg,#1e3a8a,#2563eb)' : '#fff',
-                borderRadius: 20, padding: 36,
-                border: popular ? 'none' : '1px solid #e2e8f0',
-                boxShadow: popular ? '0 20px 60px rgba(30,64,175,0.25)' : 'none',
-                transform: popular ? 'scale(1.04)' : 'none',
-                position: 'relative',
-              }}>
-                {popular && <div style={{ position: 'absolute', top: 16, right: 16, background: '#f59e0b', color: '#fff', fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 20 }}>POPULAR</div>}
-                <div style={{ fontSize: 20, fontWeight: 700, color: popular ? '#fff' : '#1e293b', marginBottom: 8 }}>{name}</div>
-                <div style={{ marginBottom: 28 }}>
+      <section id="pricing" className="py-20 md:py-24 px-5 bg-slate-50">
+        <div className="max-w-5xl mx-auto">
+          <SectionHeading tag="PRICING" title="Simple, Transparent Pricing" subtitle="No hidden charges. No setup fees. Cancel anytime." />
+          <div className="grid gap-7 md:grid-cols-3 items-center">
+            {plans.map(({ name, price, period, features: planFeatures, popular }) => (
+              <div key={name} className={`rounded-3xl p-9 relative ${popular ? 'bg-gradient-to-br from-blue-900 to-blue-600 shadow-2xl shadow-blue-600/25 md:scale-105' : 'bg-white border border-slate-200'}`}>
+                {popular && <div className="absolute top-4 right-4 bg-amber-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">POPULAR</div>}
+                <div className={`text-xl font-bold mb-2 ${popular ? 'text-white' : 'text-slate-800'}`}>{name}</div>
+                <div className="mb-7">
                   {price !== 'Custom' ? (
                     <>
-                      <span style={{ fontSize: 38, fontWeight: 900, color: popular ? '#fff' : '#1e40af' }}>Rs. {price}</span>
-                      <span style={{ color: popular ? 'rgba(255,255,255,0.65)' : '#64748b', fontSize: 14 }}>/{period}</span>
+                      <span className={`text-4xl font-black ${popular ? 'text-white' : 'text-blue-800'}`}>Rs. {price}</span>
+                      <span className={popular ? 'text-white/65 text-sm' : 'text-slate-500 text-sm'}>/{period}</span>
                     </>
                   ) : (
-                    <span style={{ fontSize: 38, fontWeight: 900, color: popular ? '#fff' : '#1e40af' }}>Custom</span>
+                    <span className={`text-4xl font-black ${popular ? 'text-white' : 'text-blue-800'}`}>Custom</span>
                   )}
                 </div>
-                <ul style={{ listStyle: 'none', marginBottom: 32, padding: 0 }}>
-                  {features.map(f => (
-                    <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '7px 0', color: popular ? 'rgba(255,255,255,0.85)' : '#475569', fontSize: 14 }}>
-                      <CheckCircle size={15} color={popular ? '#34d399' : '#10b981'} />
+                <ul className="space-y-2.5 mb-8">
+                  {planFeatures.map(f => (
+                    <li key={f} className={`flex items-center gap-2.5 text-sm ${popular ? 'text-white/85' : 'text-slate-600'}`}>
+                      <CheckCircle size={15} className={popular ? 'text-emerald-400' : 'text-emerald-500'} />
                       {f}
                     </li>
                   ))}
                 </ul>
-                <button onClick={() => navigate('/login')} style={{
-                  width: '100%', padding: '13px 0',
-                  background: popular ? '#fff' : 'linear-gradient(135deg,#1e40af,#3b82f6)',
-                  color: popular ? '#1e40af' : '#fff',
-                  border: 'none', borderRadius: 10, fontWeight: 700,
-                  fontSize: 15, cursor: 'pointer',
-                }}>
+                <button onClick={() => navigate('/login')} className={`w-full py-3 rounded-xl font-bold text-[15px] transition-all ${popular ? 'bg-white text-blue-800 hover:bg-slate-100' : 'bg-gradient-to-br from-blue-700 to-blue-500 text-white hover:shadow-lg hover:shadow-blue-600/25'}`}>
                   {name === 'Enterprise' ? 'Contact Sales' : 'Get Started'}
                 </button>
               </div>
             ))}
           </div>
-          <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: 14, marginTop: 32 }}>
+          <p className="text-center text-slate-400 text-sm mt-8">
             All plans include a free demo. Contact us to discuss your requirements before subscribing.
           </p>
         </div>
       </section>
 
       {/* Contact */}
-      <section id="contact" style={{ padding: '90px 5%', background: '#fff' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'start' }}>
+      <section id="contact" className="py-20 md:py-24 px-5 bg-white">
+        <div className="max-w-5xl mx-auto grid gap-12 md:gap-16 md:grid-cols-2 items-start">
           <div>
-            <div style={{ display: 'inline-block', background: '#dbeafe', color: '#1e40af', padding: '4px 16px', borderRadius: 20, fontSize: 13, fontWeight: 600, marginBottom: 20 }}>CONTACT US</div>
-            <h2 style={{ fontSize: 36, fontWeight: 800, marginBottom: 16 }}>Let's Talk About Your Business</h2>
-            <p style={{ color: '#64748b', fontSize: 16, lineHeight: 1.75, marginBottom: 40 }}>
+            <SectionTag>CONTACT US</SectionTag>
+            <h2 className="text-3xl md:text-4xl font-extrabold mt-5 mb-4">Let's Talk About Your Business</h2>
+            <p className="text-slate-500 text-base leading-relaxed mb-10">
               Get in touch for a free demo or to discuss how ProBiz ERP can work for your business.
               We'll walk you through the system and answer all your questions.
             </p>
@@ -314,30 +252,30 @@ export default function Landing() {
               [Mail, 'raees.malik89@gmail.com', 'Email us anytime'],
               [MapPin, 'House 124, Street 39, I-14/3, Islamabad', 'Head Office'],
             ].map(([Icon, value, label]) => (
-              <div key={label} style={{ display: 'flex', gap: 16, marginBottom: 22 }}>
-                <div style={{ width: 46, height: 46, background: '#dbeafe', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Icon size={20} color="#1e40af" />
+              <div key={label} className="flex gap-4 mb-5">
+                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
+                  <Icon size={20} className="text-blue-700" />
                 </div>
                 <div>
-                  <div style={{ fontWeight: 600, fontSize: 15, color: '#1e293b' }}>{value}</div>
-                  <div style={{ color: '#94a3b8', fontSize: 13 }}>{label}</div>
+                  <div className="font-semibold text-[15px] text-slate-800">{value}</div>
+                  <div className="text-slate-400 text-[13px]">{label}</div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div style={{ background: '#f8fafc', borderRadius: 20, padding: 36, border: '1px solid #e2e8f0' }}>
+          <div className="bg-slate-50 rounded-3xl p-8 md:p-9 border border-slate-200">
             {formSent ? (
-              <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                <CheckCircle size={48} color="#10b981" style={{ marginBottom: 16 }} />
-                <h3 style={{ fontSize: 22, fontWeight: 700, marginBottom: 10 }}>Message Received!</h3>
-                <p style={{ color: '#64748b', fontSize: 15 }}>We'll contact you within 24 hours to schedule your demo.</p>
+              <div className="text-center py-10">
+                <CheckCircle size={48} className="text-emerald-500 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2.5">Message Received!</h3>
+                <p className="text-slate-500 text-[15px]">We'll contact you within 24 hours to schedule your demo.</p>
               </div>
             ) : (
               <>
-                <h3 style={{ fontSize: 21, fontWeight: 700, marginBottom: 6 }}>Request a Free Demo</h3>
-                <p style={{ color: '#94a3b8', fontSize: 14, marginBottom: 24 }}>We'll set up a live walkthrough for your team.</p>
-                <form onSubmit={handleDemo}>
+                <h3 className="text-xl font-bold mb-1.5">Request a Free Demo</h3>
+                <p className="text-slate-400 text-sm mb-6">We'll set up a live walkthrough for your team.</p>
+                <form onSubmit={handleDemo} className="space-y-3">
                   {[
                     ['Your Name', 'name', 'text'],
                     ['Business Name', 'business', 'text'],
@@ -347,18 +285,16 @@ export default function Landing() {
                     <input key={field} type={type} placeholder={placeholder} required
                       value={formData[field]}
                       onChange={e => setFormData({ ...formData, [field]: e.target.value })}
-                      style={{ width: '100%', padding: '12px 14px', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 14, marginBottom: 12, outline: 'none', fontFamily: 'Inter, sans-serif', background: '#fff', boxSizing: 'border-box' }} />
+                      className={inputCls} />
                   ))}
                   <select required value={formData.industry} onChange={e => setFormData({ ...formData, industry: e.target.value })}
-                    style={{ width: '100%', padding: '12px 14px', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 14, marginBottom: 20, background: '#fff', fontFamily: 'Inter, sans-serif', color: formData.industry ? '#1e293b' : '#94a3b8' }}>
+                    className={`${inputCls} ${formData.industry ? 'text-slate-800' : 'text-slate-400'}`}>
                     <option value="" disabled>Select Your Industry</option>
-                    {industries.map(i => <option key={i}>{i}</option>)}
+                    {industries.map(i => <option key={i} className="text-slate-800">{i}</option>)}
                   </select>
-                  <button type="submit" disabled={formLoading} style={{
-                    width: '100%', padding: '13px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)',
-                    color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: 15, cursor: formLoading ? 'not-allowed' : 'pointer', opacity: formLoading ? 0.8 : 1,
-                  }}>
-                    {formLoading ? '⏳ Sending...' : 'Request Free Demo →'}
+                  <button type="submit" disabled={formLoading}
+                    className="w-full py-3.5 bg-gradient-to-br from-blue-700 to-blue-500 text-white rounded-xl font-bold text-[15px] hover:shadow-lg hover:shadow-blue-600/25 transition-all disabled:opacity-70">
+                    {formLoading ? 'Sending…' : 'Request Free Demo →'}
                   </button>
                 </form>
               </>
@@ -368,24 +304,38 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer style={{ background: '#0f172a', color: 'rgba(255,255,255,0.65)', padding: '48px 5% 28px' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-            <div style={{ width: 32, height: 32, background: 'linear-gradient(135deg,#1e40af,#3b82f6)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <TrendingUp size={17} color="#fff" />
+      <footer className="bg-slate-950 text-white/65 px-5 pt-12 pb-7">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-2.5 mb-2.5">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-700 to-blue-500 rounded-lg flex items-center justify-center">
+              <TrendingUp size={17} className="text-white" />
             </div>
-            <span style={{ color: '#fff', fontWeight: 800, fontSize: 19 }}>ProBiz ERP</span>
+            <span className="text-white font-extrabold text-lg">ProBiz ERP</span>
           </div>
-          <p style={{ fontSize: 14, marginBottom: 6 }}>Complete business management software for Pakistani businesses.</p>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginBottom: 24 }}>
+          <p className="text-sm mb-1.5">Complete business management software for Pakistani businesses.</p>
+          <p className="text-[13px] text-white/40 mb-6">
             Dr Muhammad Raees RPh &nbsp;|&nbsp; raees.malik89@gmail.com &nbsp;|&nbsp; 0316-8818693 &nbsp;|&nbsp; Islamabad, Pakistan
           </p>
-          <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 22, display: 'flex', justifyContent: 'space-between', fontSize: 13, flexWrap: 'wrap', gap: 10 }}>
+          <div className="border-t border-white/10 pt-5 flex justify-between text-[13px] flex-wrap gap-2.5">
             <span>© 2024 ProBiz ERP. All rights reserved.</span>
             <span>Made in Pakistan 🇵🇰</span>
           </div>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function SectionTag({ children }) {
+  return <div className="inline-block bg-blue-100 text-blue-800 px-4 py-1 rounded-full text-[13px] font-semibold">{children}</div>;
+}
+
+function SectionHeading({ tag, title, subtitle }) {
+  return (
+    <div className="text-center mb-14">
+      <SectionTag>{tag}</SectionTag>
+      <h2 className="text-3xl md:text-[38px] font-extrabold mt-4 mb-3.5">{title}</h2>
+      <p className="text-slate-500 text-[17px] max-w-xl mx-auto">{subtitle}</p>
     </div>
   );
 }

@@ -34,11 +34,11 @@ function StatCard({ icon: Icon, label, value, sub, iconCls, bgCls, border }) {
         <Icon size={22} className={iconCls} />
       </div>
       <div className="min-w-0">
-        <p className="text-xs text-gray-500 mb-1">{label}</p>
-        <p className="text-2xl font-extrabold text-gray-900 leading-none">{value ?? '—'}</p>
-        {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
+        <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">{label}</p>
+        <p className="text-2xl font-extrabold text-gray-900 dark:text-white leading-none">{value ?? '—'}</p>
+        {sub && <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">{sub}</p>}
       </div>
-      <ArrowUpRight size={14} className="text-gray-300 ml-auto shrink-0 mt-1" />
+      <ArrowUpRight size={14} className="text-gray-300 dark:text-slate-600 ml-auto shrink-0 mt-1" />
     </div>
   );
 }
@@ -47,7 +47,7 @@ function SectionCard({ title, children, action }) {
   return (
     <div className="card overflow-hidden">
       <div className="flex items-center justify-between px-5 py-4 border-b border-gray-50">
-        <h3 className="font-semibold text-gray-800 text-sm">{title}</h3>
+        <h3 className="font-semibold text-gray-800 dark:text-slate-100 text-sm">{title}</h3>
         {action}
       </div>
       <div className="p-5">{children}</div>
@@ -156,14 +156,14 @@ export default function Dashboard() {
                 {topProducts.slice(0, 4).map((p, i) => (
                   <div key={p.name} className="flex items-center gap-2">
                     <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: PIE_COLORS[i % 5] }} />
-                    <span className="text-xs text-gray-500 flex-1 truncate">{p.name}</span>
-                    <span className="text-xs font-semibold text-gray-800">Rs. {p.revenue?.toLocaleString()}</span>
+                    <span className="text-xs text-gray-500 dark:text-slate-400 flex-1 truncate">{p.name}</span>
+                    <span className="text-xs font-semibold text-gray-800 dark:text-slate-100">Rs. {p.revenue?.toLocaleString()}</span>
                   </div>
                 ))}
               </div>
             </>
           ) : (
-            <div className="flex items-center justify-center h-40 text-gray-400 text-sm">No sales data yet</div>
+            <div className="flex items-center justify-center h-40 text-gray-400 dark:text-slate-500 text-sm">No sales data yet</div>
           )}
         </SectionCard>
       </div>
@@ -196,7 +196,7 @@ export default function Dashboard() {
               </thead>
               <tbody>
                 {recentSales.length === 0 ? (
-                  <tr><td colSpan={4} className="text-center py-8 text-gray-400 text-sm">No recent sales</td></tr>
+                  <tr><td colSpan={4} className="text-center py-8 text-gray-400 dark:text-slate-500 text-sm">No recent sales</td></tr>
                 ) : recentSales.map(s => (
                   <tr key={s.id} className="table-row">
                     <td className="table-cell pl-5 font-semibold text-blue-700">{s.invoice_no}</td>
@@ -226,11 +226,11 @@ export default function Dashboard() {
           <div className="p-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {lowStock.map(p => (
               <div key={p.id} className="bg-amber-50 border border-amber-100 rounded-xl p-3">
-                <p className="font-semibold text-sm text-gray-800 truncate mb-1">{p.name}</p>
+                <p className="font-semibold text-sm text-gray-800 dark:text-slate-100 truncate mb-1">{p.name}</p>
                 <p className="text-xs text-amber-700">
                   Stock: <span className="font-bold">{p.stock} {p.unit}</span>
                 </p>
-                <p className="text-xs text-gray-400">Min: {p.min_stock}</p>
+                <p className="text-xs text-gray-400 dark:text-slate-500">Min: {p.min_stock}</p>
               </div>
             ))}
           </div>

@@ -18,10 +18,10 @@ const TYPE_COLORS = {
 
 function TabBar({ tabs, active, onChange }) {
   return (
-    <div className="flex gap-1 bg-gray-100 p-1 rounded-xl w-fit">
+    <div className="flex gap-1 bg-gray-100 dark:bg-slate-800 p-1 rounded-xl w-fit">
       {tabs.map(t => (
         <button key={t} onClick={() => onChange(t)}
-          className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all capitalize ${active === t ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
+          className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all capitalize ${active === t ? 'bg-white dark:bg-slate-900 text-blue-700 shadow-sm' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700'}`}>
           {t}
         </button>
       ))}
@@ -121,7 +121,7 @@ export default function Accounting() {
                 <c.icon size={16} className={c.cls.text} />
               </div>
               <p className={`text-lg font-extrabold ${c.cls.text}`}>Rs. {c.value?.toLocaleString()}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{c.label}</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">{c.label}</p>
             </div>
           ))}
         </div>
@@ -143,10 +143,10 @@ export default function Accounting() {
               {grouped[type].map(a => (
                 <div key={a.id} className="flex items-center justify-between px-5 py-2.5 border-b border-gray-50 last:border-0 text-sm">
                   <div>
-                    <span className="font-medium text-gray-800">{a.name}</span>
-                    <span className="text-gray-400 text-xs ml-2">({a.account_code})</span>
+                    <span className="font-medium text-gray-800 dark:text-slate-100">{a.name}</span>
+                    <span className="text-gray-400 dark:text-slate-500 text-xs ml-2">({a.account_code})</span>
                   </div>
-                  <span className="font-semibold text-gray-700">Rs. {a.balance?.toLocaleString()}</span>
+                  <span className="font-semibold text-gray-700 dark:text-slate-200">Rs. {a.balance?.toLocaleString()}</span>
                 </div>
               ))}
             </div>
@@ -164,10 +164,10 @@ export default function Accounting() {
               </thead>
               <tbody>
                 {accounts.length === 0 ? (
-                  <tr><td colSpan={4} className="text-center py-12 text-gray-400">No accounts yet</td></tr>
+                  <tr><td colSpan={4} className="text-center py-12 text-gray-400 dark:text-slate-500">No accounts yet</td></tr>
                 ) : accounts.map(a => (
                   <tr key={a.id} className="table-row">
-                    <td className="table-cell font-mono text-gray-500 text-xs">{a.account_code}</td>
+                    <td className="table-cell font-mono text-gray-500 dark:text-slate-400 text-xs">{a.account_code}</td>
                     <td className="table-cell font-semibold">{a.name}</td>
                     <td className="table-cell">
                       <span className={`${TYPE_COLORS[a.account_type]?.badge || 'badge-gray'} capitalize`}>{a.account_type}</span>
@@ -191,13 +191,13 @@ export default function Accounting() {
               </thead>
               <tbody>
                 {transactions.length === 0 ? (
-                  <tr><td colSpan={6} className="text-center py-12 text-gray-400">No transactions yet</td></tr>
+                  <tr><td colSpan={6} className="text-center py-12 text-gray-400 dark:text-slate-500">No transactions yet</td></tr>
                 ) : transactions.map(t => (
                   <tr key={t.id} className="table-row">
-                    <td className="table-cell text-xs text-gray-500">{t.date ? formatDate(t.date) : '—'}</td>
+                    <td className="table-cell text-xs text-gray-500 dark:text-slate-400">{t.date ? formatDate(t.date) : '—'}</td>
                     <td className="table-cell font-semibold">{t.account}</td>
-                    <td className="table-cell text-gray-600">{t.description}</td>
-                    <td className="table-cell font-mono text-xs text-gray-400">{t.reference || '—'}</td>
+                    <td className="table-cell text-gray-600 dark:text-slate-300">{t.description}</td>
+                    <td className="table-cell font-mono text-xs text-gray-400 dark:text-slate-500">{t.reference || '—'}</td>
                     <td className="table-cell font-semibold text-emerald-600">{t.debit > 0 ? `Rs. ${t.debit.toLocaleString()}` : '—'}</td>
                     <td className="table-cell font-semibold text-red-500">{t.credit > 0 ? `Rs. ${t.credit.toLocaleString()}` : '—'}</td>
                   </tr>

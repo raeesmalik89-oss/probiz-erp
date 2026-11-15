@@ -156,7 +156,7 @@ export default function Sales() {
         ].map(c => (
           <div key={c.label} className="card p-4 flex items-center gap-3">
             <div className={`w-10 h-10 rounded-xl ${c.bgCls} flex items-center justify-center shrink-0`}><c.icon size={18} className={c.iconCls} /></div>
-            <div><p className="text-xl font-bold text-gray-900">{c.value}</p><p className="text-xs text-gray-500">{c.label}</p></div>
+            <div><p className="text-xl font-bold text-gray-900 dark:text-white">{c.value}</p><p className="text-xs text-gray-500 dark:text-slate-400">{c.label}</p></div>
           </div>
         ))}
       </div>
@@ -165,7 +165,7 @@ export default function Sales() {
       <div className="card overflow-hidden">
         <div className="p-4 border-b border-gray-50">
           <div className="relative max-w-xs">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
             <input className="input pl-8 text-sm" placeholder="Search invoices..." value={search} onChange={e => setSearch(e.target.value)} />
           </div>
         </div>
@@ -176,20 +176,20 @@ export default function Sales() {
             </thead>
             <tbody>
               {paginated.length === 0 ? (
-                <tr><td colSpan={10} className="text-center py-12 text-gray-400"><ShoppingCart size={36} className="mx-auto mb-2 opacity-30" />No sales yet</td></tr>
+                <tr><td colSpan={10} className="text-center py-12 text-gray-400 dark:text-slate-500"><ShoppingCart size={36} className="mx-auto mb-2 opacity-30" />No sales yet</td></tr>
               ) : paginated.map(s => (
                 <tr key={s.id} className="table-row">
                   <td className="table-cell font-bold text-blue-700">{s.invoice_no}</td>
                   <td className="table-cell">{s.customer}</td>
-                  <td className="table-cell text-gray-500">{s.items_count}</td>
+                  <td className="table-cell text-gray-500 dark:text-slate-400">{s.items_count}</td>
                   <td className="table-cell font-bold">Rs. {s.total?.toLocaleString()}</td>
                   <td className="table-cell font-semibold text-emerald-600">Rs. {s.paid?.toLocaleString()}</td>
                   <td className="table-cell font-bold"><span className={s.balance > 0 ? 'text-red-500' : 'text-emerald-600'}>Rs. {s.balance?.toLocaleString()}</span></td>
                   <td className="table-cell"><span className="badge-gray capitalize">{s.payment_method}</span></td>
                   <td className="table-cell"><span className={s.status === 'completed' ? 'badge-green' : 'badge-red'}>{s.status}</span></td>
-                  <td className="table-cell text-xs text-gray-500">{s.created_at ? formatDate(s.created_at) : '—'}</td>
+                  <td className="table-cell text-xs text-gray-500 dark:text-slate-400">{s.created_at ? formatDate(s.created_at) : '—'}</td>
                   <td className="table-cell">
-                    <button onClick={async () => { const r = await API.get(`/api/sales/${s.id}`); setViewSale(r.data); }} className="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded-lg hover:bg-gray-50 text-xs text-blue-600 font-medium transition-colors">
+                    <button onClick={async () => { const r = await API.get(`/api/sales/${s.id}`); setViewSale(r.data); }} className="flex items-center gap-1 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800/50 text-xs text-blue-600 font-medium transition-colors">
                       <Eye size={12} /> View
                     </button>
                   </td>
@@ -214,12 +214,12 @@ export default function Sales() {
               <div className="relative">
                 <input className="input text-sm" value={productSearch} onChange={e => setProductSearch(e.target.value)} placeholder="Search product by name or barcode..." />
                 {filteredProducts.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-xl z-20 max-h-56 overflow-y-auto shadow-xl mt-1">
+                  <div className="absolute top-full left-0 right-0 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl z-20 max-h-56 overflow-y-auto shadow-xl mt-1">
                     {filteredProducts.map(p => (
-                      <div key={p.id} onClick={() => addToCart(p)} className="flex justify-between items-center px-4 py-2.5 hover:bg-gray-50 cursor-pointer border-b border-gray-50 last:border-0">
+                      <div key={p.id} onClick={() => addToCart(p)} className="flex justify-between items-center px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-slate-800/50 cursor-pointer border-b border-gray-50 last:border-0">
                         <div>
-                          <p className="text-sm font-semibold text-gray-800">{p.name}</p>
-                          <p className="text-xs text-gray-400">Stock: {p.stock} {p.unit}</p>
+                          <p className="text-sm font-semibold text-gray-800 dark:text-slate-100">{p.name}</p>
+                          <p className="text-xs text-gray-400 dark:text-slate-500">Stock: {p.stock} {p.unit}</p>
                         </div>
                         <span className="font-bold text-emerald-600 text-sm">Rs. {p.sale_price?.toLocaleString()}</span>
                       </div>
@@ -227,17 +227,17 @@ export default function Sales() {
                   </div>
                 )}
               </div>
-              <div className="bg-gray-50 rounded-xl p-3 min-h-[180px]">
+              <div className="bg-gray-50 dark:bg-slate-800/50 rounded-xl p-3 min-h-[180px]">
                 {cartItems.length === 0 ? (
-                  <p className="text-center text-gray-400 text-sm pt-14">Search and add products above</p>
+                  <p className="text-center text-gray-400 dark:text-slate-500 text-sm pt-14">Search and add products above</p>
                 ) : cartItems.map(item => (
-                  <div key={item.product_id} className="flex items-center gap-3 py-2.5 border-b border-gray-200 last:border-0">
-                    <span className="flex-1 text-sm font-semibold text-gray-800 truncate">{item.name}</span>
-                    <span className="text-xs text-gray-500">Rs. {item.price}</span>
+                  <div key={item.product_id} className="flex items-center gap-3 py-2.5 border-b border-gray-200 dark:border-slate-700 last:border-0">
+                    <span className="flex-1 text-sm font-semibold text-gray-800 dark:text-slate-100 truncate">{item.name}</span>
+                    <span className="text-xs text-gray-500 dark:text-slate-400">Rs. {item.price}</span>
                     <div className="flex items-center gap-1">
-                      <button onClick={() => updateQty(item.product_id, item.qty - 1)} className="w-6 h-6 border border-gray-200 rounded-md bg-white text-sm font-bold hover:bg-gray-100">-</button>
+                      <button onClick={() => updateQty(item.product_id, item.qty - 1)} className="w-6 h-6 border border-gray-200 dark:border-slate-700 rounded-md bg-white dark:bg-slate-900 text-sm font-bold hover:bg-gray-100 dark:hover:bg-slate-800">-</button>
                       <span className="w-7 text-center text-sm font-bold">{item.qty}</span>
-                      <button onClick={() => updateQty(item.product_id, item.qty + 1)} className="w-6 h-6 border border-gray-200 rounded-md bg-white text-sm font-bold hover:bg-gray-100">+</button>
+                      <button onClick={() => updateQty(item.product_id, item.qty + 1)} className="w-6 h-6 border border-gray-200 dark:border-slate-700 rounded-md bg-white dark:bg-slate-900 text-sm font-bold hover:bg-gray-100 dark:hover:bg-slate-800">+</button>
                     </div>
                     <span className="font-bold text-sm min-w-[70px] text-right">Rs. {item.total?.toLocaleString()}</span>
                     <button onClick={() => removeFromCart(item.product_id)}><Trash2 size={14} className="text-red-400 hover:text-red-600" /></button>
@@ -247,16 +247,16 @@ export default function Sales() {
             </div>
 
             {/* Right: order summary */}
-            <div className="bg-gray-50 rounded-2xl p-5 space-y-3">
-              <h4 className="font-bold text-gray-800">Order Summary</h4>
-              <div className="flex justify-between text-sm"><span className="text-gray-500">Subtotal</span><span className="font-semibold">Rs. {subtotal.toLocaleString()}</span></div>
+            <div className="bg-gray-50 dark:bg-slate-800/50 rounded-2xl p-5 space-y-3">
+              <h4 className="font-bold text-gray-800 dark:text-slate-100">Order Summary</h4>
+              <div className="flex justify-between text-sm"><span className="text-gray-500 dark:text-slate-400">Subtotal</span><span className="font-semibold">Rs. {subtotal.toLocaleString()}</span></div>
               {[['Discount (Rs.)', 'discount'], ['Tax (Rs.)', 'tax']].map(([label, key]) => (
                 <div key={key}>
                   <label className="label">{label}</label>
                   <input type="number" className="input text-sm" value={posForm[key]} onChange={e => setPos(key, e.target.value)} />
                 </div>
               ))}
-              <div className="flex justify-between py-3 border-t border-gray-200 text-lg font-extrabold">
+              <div className="flex justify-between py-3 border-t border-gray-200 dark:border-slate-700 text-lg font-extrabold">
                 <span>TOTAL</span><span className="text-blue-700">Rs. {total2.toLocaleString()}</span>
               </div>
               <div>
@@ -300,25 +300,25 @@ export default function Sales() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-blue-600">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Bill To</p>
+            <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg p-3 border-l-4 border-blue-600">
+              <p className="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider mb-1">Bill To</p>
               <p className="font-bold text-sm">{viewSale.customer?.name || 'Walk-in Customer'}</p>
-              {viewSale.customer?.phone && <p className="text-xs text-gray-500">{viewSale.customer.phone}</p>}
+              {viewSale.customer?.phone && <p className="text-xs text-gray-500 dark:text-slate-400">{viewSale.customer.phone}</p>}
             </div>
-            <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-emerald-500">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Payment</p>
+            <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg p-3 border-l-4 border-emerald-500">
+              <p className="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider mb-1">Payment</p>
               <p className="font-bold text-sm capitalize">{(viewSale.payment_method || '').replace('_', ' ')}</p>
               <span className={viewSale.status === 'completed' ? 'badge-green' : 'badge-red'}>{viewSale.status?.toUpperCase()}</span>
             </div>
           </div>
-          <div className="overflow-x-auto rounded-xl border border-gray-100 mb-4">
+          <div className="overflow-x-auto rounded-xl border border-gray-100 dark:border-slate-800 mb-4">
             <table className="w-full text-sm">
               <thead><tr className="bg-blue-800 text-white">{['Product', 'Qty', 'Price', 'Total'].map(h => <th key={h} className={`px-3 py-2 text-xs font-semibold ${h === 'Total' ? 'text-right' : 'text-left'}`}>{h}</th>)}</tr></thead>
               <tbody>
                 {viewSale.items?.map((item, i) => (
-                  <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  <tr key={i} className={i % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-gray-50 dark:bg-slate-800/50'}>
                     <td className="px-3 py-2 font-semibold">{item.product_name}</td>
-                    <td className="px-3 py-2 text-gray-500">{item.quantity}</td>
+                    <td className="px-3 py-2 text-gray-500 dark:text-slate-400">{item.quantity}</td>
                     <td className="px-3 py-2">Rs. {item.unit_price?.toLocaleString()}</td>
                     <td className="px-3 py-2 font-bold text-right">Rs. {item.total?.toLocaleString()}</td>
                   </tr>
@@ -326,9 +326,9 @@ export default function Sales() {
               </tbody>
             </table>
           </div>
-          <div className="bg-gray-50 rounded-xl p-4 space-y-2">
-            {viewSale.discount > 0 && <div className="flex justify-between text-sm"><span className="text-gray-500">Discount</span><span className="text-red-500 font-semibold">- Rs. {viewSale.discount?.toLocaleString()}</span></div>}
-            {viewSale.tax > 0 && <div className="flex justify-between text-sm"><span className="text-gray-500">Tax</span><span>Rs. {viewSale.tax?.toLocaleString()}</span></div>}
+          <div className="bg-gray-50 dark:bg-slate-800/50 rounded-xl p-4 space-y-2">
+            {viewSale.discount > 0 && <div className="flex justify-between text-sm"><span className="text-gray-500 dark:text-slate-400">Discount</span><span className="text-red-500 font-semibold">- Rs. {viewSale.discount?.toLocaleString()}</span></div>}
+            {viewSale.tax > 0 && <div className="flex justify-between text-sm"><span className="text-gray-500 dark:text-slate-400">Tax</span><span>Rs. {viewSale.tax?.toLocaleString()}</span></div>}
             <div className="flex justify-between items-center bg-blue-800 text-white rounded-xl px-4 py-3 text-lg font-extrabold">
               <span>TOTAL</span><span>Rs. {viewSale.total?.toLocaleString()}</span>
             </div>

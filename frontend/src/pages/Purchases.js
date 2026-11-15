@@ -152,7 +152,7 @@ export default function Purchases() {
         ].map(c => (
           <div key={c.label} className="card p-4 flex items-center gap-3">
             <div className={`w-10 h-10 rounded-xl ${c.bgCls} flex items-center justify-center shrink-0`}><c.icon size={18} className={c.iconCls} /></div>
-            <div><p className="text-xl font-bold text-gray-900">{c.value}</p><p className="text-xs text-gray-500">{c.label}</p></div>
+            <div><p className="text-xl font-bold text-gray-900 dark:text-white">{c.value}</p><p className="text-xs text-gray-500 dark:text-slate-400">{c.label}</p></div>
           </div>
         ))}
       </div>
@@ -161,7 +161,7 @@ export default function Purchases() {
       <div className="card overflow-hidden">
         <div className="p-4 border-b border-gray-50">
           <div className="relative max-w-xs">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
             <input className="input pl-8 text-sm" placeholder="Search PO number..." value={search} onChange={e => setSearch(e.target.value)} />
           </div>
         </div>
@@ -172,7 +172,7 @@ export default function Purchases() {
             </thead>
             <tbody>
               {paginated.length === 0 ? (
-                <tr><td colSpan={9} className="text-center py-12 text-gray-400"><Truck size={36} className="mx-auto mb-2 opacity-30" />No purchases yet</td></tr>
+                <tr><td colSpan={9} className="text-center py-12 text-gray-400 dark:text-slate-500"><Truck size={36} className="mx-auto mb-2 opacity-30" />No purchases yet</td></tr>
               ) : paginated.map(p => (
                 <tr key={p.id} className="table-row">
                   <td className="table-cell font-bold text-blue-700">{p.po_number}</td>
@@ -182,9 +182,9 @@ export default function Purchases() {
                   <td className="table-cell font-bold"><span className={p.balance > 0 ? 'text-red-500' : 'text-emerald-600'}>Rs. {p.balance?.toLocaleString()}</span></td>
                   <td className="table-cell"><span className="badge-gray capitalize">{p.payment_method}</span></td>
                   <td className="table-cell"><span className={p.status === 'completed' ? 'badge-green' : 'badge-yellow'}>{p.status}</span></td>
-                  <td className="table-cell text-xs text-gray-500">{p.created_at ? formatDate(p.created_at) : '—'}</td>
+                  <td className="table-cell text-xs text-gray-500 dark:text-slate-400">{p.created_at ? formatDate(p.created_at) : '—'}</td>
                   <td className="table-cell">
-                    <button onClick={async () => { const r = await API.get(`/api/purchases/${p.id}`); setViewPO(r.data); }} className="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded-lg hover:bg-gray-50 text-xs text-blue-600 font-medium transition-colors">
+                    <button onClick={async () => { const r = await API.get(`/api/purchases/${p.id}`); setViewPO(r.data); }} className="flex items-center gap-1 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800/50 text-xs text-blue-600 font-medium transition-colors">
                       <Eye size={12} /> View
                     </button>
                   </td>
@@ -209,29 +209,29 @@ export default function Purchases() {
               <div className="relative">
                 <input className="input text-sm" value={productSearch} onChange={e => setProductSearch(e.target.value)} placeholder="Search product to add..." />
                 {filteredProducts.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-xl z-20 max-h-52 overflow-y-auto shadow-xl mt-1">
+                  <div className="absolute top-full left-0 right-0 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl z-20 max-h-52 overflow-y-auto shadow-xl mt-1">
                     {filteredProducts.map(p => (
-                      <div key={p.id} onClick={() => addToCart(p)} className="flex justify-between items-center px-4 py-2.5 hover:bg-gray-50 cursor-pointer border-b border-gray-50 last:border-0">
-                        <span className="text-sm font-semibold text-gray-800">{p.name}</span>
-                        <span className="text-xs text-gray-500 font-medium">Cost: Rs. {p.cost_price?.toLocaleString()}</span>
+                      <div key={p.id} onClick={() => addToCart(p)} className="flex justify-between items-center px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-slate-800/50 cursor-pointer border-b border-gray-50 last:border-0">
+                        <span className="text-sm font-semibold text-gray-800 dark:text-slate-100">{p.name}</span>
+                        <span className="text-xs text-gray-500 dark:text-slate-400 font-medium">Cost: Rs. {p.cost_price?.toLocaleString()}</span>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
-              <div className="bg-gray-50 rounded-xl p-3 min-h-[180px]">
+              <div className="bg-gray-50 dark:bg-slate-800/50 rounded-xl p-3 min-h-[180px]">
                 {cartItems.length === 0 ? (
-                  <p className="text-center text-gray-400 text-sm pt-14">Search and add products above</p>
+                  <p className="text-center text-gray-400 dark:text-slate-500 text-sm pt-14">Search and add products above</p>
                 ) : cartItems.map(item => (
-                  <div key={item.product_id} className="flex items-center gap-3 py-2.5 border-b border-gray-200 last:border-0">
-                    <span className="flex-1 text-sm font-semibold text-gray-800 truncate">{item.name}</span>
+                  <div key={item.product_id} className="flex items-center gap-3 py-2.5 border-b border-gray-200 dark:border-slate-700 last:border-0">
+                    <span className="flex-1 text-sm font-semibold text-gray-800 dark:text-slate-100 truncate">{item.name}</span>
                     <div className="flex items-center gap-1">
-                      <button onClick={() => setCartItems(cartItems.map(i => i.product_id === item.product_id && i.qty > 1 ? { ...i, qty: i.qty - 1, total: (i.qty - 1) * i.cost } : i))} className="w-6 h-6 border border-gray-200 rounded-md bg-white text-sm font-bold hover:bg-gray-100">-</button>
+                      <button onClick={() => setCartItems(cartItems.map(i => i.product_id === item.product_id && i.qty > 1 ? { ...i, qty: i.qty - 1, total: (i.qty - 1) * i.cost } : i))} className="w-6 h-6 border border-gray-200 dark:border-slate-700 rounded-md bg-white dark:bg-slate-900 text-sm font-bold hover:bg-gray-100 dark:hover:bg-slate-800">-</button>
                       <span className="w-7 text-center text-sm font-bold">{item.qty}</span>
-                      <button onClick={() => setCartItems(cartItems.map(i => i.product_id === item.product_id ? { ...i, qty: i.qty + 1, total: (i.qty + 1) * i.cost } : i))} className="w-6 h-6 border border-gray-200 rounded-md bg-white text-sm font-bold hover:bg-gray-100">+</button>
+                      <button onClick={() => setCartItems(cartItems.map(i => i.product_id === item.product_id ? { ...i, qty: i.qty + 1, total: (i.qty + 1) * i.cost } : i))} className="w-6 h-6 border border-gray-200 dark:border-slate-700 rounded-md bg-white dark:bg-slate-900 text-sm font-bold hover:bg-gray-100 dark:hover:bg-slate-800">+</button>
                     </div>
                     <input type="number" value={item.cost} onChange={e => setCartItems(cartItems.map(i => i.product_id === item.product_id ? { ...i, cost: parseFloat(e.target.value) || 0, total: i.qty * (parseFloat(e.target.value) || 0) } : i))}
-                      className="w-24 px-2 py-1 border border-gray-200 rounded-lg text-sm text-center" />
+                      className="w-24 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded-lg text-sm text-center" />
                     <span className="font-bold text-sm min-w-[70px] text-right">Rs. {item.total?.toLocaleString()}</span>
                     <button onClick={() => setCartItems(cartItems.filter(i => i.product_id !== item.product_id))}><Trash2 size={14} className="text-red-400 hover:text-red-600" /></button>
                   </div>
@@ -240,9 +240,9 @@ export default function Purchases() {
             </div>
 
             {/* Right: order summary */}
-            <div className="bg-gray-50 rounded-2xl p-5 space-y-3">
-              <h4 className="font-bold text-gray-800">Order Summary</h4>
-              <div className="flex justify-between text-sm"><span className="text-gray-500">Subtotal</span><span className="font-semibold">Rs. {subtotal.toLocaleString()}</span></div>
+            <div className="bg-gray-50 dark:bg-slate-800/50 rounded-2xl p-5 space-y-3">
+              <h4 className="font-bold text-gray-800 dark:text-slate-100">Order Summary</h4>
+              <div className="flex justify-between text-sm"><span className="text-gray-500 dark:text-slate-400">Subtotal</span><span className="font-semibold">Rs. {subtotal.toLocaleString()}</span></div>
               {[['Discount (Rs.)', 'discount'], ['Tax (Rs.)', 'tax'], ['Amount Paid', 'paid']].map(([label, key]) => (
                 <div key={key}>
                   <label className="label">{label}</label>
@@ -255,7 +255,7 @@ export default function Purchases() {
                   {['cash', 'card', 'bank_transfer', 'cheque', 'credit'].map(m => <option key={m} value={m}>{m.replace('_', ' ').toUpperCase()}</option>)}
                 </select>
               </div>
-              <div className="flex justify-between py-3 border-t border-gray-200 text-lg font-extrabold">
+              <div className="flex justify-between py-3 border-t border-gray-200 dark:border-slate-700 text-lg font-extrabold">
                 <span>TOTAL</span><span className="text-blue-700">Rs. {totalAmt.toLocaleString()}</span>
               </div>
               <button onClick={handleSave} className="w-full py-3 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl text-base transition-colors">
@@ -284,26 +284,26 @@ export default function Purchases() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-blue-600">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Supplier</p>
+            <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg p-3 border-l-4 border-blue-600">
+              <p className="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider mb-1">Supplier</p>
               <p className="font-bold text-sm">{viewPO.supplier?.name}</p>
-              {viewPO.supplier?.phone && <p className="text-xs text-gray-500">{viewPO.supplier.phone}</p>}
-              {viewPO.supplier?.city && <p className="text-xs text-gray-500">{viewPO.supplier.city}</p>}
+              {viewPO.supplier?.phone && <p className="text-xs text-gray-500 dark:text-slate-400">{viewPO.supplier.phone}</p>}
+              {viewPO.supplier?.city && <p className="text-xs text-gray-500 dark:text-slate-400">{viewPO.supplier.city}</p>}
             </div>
-            <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-emerald-500">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Payment</p>
+            <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg p-3 border-l-4 border-emerald-500">
+              <p className="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider mb-1">Payment</p>
               <p className="font-bold text-sm capitalize">{(viewPO.payment_method || '').replace('_', ' ')}</p>
               <span className={viewPO.status === 'completed' ? 'badge-green' : 'badge-yellow'}>{viewPO.status?.toUpperCase()}</span>
             </div>
           </div>
-          <div className="overflow-x-auto rounded-xl border border-gray-100 mb-4">
+          <div className="overflow-x-auto rounded-xl border border-gray-100 dark:border-slate-800 mb-4">
             <table className="w-full text-sm">
               <thead><tr className="bg-blue-800 text-white">{['Product', 'Qty', 'Unit Cost', 'Total'].map(h => <th key={h} className={`px-3 py-2 text-xs font-semibold ${h === 'Total' ? 'text-right' : 'text-left'}`}>{h}</th>)}</tr></thead>
               <tbody>
                 {viewPO.items?.map((item, i) => (
-                  <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  <tr key={i} className={i % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-gray-50 dark:bg-slate-800/50'}>
                     <td className="px-3 py-2 font-semibold">{item.product_name}</td>
-                    <td className="px-3 py-2 text-gray-500">{item.quantity}</td>
+                    <td className="px-3 py-2 text-gray-500 dark:text-slate-400">{item.quantity}</td>
                     <td className="px-3 py-2">Rs. {item.unit_cost?.toLocaleString()}</td>
                     <td className="px-3 py-2 font-bold text-right">Rs. {item.total?.toLocaleString()}</td>
                   </tr>
@@ -311,9 +311,9 @@ export default function Purchases() {
               </tbody>
             </table>
           </div>
-          <div className="bg-gray-50 rounded-xl p-4 space-y-2">
-            {viewPO.discount > 0 && <div className="flex justify-between text-sm"><span className="text-gray-500">Discount</span><span className="text-red-500 font-semibold">- Rs. {viewPO.discount?.toLocaleString()}</span></div>}
-            {viewPO.tax > 0 && <div className="flex justify-between text-sm"><span className="text-gray-500">Tax</span><span>Rs. {viewPO.tax?.toLocaleString()}</span></div>}
+          <div className="bg-gray-50 dark:bg-slate-800/50 rounded-xl p-4 space-y-2">
+            {viewPO.discount > 0 && <div className="flex justify-between text-sm"><span className="text-gray-500 dark:text-slate-400">Discount</span><span className="text-red-500 font-semibold">- Rs. {viewPO.discount?.toLocaleString()}</span></div>}
+            {viewPO.tax > 0 && <div className="flex justify-between text-sm"><span className="text-gray-500 dark:text-slate-400">Tax</span><span>Rs. {viewPO.tax?.toLocaleString()}</span></div>}
             <div className="flex justify-between items-center bg-blue-800 text-white rounded-xl px-4 py-3 text-lg font-extrabold">
               <span>TOTAL</span><span>Rs. {viewPO.total?.toLocaleString()}</span>
             </div>

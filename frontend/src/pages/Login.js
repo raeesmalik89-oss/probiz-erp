@@ -2,13 +2,25 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
-import { TrendingUp, Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import { TrendingUp, Eye, EyeOff, Lock, Mail, CheckCircle, ArrowRight } from 'lucide-react';
+
+const highlights = [
+  ['70+ Modules', 'Everything from POS to Payroll'],
+  ['Multi-Branch', 'Manage unlimited locations'],
+  ['Real-time Reports', 'Data-driven decisions'],
+];
+
+const demoAccounts = [
+  { label: 'Admin', email: 'admin@probiz.pk' },
+  { label: 'Manager', email: 'manager@probiz.pk' },
+  { label: 'Cashier', email: 'cashier@probiz.pk' },
+];
 
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('raees.malik89@gmail.com');
-  const [password, setPassword] = useState('admin123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -26,98 +38,110 @@ export default function Login() {
     }
   };
 
-  const demoAccounts = [
-    { label: 'Admin', email: 'raees.malik89@gmail.com', password: 'admin123' },
-    { label: 'Manager', email: 'manager@probiz.pk', password: 'manager123' },
-    { label: 'Cashier', email: 'cashier@probiz.pk', password: 'cashier123' },
-  ];
-
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: '#f8fafc' }}>
-      {/* Left panel */}
-      <div style={{
-        flex: 1, background: 'linear-gradient(135deg,#0f172a 0%,#1e3a8a 50%,#2563eb 100%)',
-        display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px 5%',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 48 }}>
-          <div style={{ width: 44, height: 44, background: 'rgba(255,255,255,0.2)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <TrendingUp size={24} color="#fff" />
+    <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950">
+      {/* Left brand panel */}
+      <div className="hidden lg:flex lg:flex-1 flex-col justify-center px-[6%] py-16 bg-gradient-to-br from-slate-900 via-blue-900 to-blue-700 relative overflow-hidden">
+        <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-blue-500/10 pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-violet-500/10 pointer-events-none" />
+
+        <div className="relative">
+          <div className="flex items-center gap-3 mb-12">
+            <div className="w-11 h-11 rounded-xl bg-white/20 flex items-center justify-center">
+              <TrendingUp size={24} className="text-white" />
+            </div>
+            <span className="text-white font-extrabold text-2xl">ProBiz ERP</span>
           </div>
-          <span style={{ color: '#fff', fontWeight: 800, fontSize: 26 }}>ProBiz ERP</span>
+          <h2 className="text-white text-4xl font-extrabold leading-tight mb-4">
+            Your Complete<br />Business Platform
+          </h2>
+          <p className="text-white/70 text-base leading-relaxed mb-12 max-w-md">
+            Inventory · Sales · Accounting · Payroll · Analytics — all in one powerful system.
+          </p>
+          {highlights.map(([title, desc]) => (
+            <div key={title} className="flex gap-3.5 mb-5">
+              <div className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center shrink-0 mt-0.5">
+                <CheckCircle size={15} className="text-emerald-400" />
+              </div>
+              <div>
+                <div className="text-white font-semibold text-[15px]">{title}</div>
+                <div className="text-white/55 text-[13px]">{desc}</div>
+              </div>
+            </div>
+          ))}
         </div>
-        <h2 style={{ color: '#fff', fontSize: 36, fontWeight: 800, marginBottom: 16, lineHeight: 1.2 }}>
-          Your Complete<br />Business Platform
-        </h2>
-        <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 16, lineHeight: 1.7, marginBottom: 48 }}>
-          Inventory · Sales · Accounting · Payroll · Analytics — all in one powerful system.
-        </p>
-        {[['70+ Modules', 'Everything from POS to Payroll'],
-          ['Multi-Branch', 'Manage unlimited locations'],
-          ['Real-time Reports', 'Data-driven decisions']
-        ].map(([title, desc]) => (
-          <div key={title} style={{ display: 'flex', gap: 14, marginBottom: 20 }}>
-            <div style={{ width: 28, height: 28, background: 'rgba(255,255,255,0.15)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
-              <span style={{ color: '#34d399', fontSize: 14 }}>✓</span>
-            </div>
-            <div>
-              <div style={{ color: '#fff', fontWeight: 600, fontSize: 15 }}>{title}</div>
-              <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: 13 }}>{desc}</div>
-            </div>
-          </div>
-        ))}
       </div>
 
-      {/* Right panel */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
-        <div style={{ width: '100%', maxWidth: 420 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8 }}>Sign In</h1>
-          <p style={{ color: '#64748b', marginBottom: 36 }}>Access your business dashboard</p>
+      {/* Right form panel */}
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-10">
+        <div className="w-full max-w-md">
+          {/* Mobile logo */}
+          <div className="flex lg:hidden items-center gap-3 mb-8">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+              <TrendingUp size={20} className="text-white" />
+            </div>
+            <span className="font-extrabold text-xl text-slate-900 dark:text-white">ProBiz ERP</span>
+          </div>
 
-          {/* Demo accounts */}
-          <div style={{ background: '#f1f5f9', borderRadius: 12, padding: 16, marginBottom: 28 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: '#64748b', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.5 }}>Demo Accounts</div>
-            <div style={{ display: 'flex', gap: 8 }}>
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">Sign In</h1>
+          <p className="text-slate-500 dark:text-slate-400 mb-8">Access your business dashboard</p>
+
+          {/* Demo accounts (prefill email only — no stored passwords) */}
+          <div className="bg-slate-100 dark:bg-slate-800/60 rounded-xl p-4 mb-7">
+            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2.5">
+              Demo accounts — fills email, enter the password
+            </div>
+            <div className="flex gap-2">
               {demoAccounts.map(acc => (
-                <button key={acc.label} onClick={() => { setEmail(acc.email); setPassword(acc.password); }} style={{
-                  flex: 1, padding: '7px 0', background: '#fff', border: '1px solid #e2e8f0',
-                  borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                  color: '#1e40af', transition: 'all 0.2s',
-                }}>{acc.label}</button>
+                <button
+                  key={acc.label}
+                  type="button"
+                  onClick={() => { setEmail(acc.email); setPassword(''); }}
+                  className="flex-1 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-[13px] font-semibold text-blue-700 dark:text-blue-300 hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
+                >
+                  {acc.label}
+                </button>
               ))}
             </div>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <label style={{ display: 'block', marginBottom: 6, fontWeight: 600, fontSize: 14 }}>Email Address</label>
-            <div style={{ position: 'relative', marginBottom: 20 }}>
-              <Mail size={18} color="#94a3b8" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
-              <input
-                type="email" value={email} onChange={e => setEmail(e.target.value)} required
-                style={{ width: '100%', padding: '13px 14px 13px 44px', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 15, outline: 'none', fontFamily: 'Inter, sans-serif' }}
-              />
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="label">Email Address</label>
+              <div className="relative">
+                <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="email" value={email} onChange={e => setEmail(e.target.value)} required
+                  autoComplete="username"
+                  className="input !py-3 !pl-11"
+                  placeholder="you@company.com"
+                />
+              </div>
             </div>
-            <label style={{ display: 'block', marginBottom: 6, fontWeight: 600, fontSize: 14 }}>Password</label>
-            <div style={{ position: 'relative', marginBottom: 28 }}>
-              <Lock size={18} color="#94a3b8" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
-              <input
-                type={showPass ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} required
-                style={{ width: '100%', padding: '13px 44px 13px 44px', border: '1px solid #e2e8f0', borderRadius: 10, fontSize: 15, outline: 'none', fontFamily: 'Inter, sans-serif' }}
-              />
-              <button type="button" onClick={() => setShowPass(!showPass)} style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer' }}>
-                {showPass ? <EyeOff size={18} color="#94a3b8" /> : <Eye size={18} color="#94a3b8" />}
-              </button>
+            <div>
+              <label className="label">Password</label>
+              <div className="relative">
+                <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type={showPass ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} required
+                  autoComplete="current-password"
+                  className="input !py-3 !pl-11 !pr-11"
+                  placeholder="••••••••"
+                />
+                <button type="button" onClick={() => setShowPass(!showPass)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                  {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
-            <button type="submit" disabled={loading} style={{
-              width: '100%', padding: '14px',
-              background: loading ? '#94a3b8' : 'linear-gradient(135deg,#1e40af,#3b82f6)',
-              color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700,
-              fontSize: 16, cursor: loading ? 'not-allowed' : 'pointer',
-            }}>
-              {loading ? 'Signing in...' : 'Sign In to Dashboard →'}
+            <button type="submit" disabled={loading}
+              className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-blue-700 to-blue-500 hover:from-blue-800 hover:to-blue-600 text-white font-bold text-base rounded-xl shadow-lg shadow-blue-600/20 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+              {loading ? 'Signing in…' : <>Sign In to Dashboard <ArrowRight size={18} /></>}
             </button>
           </form>
-          <p style={{ textAlign: 'center', marginTop: 24, color: '#64748b', fontSize: 14 }}>
-            <a href="/" style={{ color: '#1e40af', fontWeight: 600, textDecoration: 'none' }}>← Back to website</a>
+
+          <p className="text-center mt-6 text-sm text-slate-500 dark:text-slate-400">
+            <a href="/" className="text-blue-700 dark:text-blue-400 font-semibold hover:underline">← Back to website</a>
           </p>
         </div>
       </div>

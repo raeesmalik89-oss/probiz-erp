@@ -11,10 +11,10 @@ const MONTHS = ['January','February','March','April','May','June','July','August
 
 function TabBar({ tabs, active, onChange }) {
   return (
-    <div className="flex gap-1 bg-gray-100 p-1 rounded-xl w-fit">
+    <div className="flex gap-1 bg-gray-100 dark:bg-slate-800 p-1 rounded-xl w-fit">
       {tabs.map(t => (
         <button key={t} onClick={() => onChange(t)}
-          className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all capitalize ${active === t ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
+          className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all capitalize ${active === t ? 'bg-white dark:bg-slate-900 text-blue-700 shadow-sm' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700'}`}>
           {t}
         </button>
       ))}
@@ -124,8 +124,8 @@ export default function Payroll() {
               <c.icon size={18} className={c.iconCls} />
             </div>
             <div>
-              <p className="text-xl font-bold text-gray-900">{c.value}</p>
-              <p className="text-xs text-gray-500">{c.label}</p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white">{c.value}</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400">{c.label}</p>
             </div>
           </div>
         ))}
@@ -138,7 +138,7 @@ export default function Payroll() {
         <div className="card overflow-hidden">
           <div className="p-4 border-b border-gray-50">
             <div className="relative max-w-xs">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
               <input className="input pl-8 text-sm" placeholder="Search employees..." value={search} onChange={e => setSearch(e.target.value)} />
             </div>
           </div>
@@ -149,18 +149,18 @@ export default function Payroll() {
               </thead>
               <tbody>
                 {empPagination.paginated.length === 0 ? (
-                  <tr><td colSpan={8} className="text-center py-12 text-gray-400"><UserCheck size={36} className="mx-auto mb-2 opacity-30" />No employees found</td></tr>
+                  <tr><td colSpan={8} className="text-center py-12 text-gray-400 dark:text-slate-500"><UserCheck size={36} className="mx-auto mb-2 opacity-30" />No employees found</td></tr>
                 ) : empPagination.paginated.map(e => (
                   <tr key={e.id} className="table-row">
-                    <td className="table-cell font-mono text-xs text-gray-500">{e.employee_id}</td>
+                    <td className="table-cell font-mono text-xs text-gray-500 dark:text-slate-400">{e.employee_id}</td>
                     <td className="table-cell font-semibold">{e.name}</td>
-                    <td className="table-cell text-gray-600">{e.designation || '—'}</td>
+                    <td className="table-cell text-gray-600 dark:text-slate-300">{e.designation || '—'}</td>
                     <td className="table-cell">{e.department ? <span className="badge-blue">{e.department}</span> : '—'}</td>
                     <td className="table-cell font-semibold">Rs. {e.basic_salary?.toLocaleString()}</td>
                     <td className="table-cell text-emerald-600">Rs. {e.allowances?.toLocaleString()}</td>
                     <td className="table-cell font-bold text-blue-700">Rs. {(e.basic_salary + e.allowances).toLocaleString()}</td>
                     <td className="table-cell">
-                      <button onClick={() => openEditEmp(e)} className="p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                      <button onClick={() => openEditEmp(e)} className="p-1.5 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
                         <Edit2 size={13} className="text-blue-500" />
                       </button>
                     </td>
@@ -183,11 +183,11 @@ export default function Payroll() {
               </thead>
               <tbody>
                 {payPagination.paginated.length === 0 ? (
-                  <tr><td colSpan={9} className="text-center py-12 text-gray-400">No payslips generated yet</td></tr>
+                  <tr><td colSpan={9} className="text-center py-12 text-gray-400 dark:text-slate-500">No payslips generated yet</td></tr>
                 ) : payPagination.paginated.map(p => (
                   <tr key={p.id} className="table-row">
                     <td className="table-cell font-semibold">{p.employee}</td>
-                    <td className="table-cell text-gray-500">{MONTHS[p.month - 1]} {p.year}</td>
+                    <td className="table-cell text-gray-500 dark:text-slate-400">{MONTHS[p.month - 1]} {p.year}</td>
                     <td className="table-cell">Rs. {p.basic_salary?.toLocaleString()}</td>
                     <td className="table-cell text-emerald-600">Rs. {p.allowances?.toLocaleString()}</td>
                     <td className="table-cell">Rs. {p.overtime?.toLocaleString()}</td>
@@ -216,14 +216,14 @@ export default function Payroll() {
       {tab === 'departments' && (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {departments.length === 0 ? (
-            <div className="col-span-full text-center py-12 text-gray-400">No departments added yet</div>
+            <div className="col-span-full text-center py-12 text-gray-400 dark:text-slate-500">No departments added yet</div>
           ) : departments.map(d => (
             <div key={d.id} className="card p-5">
               <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-3">
                 <Building2 size={18} className="text-blue-600" />
               </div>
-              <p className="font-bold text-gray-900 mb-1">{d.name}</p>
-              <p className="text-xs text-gray-500 mb-3">{d.description || 'No description'}</p>
+              <p className="font-bold text-gray-900 dark:text-white mb-1">{d.name}</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">{d.description || 'No description'}</p>
               <span className="badge-blue">{d.employee_count} employees</span>
             </div>
           ))}

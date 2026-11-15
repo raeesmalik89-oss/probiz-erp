@@ -155,8 +155,8 @@ export default function Attendance() {
               <c.icon size={18} className={c.iconCls} />
             </div>
             <div>
-              <p className="text-xl font-bold text-gray-900">{c.value}</p>
-              <p className="text-xs text-gray-500">{c.label}</p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white">{c.value}</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400">{c.label}</p>
             </div>
           </div>
         ))}
@@ -167,17 +167,17 @@ export default function Attendance() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
           {/* Month nav */}
           <div className="flex items-center gap-2">
-            <button onClick={() => setViewDate(new Date(year, month - 1, 1))} className="p-1.5 rounded-lg hover:bg-gray-100">
+            <button onClick={() => setViewDate(new Date(year, month - 1, 1))} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800">
               <ChevronLeft size={16} />
             </button>
-            <span className="text-sm font-semibold text-gray-700 w-40 text-center">{monthName(viewDate)}</span>
-            <button onClick={() => setViewDate(new Date(year, month + 1, 1))} className="p-1.5 rounded-lg hover:bg-gray-100">
+            <span className="text-sm font-semibold text-gray-700 dark:text-slate-200 w-40 text-center">{monthName(viewDate)}</span>
+            <button onClick={() => setViewDate(new Date(year, month + 1, 1))} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800">
               <ChevronRight size={16} />
             </button>
           </div>
 
           <div className="flex-1 relative">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
             <input
               className="input pl-8 text-xs"
               placeholder="Search employee..."
@@ -217,30 +217,30 @@ export default function Attendance() {
         <div className="overflow-x-auto scrollbar-thin">
           <table className="w-full text-xs">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="sticky left-0 bg-gray-50 px-4 py-3 text-left font-semibold text-gray-600 min-w-[140px] z-10">Employee</th>
+              <tr className="bg-gray-50 dark:bg-slate-800/50 border-b border-gray-100 dark:border-slate-800">
+                <th className="sticky left-0 bg-gray-50 dark:bg-slate-800/50 px-4 py-3 text-left font-semibold text-gray-600 dark:text-slate-300 min-w-[140px] z-10">Employee</th>
                 {Array.from({ length: daysInMonth }, (_, i) => {
                   const d = new Date(year, month, i + 1);
                   const isToday = d.toISOString().slice(0, 10) === todayStr;
                   return (
-                    <th key={i} className={`px-2 py-3 text-center font-semibold min-w-[36px] ${isToday ? 'bg-blue-50 text-blue-700' : 'text-gray-500'}`}>
+                    <th key={i} className={`px-2 py-3 text-center font-semibold min-w-[36px] ${isToday ? 'bg-blue-50 text-blue-700' : 'text-gray-500 dark:text-slate-400'}`}>
                       <div>{i + 1}</div>
-                      <div className="font-normal text-[10px] text-gray-400">{d.toLocaleString('default', { weekday: 'short' })}</div>
+                      <div className="font-normal text-[10px] text-gray-400 dark:text-slate-500">{d.toLocaleString('default', { weekday: 'short' })}</div>
                     </th>
                   );
                 })}
-                <th className="px-4 py-3 text-center font-semibold text-gray-600">Present</th>
-                <th className="px-4 py-3 text-center font-semibold text-gray-600">Absent</th>
+                <th className="px-4 py-3 text-center font-semibold text-gray-600 dark:text-slate-300">Present</th>
+                <th className="px-4 py-3 text-center font-semibold text-gray-600 dark:text-slate-300">Absent</th>
               </tr>
             </thead>
             <tbody>
               {filtered.length === 0 ? (
-                <tr><td colSpan={daysInMonth + 3} className="text-center py-12 text-gray-400">No employees found</td></tr>
+                <tr><td colSpan={daysInMonth + 3} className="text-center py-12 text-gray-400 dark:text-slate-500">No employees found</td></tr>
               ) : filtered.map((emp, idx) => {
                 let presentCount = 0, absentCount = 0;
                 return (
                   <tr key={emp.id} className={`border-b border-gray-50 ${idx % 2 === 0 ? '' : 'bg-gray-50/50'}`}>
-                    <td className="sticky left-0 bg-inherit px-4 py-2.5 font-medium text-gray-800 z-10">
+                    <td className="sticky left-0 bg-inherit px-4 py-2.5 font-medium text-gray-800 dark:text-slate-100 z-10">
                       <div className="flex items-center gap-2">
                         <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-[10px] shrink-0">
                           {emp.name?.charAt(0)}
@@ -267,7 +267,7 @@ export default function Attendance() {
                               rec.status === 'absent'   ? 'bg-red-100 text-red-600' :
                               rec.status === 'late'     ? 'bg-amber-100 text-amber-700' :
                               rec.status === 'half_day' ? 'bg-blue-100 text-blue-700' :
-                              'bg-gray-100 text-gray-500'
+                              'bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-slate-400'
                             }`}>
                               {rec.status === 'present' ? 'P' : rec.status === 'absent' ? 'A' : rec.status === 'late' ? 'L' : rec.status === 'half_day' ? 'H' : 'Lv'}
                             </span>
