@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import API from '../api/client';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { BarChart3, TrendingUp, Package, DollarSign, Printer, FileText, Download } from 'lucide-react';
+import { BarChart3, TrendingUp, Package, DollarSign, Printer, FileText, Download, FileSpreadsheet } from 'lucide-react';
 import { exportCSV } from '../utils/csvExport';
+import { downloadFile } from '../utils/download';
+import toast from 'react-hot-toast';
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#0ea5e9'];
 
@@ -106,6 +108,15 @@ export default function Reports() {
     <div class="footer"><p>ProBiz ERP &nbsp;|&nbsp; probiz-erp-poru.vercel.app &nbsp;|&nbsp; Confidential — Superadmin Report</p></div>
     </div><script>window.onload=()=>window.print()</script></body></html>`);
     w.document.close();
+  };
+
+  const exportExcel = async (path, name) => {
+    try {
+      await downloadFile(path, name);
+      toast.success('Excel downloaded');
+    } catch {
+      toast.error('Export failed');
+    }
   };
 
   const tabs = [
@@ -231,6 +242,12 @@ export default function Reports() {
               </button>
               <button onClick={() => exportCSV(purchasesList.map(p => ({ PO: p.po_number, Supplier: p.supplier, Date: p.date, Total: p.total, Status: p.status })), 'purchases-report.csv')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', background: '#f1f5f9', color: '#374151', border: '1px solid #e2e8f0', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
                 <Download size={14} /> Export Purchases CSV
+              </button>
+              <button onClick={() => exportExcel(`/api/exports/sales.xlsx?from_date=${fromDate}&to_date=${toDate}`, 'sales-report.xlsx')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', background: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
+                <FileSpreadsheet size={14} /> Sales Excel
+              </button>
+              <button onClick={() => exportExcel(`/api/exports/purchases.xlsx?from_date=${fromDate}&to_date=${toDate}`, 'purchases-report.xlsx')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', background: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
+                <FileSpreadsheet size={14} /> Purchases Excel
               </button>
               <button onClick={printSummary} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 18px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
                 <Printer size={14} /> Print Summary
@@ -558,6 +575,12 @@ export default function Reports() {
       )}
 
       {tab === 'inventory' && stats && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <button onClick={() => exportExcel('/api/exports/inventory.xlsx', 'inventory-valuation.xlsx')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', background: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
+            <FileSpreadsheet size={14} /> Inventory Valuation (Excel)
+          </button>
+        </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
           <div style={{ background: '#fff', borderRadius: 16, padding: 28, border: '1px solid #e2e8f0' }}>
             <h3 style={{ fontWeight: 700, marginBottom: 20 }}>Inventory Summary</h3>
@@ -587,6 +610,7 @@ export default function Reports() {
               </div>
             ))}
           </div>
+        </div>
         </div>
       )}
     </div>

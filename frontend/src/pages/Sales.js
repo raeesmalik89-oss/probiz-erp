@@ -6,7 +6,8 @@ import Modal from '../components/ui/Modal';
 import Pagination, { usePagination } from '../components/ui/Pagination';
 import { PageSpinner } from '../components/ui/Spinner';
 import { exportCSV } from '../utils/csvExport';
-import { Plus, Search, ShoppingCart, Trash2, Eye, Printer, Download, TrendingUp, DollarSign } from 'lucide-react';
+import { downloadFile } from '../utils/download';
+import { Plus, Search, ShoppingCart, Trash2, Eye, Printer, Download, TrendingUp, DollarSign, ScanLine, FileDown } from 'lucide-react';
 
 // ─── Printable Invoice (unchanged logic) ──────────────────────────────────────
 const PrintInvoice = ({ sale }) => {
@@ -64,6 +65,7 @@ export default function Sales() {
   const [posForm, setPosForm]                   = useState({ customer_id: '', discount: 0, tax: 0, paid: 0, payment_method: 'cash' });
   const [productSearch, setProductSearch]       = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [barcode, setBarcode]                   = useState('');
   const setPos = (k, v) => setPosForm(f => ({ ...f, [k]: v }));
 
   const { page, setPage, paginated, total, pageSize } = usePagination(sales, 20);
@@ -95,6 +97,21 @@ export default function Sales() {
     if (existing) setCartItems(cartItems.map(i => i.product_id === product.id ? { ...i, qty: i.qty + 1, total: (i.qty + 1) * i.price } : i));
     else setCartItems([...cartItems, { product_id: product.id, name: product.name, price: product.sale_price, qty: 1, total: product.sale_price, discount: 0 }]);
     setProductSearch(''); setFilteredProducts([]);
+  };
+
+  const handleBarcode = async (e) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const code = barcode.trim();
+    if (!code) return;
+    try {
+      const { data } = await API.get(`/api/inventory/products/by-barcode/${encodeURIComponent(code)}`);
+      addToCart({ id: data.id, name: data.name, sale_price: data.sale_price, unit: data.unit, stock: data.stock });
+      toast.success(`Added ${data.name}`);
+    } catch {
+      toast.error(`No product with barcode "${code}"`);
+    }
+    setBarcode('');
   };
 
   const removeFromCart = (id) => setCartItems(cartItems.filter(i => i.product_id !== id));
@@ -211,6 +228,17 @@ export default function Sales() {
                 <option value="">Walk-in Customer</option>
                 {customers.map(c => <option key={c.id} value={c.id}>{c.name} — {c.phone}</option>)}
               </select>
+              <div className="relative">
+                <ScanLine size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-500" />
+                <input
+                  className="input text-sm pl-9"
+                  value={barcode}
+                  onChange={e => setBarcode(e.target.value)}
+                  onKeyDown={handleBarcode}
+                  placeholder="Scan barcode, then Enter to add…"
+                  autoFocus
+                />
+              </div>
               <div className="relative">
                 <input className="input text-sm" value={productSearch} onChange={e => setProductSearch(e.target.value)} placeholder="Search product by name or barcode..." />
                 {filteredProducts.length > 0 && (
@@ -337,7 +365,15 @@ export default function Sales() {
             </div>
             {viewSale.balance > 0 && <div className="flex justify-between bg-red-50 border border-red-200 rounded-xl px-4 py-2.5 text-sm font-bold text-red-600"><span>Balance Due</span><span>Rs. {viewSale.balance?.toLocaleString()}</span></div>}
           </div>
-          <PrintInvoice sale={viewSale} />
+          <div className="grid grid-cols-2 gap-2">
+            <PrintInvoice sale={viewSale} />
+            <button
+              onClick={() => downloadFile(`/api/sales/${viewSale.id}/invoice.pdf`, `${viewSale.invoice_no}.pdf`)}
+              className="btn-secondary w-full justify-center mt-4"
+            >
+              <FileDown size={15} /> Download PDF
+            </button>
+          </div>
         </Modal>
       )}
     </div>

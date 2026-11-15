@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, func
 from pydantic import BaseModel
@@ -7,8 +8,18 @@ from database import get_db
 from auth import get_current_user
 import models
 from datetime import datetime
+import pdf_utils
 
 router = APIRouter(prefix="/api/sales", tags=["sales"])
+
+
+def _business_info(db: Session) -> dict:
+    sub = db.query(models.Subscription).first()
+    return {
+        "name": (sub.business_name if sub and sub.business_name else "ProBiz ERP"),
+        "phone": (sub.contact_phone if sub else None),
+        "email": (sub.contact_email if sub else None),
+    }
 
 class SaleItemIn(BaseModel):
     product_id: int
@@ -111,6 +122,20 @@ def get_sale(sale_id: int, db: Session = Depends(get_db), _=Depends(get_current_
             "expiry_date": i.product.expiry_date if i.product else None,
         } for i in s.items]
     }
+
+@router.get("/{sale_id}/invoice.pdf")
+def sale_invoice_pdf(sale_id: int, db: Session = Depends(get_db), _=Depends(get_current_user)):
+    s = db.query(models.Sale).filter(models.Sale.id == sale_id).first()
+    if not s:
+        raise HTTPException(status_code=404, detail="Sale not found")
+    pdf = pdf_utils.build_invoice_pdf(s, list(s.items), s.customer, _business_info(db))
+    filename = f"{s.invoice_no}.pdf"
+    return Response(
+        content=pdf,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'inline; filename="{filename}"'},
+    )
+
 
 @router.post("/")
 def create_sale(data: SaleCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
