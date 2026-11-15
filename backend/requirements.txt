@@ -1,13 +1,26 @@
-fastapi
-uvicorn[standard]
-sqlalchemy
-python-jose[cryptography]
-bcrypt
-python-multipart
-pydantic
-pydantic-settings
-python-dotenv
-psycopg2-binary
-reportlab
-openpyxl
-python-dateutil
+# ProBiz ERP backend dependencies — pinned for reproducible builds.
+# Resolved and verified against Python 3.11–3.13 on 2026-11-15.
+# To upgrade: bump a version here, reinstall, run the app, then commit the change.
+
+# Web framework & server
+fastapi==0.163.1
+uvicorn[standard]==0.54.0
+
+# Database
+sqlalchemy==2.1.8
+psycopg2-binary==2.9.13
+
+# Auth & security
+python-jose[cryptography]==3.5.0
+bcrypt==5.0.0
+
+# Request parsing & settings
+python-multipart==0.0.33
+pydantic==2.14.3
+pydantic-settings==2.16.3
+python-dotenv==1.2.4
+
+# Reports & exports (PDF / Excel) and date utilities
+reportlab==5.1.0
+openpyxl==3.1.5
+python-dateutil==4.0.0
