@@ -5,8 +5,8 @@ import toast from 'react-hot-toast';
 import API from '../api/client';
 
 const Section = ({ title, icon: Icon, children }) => (
-  <div style={{ background: '#fff', borderRadius: 16, padding: 28, border: '1px solid #e2e8f0', marginBottom: 20 }}>
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid #f1f5f9' }}>
+  <div style={{ background: 'var(--panel)', borderRadius: 16, padding: 28, border: '1px solid var(--line)', marginBottom: 20 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid var(--line-2)' }}>
       <div style={{ width: 36, height: 36, background: '#dbeafe', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Icon size={18} color="#1e40af" />
       </div>
@@ -18,9 +18,9 @@ const Section = ({ title, icon: Icon, children }) => (
 
 const Field = ({ label, value, onChange, type = 'text', readOnly }) => (
   <div style={{ marginBottom: 16 }}>
-    <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 6, color: '#374151' }}>{label}</label>
+    <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 6, color: 'var(--ink-label)' }}>{label}</label>
     <input type={type} value={value} onChange={onChange} readOnly={readOnly}
-      style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 14, outline: 'none', background: readOnly ? '#f8fafc' : '#fff', color: readOnly ? '#94a3b8' : '#1e293b', fontFamily: 'Inter, sans-serif' }} />
+      style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 14, outline: 'none', background: readOnly ? 'var(--panel-2)' : 'var(--panel)', color: readOnly ? 'var(--ink-faint)' : 'var(--ink)', fontFamily: 'Inter, sans-serif' }} />
   </div>
 );
 
@@ -133,7 +133,7 @@ export default function Settings() {
     <div>
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: 26, fontWeight: 800 }}>Settings</h1>
-        <p style={{ color: '#64748b', marginTop: 2 }}>System configuration and preferences</p>
+        <p style={{ color: 'var(--ink-muted)', marginTop: 2 }}>System configuration and preferences</p>
       </div>
 
       {/* ── Subscription Management (superadmin only) ── */}
@@ -158,7 +158,7 @@ export default function Settings() {
               ].map((item, i) => (
                 <div key={i} style={{ background: 'rgba(255,255,255,0.07)', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
                   <div style={{ color: item.color, marginBottom: 4 }}>{item.icon}</div>
-                  <div style={{ color: '#94a3b8', fontSize: 11, marginBottom: 4 }}>{item.label}</div>
+                  <div style={{ color: 'var(--ink-faint)', fontSize: 11, marginBottom: 4 }}>{item.label}</div>
                   <div style={{ color: '#fff', fontWeight: 700, fontSize: 15 }}>{item.value}</div>
                 </div>
               ))}
@@ -170,7 +170,7 @@ export default function Settings() {
             <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 20, border: '1px solid rgba(255,255,255,0.1)' }}>
               <h4 style={{ color: '#fff', fontWeight: 700, fontSize: 14, marginBottom: 16, marginTop: 0 }}>🚀 Activate Paid Plan</h4>
               <div style={{ marginBottom: 12 }}>
-                <label style={{ color: '#94a3b8', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 6 }}>Select Plan</label>
+                <label style={{ color: 'var(--ink-faint)', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 6 }}>Select Plan</label>
                 <select value={selectedPlan} onChange={e => setSelectedPlan(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid #334155', background: '#1e293b', color: '#fff', fontSize: 14 }}>
                   <option value="basic">Basic — Rs. 2,500/mo (1 Branch, 3 Users)</option>
                   <option value="professional">Professional — Rs. 5,000/mo (3 Branches, 10 Users)</option>
@@ -178,7 +178,7 @@ export default function Settings() {
                 </select>
               </div>
               <div style={{ marginBottom: 16 }}>
-                <label style={{ color: '#94a3b8', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 6 }}>Duration (months)</label>
+                <label style={{ color: 'var(--ink-faint)', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 6 }}>Duration (months)</label>
                 <select value={selectedMonths} onChange={e => setSelectedMonths(Number(e.target.value))} style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid #334155', background: '#1e293b', color: '#fff', fontSize: 14 }}>
                   {[1,2,3,6,12].map(m => <option key={m} value={m}>{m} month{m > 1 ? 's' : ''}{m === 12 ? ' (1 Year)' : ''}</option>)}
                 </select>
@@ -191,11 +191,11 @@ export default function Settings() {
             {/* Extend Trial */}
             <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 20, border: '1px solid rgba(255,255,255,0.1)' }}>
               <h4 style={{ color: '#fff', fontWeight: 700, fontSize: 14, marginBottom: 16, marginTop: 0 }}>⏳ Extend Free Trial</h4>
-              <p style={{ color: '#94a3b8', fontSize: 13, marginBottom: 16, lineHeight: 1.6 }}>
+              <p style={{ color: 'var(--ink-faint)', fontSize: 13, marginBottom: 16, lineHeight: 1.6 }}>
                 Use this when a prospect needs more time to evaluate. Adds days to their current trial end date.
               </p>
               <div style={{ marginBottom: 16 }}>
-                <label style={{ color: '#94a3b8', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 6 }}>Extra Days</label>
+                <label style={{ color: 'var(--ink-faint)', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 6 }}>Extra Days</label>
                 <select value={extendDays} onChange={e => setExtendDays(Number(e.target.value))} style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid #334155', background: '#1e293b', color: '#fff', fontSize: 14 }}>
                   {[3,7,14,30].map(d => <option key={d} value={d}>+{d} days</option>)}
                 </select>
@@ -210,8 +210,8 @@ export default function Settings() {
 
       {/* ── Demo Requests (superadmin only) ── */}
       {user?.role === 'superadmin' && (
-        <div style={{ background: '#fff', borderRadius: 16, padding: 28, border: '1px solid #e2e8f0', marginBottom: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid #f1f5f9' }}>
+        <div style={{ background: 'var(--panel)', borderRadius: 16, padding: 28, border: '1px solid var(--line)', marginBottom: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid var(--line-2)' }}>
             <div style={{ width: 36, height: 36, background: '#dcfce7', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Users size={18} color="#16a34a" />
             </div>
@@ -219,28 +219,28 @@ export default function Settings() {
             <span style={{ marginLeft: 8, background: '#fef3c7', color: '#d97706', padding: '2px 10px', borderRadius: 20, fontSize: 12, fontWeight: 700 }}>
               {demoRequests.filter(r => r.status === 'new').length} new
             </span>
-            <button onClick={loadDemoRequests} style={{ marginLeft: 'auto', padding: '7px 16px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <button onClick={loadDemoRequests} style={{ marginLeft: 'auto', padding: '7px 16px', background: 'var(--panel-3)', border: '1px solid var(--line)', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}>
               <RefreshCw size={14} /> {demoLoaded ? 'Refresh' : 'Load Requests'}
             </button>
           </div>
 
           {!demoLoaded ? (
-            <p style={{ color: '#94a3b8', fontSize: 14, textAlign: 'center', padding: '20px 0' }}>Click "Load Requests" to see demo requests from the landing page.</p>
+            <p style={{ color: 'var(--ink-faint)', fontSize: 14, textAlign: 'center', padding: '20px 0' }}>Click "Load Requests" to see demo requests from the landing page.</p>
           ) : demoLoading ? (
-            <p style={{ color: '#94a3b8', fontSize: 14, textAlign: 'center', padding: '20px 0' }}>Loading...</p>
+            <p style={{ color: 'var(--ink-faint)', fontSize: 14, textAlign: 'center', padding: '20px 0' }}>Loading...</p>
           ) : demoRequests.length === 0 ? (
-            <p style={{ color: '#94a3b8', fontSize: 14, textAlign: 'center', padding: '20px 0' }}>No demo requests yet. Share your landing page to get leads!</p>
+            <p style={{ color: 'var(--ink-faint)', fontSize: 14, textAlign: 'center', padding: '20px 0' }}>No demo requests yet. Share your landing page to get leads!</p>
           ) : (
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-                <thead><tr style={{ background: '#f8fafc' }}>
+                <thead><tr style={{ background: 'var(--panel-2)' }}>
                   {['Name', 'Business', 'Phone', 'Industry', 'Date', 'Status', 'Actions'].map(h => (
-                    <th key={h} style={{ padding: '10px 12px', textAlign: 'left', fontWeight: 600, color: '#64748b', whiteSpace: 'nowrap' }}>{h}</th>
+                    <th key={h} style={{ padding: '10px 12px', textAlign: 'left', fontWeight: 600, color: 'var(--ink-muted)', whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr></thead>
                 <tbody>
                   {demoRequests.map(req => (
-                    <tr key={req.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <tr key={req.id} style={{ borderBottom: '1px solid var(--line-2)' }}>
                       <td style={{ padding: '10px 12px', fontWeight: 600 }}>{req.name}</td>
                       <td style={{ padding: '10px 12px' }}>{req.business}</td>
                       <td style={{ padding: '10px 12px' }}>
@@ -248,8 +248,8 @@ export default function Settings() {
                           📱 {req.phone}
                         </a>
                       </td>
-                      <td style={{ padding: '10px 12px', color: '#64748b' }}>{req.industry || '—'}</td>
-                      <td style={{ padding: '10px 12px', color: '#94a3b8', whiteSpace: 'nowrap' }}>{req.created_at?.slice(0,10)}</td>
+                      <td style={{ padding: '10px 12px', color: 'var(--ink-muted)' }}>{req.industry || '—'}</td>
+                      <td style={{ padding: '10px 12px', color: 'var(--ink-faint)', whiteSpace: 'nowrap' }}>{req.created_at?.slice(0,10)}</td>
                       <td style={{ padding: '10px 12px' }}>
                         <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700,
                           background: req.status === 'new' ? '#fef3c7' : req.status === 'activated' ? '#dcfce7' : req.status === 'contacted' ? '#dbeafe' : '#f1f5f9',
@@ -293,10 +293,10 @@ export default function Settings() {
             ['Confirm New Password', 'confirm'],
           ].map(([label, key]) => (
             <div key={key} style={{ marginBottom: 14 }}>
-              <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 6, color: '#374151' }}>{label}</label>
+              <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 6, color: 'var(--ink-label)' }}>{label}</label>
               <input type="password" value={pwForm[key]} onChange={e => setPwForm({ ...pwForm, [key]: e.target.value })}
                 placeholder="••••••••"
-                style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 14, outline: 'none', fontFamily: 'Inter, sans-serif', boxSizing: 'border-box' }} />
+                style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 14, outline: 'none', fontFamily: 'Inter, sans-serif', boxSizing: 'border-box' }} />
             </div>
           ))}
           <button onClick={handleChangePassword} disabled={pwLoading} style={{ padding: '11px 28px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: 'pointer', marginTop: 4 }}>
@@ -328,21 +328,21 @@ export default function Settings() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 20px' }}>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 6 }}>Default Tax Rate (%)</label>
-            <input type="number" value={taxRate} onChange={e => setTaxRate(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 14, outline: 'none' }} />
+            <input type="number" value={taxRate} onChange={e => setTaxRate(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 14, outline: 'none' }} />
           </div>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 6 }}>Fiscal Year Start</label>
-            <select style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 14, background: '#fff' }}>
+            <select style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 14, background: 'var(--panel)' }}>
               <option>January</option><option>July</option><option>April</option>
             </select>
           </div>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 6 }}>Invoice Prefix</label>
-            <input defaultValue="INV-" style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 14, outline: 'none' }} />
+            <input defaultValue="INV-" style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 14, outline: 'none' }} />
           </div>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 6 }}>PO Prefix</label>
-            <input defaultValue="PO-" style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 14, outline: 'none' }} />
+            <input defaultValue="PO-" style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 14, outline: 'none' }} />
           </div>
         </div>
       </Section>
@@ -353,13 +353,13 @@ export default function Settings() {
           ['salesAlert', 'New sale notifications'],
           ['payroll', 'Payroll reminders'],
         ].map(([key, label]) => (
-          <div key={key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0', borderBottom: '1px solid #f1f5f9' }}>
-            <span style={{ fontSize: 15, color: '#475569' }}>{label}</span>
+          <div key={key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0', borderBottom: '1px solid var(--line-2)' }}>
+            <span style={{ fontSize: 15, color: 'var(--ink-2)' }}>{label}</span>
             <button onClick={() => setNotifications({ ...notifications, [key]: !notifications[key] })} style={{
               width: 48, height: 26, borderRadius: 13, border: 'none', cursor: 'pointer',
               background: notifications[key] ? '#1e40af' : '#e2e8f0', position: 'relative', transition: 'background 0.2s',
             }}>
-              <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#fff', position: 'absolute', top: 3, left: notifications[key] ? 25 : 3, transition: 'left 0.2s', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }} />
+              <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'var(--panel)', position: 'absolute', top: 3, left: notifications[key] ? 25 : 3, transition: 'left 0.2s', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }} />
             </button>
           </div>
         ))}
@@ -368,8 +368,8 @@ export default function Settings() {
       <Section title="Role Permissions" icon={Shield}>
         <div style={{ overflow: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-            <thead><tr style={{ background: '#f8fafc' }}>
-              {['Permission', 'Superadmin', 'Admin', 'Manager', 'Cashier', 'Accountant'].map(h => <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontWeight: 600, color: '#64748b' }}>{h}</th>)}
+            <thead><tr style={{ background: 'var(--panel-2)' }}>
+              {['Permission', 'Superadmin', 'Admin', 'Manager', 'Cashier', 'Accountant'].map(h => <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontWeight: 600, color: 'var(--ink-muted)' }}>{h}</th>)}
             </tr></thead>
             <tbody>
               {[
@@ -381,7 +381,7 @@ export default function Settings() {
                 ['Manage Payroll', true, true, false, false, false],
                 ['System Settings', true, false, false, false, false],
               ].map(([perm, ...vals]) => (
-                <tr key={perm} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                <tr key={perm} style={{ borderBottom: '1px solid var(--line-2)' }}>
                   <td style={{ padding: '10px 14px', fontWeight: 500 }}>{perm}</td>
                   {vals.map((v, i) => (
                     <td key={i} style={{ padding: '10px 14px' }}>
@@ -399,7 +399,7 @@ export default function Settings() {
       <Section title="Reset to Demo Data" icon={AlertTriangle}>
         <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start', flexWrap: 'wrap' }}>
           <div style={{ flex: 1, minWidth: 260 }}>
-            <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7, margin: 0 }}>
+            <p style={{ fontSize: 14, color: 'var(--ink-muted)', lineHeight: 1.7, margin: 0 }}>
               This will <strong>delete all current data</strong> — all sales, inventory, customers, suppliers, employees and accounts — and replace with a small clean demo dataset (3 products, 2 customers, 1 sale) so you can see how the system works before entering your real data.
             </p>
             <p style={{ fontSize: 13, color: '#ef4444', marginTop: 10, marginBottom: 0 }}>
@@ -411,7 +411,7 @@ export default function Settings() {
               <>
                 <p style={{ fontSize: 13, color: '#dc2626', fontWeight: 600, margin: 0, textAlign: 'right' }}>Are you sure? This cannot be undone.</p>
                 <div style={{ display: 'flex', gap: 10 }}>
-                  <button onClick={() => setConfirmReset(false)} style={{ padding: '10px 20px', border: '1px solid #e2e8f0', background: '#fff', borderRadius: 8, fontWeight: 600, fontSize: 14, cursor: 'pointer', color: '#475569' }}>
+                  <button onClick={() => setConfirmReset(false)} style={{ padding: '10px 20px', border: '1px solid var(--line)', background: 'var(--panel)', borderRadius: 8, fontWeight: 600, fontSize: 14, cursor: 'pointer', color: 'var(--ink-2)' }}>
                     Cancel
                   </button>
                   <button onClick={handleReset} disabled={resetting} style={{ padding: '10px 22px', background: '#dc2626', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -421,7 +421,7 @@ export default function Settings() {
                 </div>
               </>
             ) : (
-              <button onClick={handleReset} style={{ padding: '11px 24px', background: '#fff', border: '2px solid #ef4444', color: '#ef4444', borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <button onClick={handleReset} style={{ padding: '11px 24px', background: 'var(--panel)', border: '2px solid #ef4444', color: '#ef4444', borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <RefreshCw size={15} /> Reset to Clean Demo
               </button>
             )}

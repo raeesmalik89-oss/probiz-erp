@@ -71,14 +71,14 @@ export default function Reports() {
     table{width:100%;border-collapse:collapse;margin-bottom:4px}
     th{background:#f1f5f9;padding:7px 10px;text-align:left;font-size:11px;font-weight:700;color:#475569}
     th:last-child,td:last-child{text-align:right}
-    td{padding:7px 10px;border-bottom:1px solid #f8fafc;font-size:12px}
+    td{padding:7px 10px;border-bottom:1px solid var(--line-2);font-size:12px}
     tr:nth-child(even) td{background:#fafafa}
-    .tfoot td{font-weight:800;background:#f1f5f9;border-top:2px solid #e2e8f0}
+    .tfoot td{font-weight:800;background:#f1f5f9;border-top:2px solid var(--line)}
     .profit-box{display:flex;justify-content:flex-end;margin-top:16px}
     .profit-inner{width:260px;border-radius:8px;overflow:hidden}
-    .pr{display:flex;justify-content:space-between;padding:9px 14px;font-size:13px;border-bottom:1px solid #e2e8f0}
+    .pr{display:flex;justify-content:space-between;padding:9px 14px;font-size:13px;border-bottom:1px solid var(--line)}
     .pr-final{display:flex;justify-content:space-between;padding:11px 14px;font-size:16px;font-weight:900;background:#1e40af;color:#fff}
-    .footer{text-align:center;border-top:2px solid #e2e8f0;padding-top:12px;font-size:10px;color:#94a3b8;margin-top:20px}
+    .footer{text-align:center;border-top:2px solid var(--line);padding-top:12px;font-size:10px;color:#94a3b8;margin-top:20px}
     @media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}</style></head>
     <body><div class="page">
     <div class="header">
@@ -142,7 +142,7 @@ export default function Reports() {
     .title{text-align:right}.title h2{font-size:20px;font-weight:900;color:#1e40af;line-height:1.2}
     .title p{font-size:11px;color:#64748b;margin-top:3px}
     .section{margin-bottom:16px}.section h3{font-size:13px;font-weight:700;background:#1e40af;color:#fff;padding:6px 12px;border-radius:6px;margin-bottom:0}
-    .row{display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:13px}
+    .row{display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--line-2);font-size:13px}
     .row:nth-child(even){background:#f8fafc}
     .row-total{display:flex;justify-content:space-between;padding:10px 12px;font-size:14px;font-weight:800;background:#1e40af;color:#fff;border-radius:0 0 6px 6px;margin-bottom:12px}
     .profit{color:#10b981}.loss{color:#ef4444}
@@ -150,7 +150,7 @@ export default function Reports() {
     .kpi-box{flex:1;border-radius:8px;padding:12px;text-align:center}
     .kpi-box .val{font-size:18px;font-weight:900;margin-bottom:3px}
     .kpi-box .lbl{font-size:10px;color:#64748b}
-    .footer{text-align:center;border-top:2px solid #e2e8f0;padding-top:10px;font-size:10px;color:#94a3b8;margin-top:16px}
+    .footer{text-align:center;border-top:2px solid var(--line);padding-top:10px;font-size:10px;color:#94a3b8;margin-top:16px}
     @media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}</style></head>
     <body><div class="page">
     <div class="header">
@@ -195,7 +195,7 @@ export default function Reports() {
     <div>
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: 26, fontWeight: 800 }}>Reports & Analytics</h1>
-        <p style={{ color: '#64748b', marginTop: 2 }}>Detailed business insights and data visualization</p>
+        <p style={{ color: 'var(--ink-muted)', marginTop: 2 }}>Detailed business insights and data visualization</p>
       </div>
 
       {/* KPI Summary */}
@@ -207,8 +207,8 @@ export default function Reports() {
             ["Month Purchases", `Rs. ${stats.month_purchases?.toLocaleString()}`, '#f59e0b'],
             ["Gross Profit", `Rs. ${(stats.month_sales - stats.month_purchases).toLocaleString()}`, stats.month_sales > stats.month_purchases ? '#10b981' : '#ef4444'],
           ].map(([label, value, color]) => (
-            <div key={label} style={{ background: '#fff', borderRadius: 12, padding: '18px 20px', border: '1px solid #e2e8f0' }}>
-              <div style={{ fontSize: 12, color: '#64748b', marginBottom: 4 }}>{label}</div>
+            <div key={label} style={{ background: 'var(--panel)', borderRadius: 12, padding: '18px 20px', border: '1px solid var(--line)' }}>
+              <div style={{ fontSize: 12, color: 'var(--ink-muted)', marginBottom: 4 }}>{label}</div>
               <div style={{ fontSize: 20, fontWeight: 800, color }}>{value}</div>
             </div>
           ))}
@@ -216,9 +216,9 @@ export default function Reports() {
       )}
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 4, background: '#f1f5f9', padding: 4, borderRadius: 10, marginBottom: 24, width: 'fit-content' }}>
+      <div style={{ display: 'flex', gap: 4, background: 'var(--panel-3)', padding: 4, borderRadius: 10, marginBottom: 24, width: 'fit-content' }}>
         {tabs.map(({ id, label }) => (
-          <button key={id} onClick={() => setTab(id)} style={{ padding: '8px 20px', borderRadius: 8, border: 'none', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: tab === id ? '#fff' : 'transparent', color: tab === id ? '#1e40af' : '#64748b', boxShadow: tab === id ? '0 1px 4px rgba(0,0,0,0.1)' : 'none' }}>{label}</button>
+          <button key={id} onClick={() => setTab(id)} style={{ padding: '8px 20px', borderRadius: 8, border: 'none', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: tab === id ? 'var(--panel)' : 'transparent', color: tab === id ? '#1e40af' : '#64748b', boxShadow: tab === id ? '0 1px 4px rgba(0,0,0,0.1)' : 'none' }}>{label}</button>
         ))}
       </div>
 
@@ -226,21 +226,21 @@ export default function Reports() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
           {/* Date Filter */}
-          <div style={{ background: '#fff', borderRadius: 12, padding: '16px 20px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-            <span style={{ fontWeight: 700, color: '#1e293b' }}>📅 Period:</span>
+          <div style={{ background: 'var(--panel)', borderRadius: 12, padding: '16px 20px', border: '1px solid var(--line)', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+            <span style={{ fontWeight: 700, color: 'var(--ink)' }}>📅 Period:</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <label style={{ fontSize: 13, color: '#64748b' }}>From</label>
-              <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} style={{ padding: '7px 10px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 13 }} />
+              <label style={{ fontSize: 13, color: 'var(--ink-muted)' }}>From</label>
+              <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} style={{ padding: '7px 10px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 13 }} />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <label style={{ fontSize: 13, color: '#64748b' }}>To</label>
-              <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} style={{ padding: '7px 10px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 13 }} />
+              <label style={{ fontSize: 13, color: 'var(--ink-muted)' }}>To</label>
+              <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} style={{ padding: '7px 10px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 13 }} />
             </div>
             <div style={{ display: 'flex', gap: 8, marginLeft: 'auto' }}>
-              <button onClick={() => exportCSV(salesList.map(s => ({ Invoice: s.invoice_no, Customer: s.customer, Date: s.date, Total: s.total, Status: s.status })), 'sales-report.csv')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', background: '#f1f5f9', color: '#374151', border: '1px solid #e2e8f0', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
+              <button onClick={() => exportCSV(salesList.map(s => ({ Invoice: s.invoice_no, Customer: s.customer, Date: s.date, Total: s.total, Status: s.status })), 'sales-report.csv')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', background: 'var(--panel-3)', color: 'var(--ink-label)', border: '1px solid var(--line)', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
                 <Download size={14} /> Export Sales CSV
               </button>
-              <button onClick={() => exportCSV(purchasesList.map(p => ({ PO: p.po_number, Supplier: p.supplier, Date: p.date, Total: p.total, Status: p.status })), 'purchases-report.csv')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', background: '#f1f5f9', color: '#374151', border: '1px solid #e2e8f0', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
+              <button onClick={() => exportCSV(purchasesList.map(p => ({ PO: p.po_number, Supplier: p.supplier, Date: p.date, Total: p.total, Status: p.status })), 'purchases-report.csv')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', background: 'var(--panel-3)', color: 'var(--ink-label)', border: '1px solid var(--line)', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
                 <Download size={14} /> Export Purchases CSV
               </button>
               <button onClick={() => exportExcel(`/api/exports/sales.xlsx?from_date=${fromDate}&to_date=${toDate}`, 'sales-report.xlsx')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', background: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
@@ -269,34 +269,34 @@ export default function Reports() {
                     { label: profit >= 0 ? 'Gross Profit' : 'Net Loss', sub: totalSales > 0 ? `${((profit/totalSales)*100).toFixed(1)}% margin` : '', value: `Rs. ${profit.toLocaleString()}`, color: profit >= 0 ? '#065f46' : '#991b1b', bg: profit >= 0 ? '#d1fae5' : '#fee2e2' },
                   ].map(({ label, sub, value, color, bg }) => (
                     <div key={label} style={{ background: bg, borderRadius: 14, padding: '20px 22px' }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>{label}</div>
-                      <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 8 }}>{sub}</div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink-muted)', marginBottom: 2 }}>{label}</div>
+                      <div style={{ fontSize: 12, color: 'var(--ink-faint)', marginBottom: 8 }}>{sub}</div>
                       <div style={{ fontSize: 24, fontWeight: 900, color }}>{value}</div>
                     </div>
                   ))}
                 </div>
 
                 {/* Sales Table */}
-                <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0', overflow: 'hidden' }}>
+                <div style={{ background: 'var(--panel)', borderRadius: 16, border: '1px solid var(--line)', overflow: 'hidden' }}>
                   <div style={{ background: 'linear-gradient(135deg,#1e40af,#3b82f6)', padding: '12px 20px' }}>
                     <h3 style={{ color: '#fff', fontWeight: 800, fontSize: 15 }}>📦 Sales — {salesList.length} Invoices &nbsp;|&nbsp; Total: Rs. {totalSales.toLocaleString()}</h3>
                   </div>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-                    <thead><tr style={{ background: '#f8fafc' }}>
+                    <thead><tr style={{ background: 'var(--panel-2)' }}>
                       {['#', 'Invoice No', 'Customer', 'Date', 'Payment', 'Status', 'Total'].map(h => (
-                        <th key={h} style={{ padding: '10px 14px', textAlign: h === 'Total' ? 'right' : 'left', fontWeight: 600, fontSize: 12, color: '#64748b' }}>{h}</th>
+                        <th key={h} style={{ padding: '10px 14px', textAlign: h === 'Total' ? 'right' : 'left', fontWeight: 600, fontSize: 12, color: 'var(--ink-muted)' }}>{h}</th>
                       ))}
                     </tr></thead>
                     <tbody>
-                      {summaryLoading ? <tr><td colSpan={7} style={{ textAlign: 'center', padding: 30, color: '#94a3b8' }}>Loading...</td></tr>
-                        : salesList.length === 0 ? <tr><td colSpan={7} style={{ textAlign: 'center', padding: 30, color: '#94a3b8' }}>No sales in this period</td></tr>
+                      {summaryLoading ? <tr><td colSpan={7} style={{ textAlign: 'center', padding: 30, color: 'var(--ink-faint)' }}>Loading...</td></tr>
+                        : salesList.length === 0 ? <tr><td colSpan={7} style={{ textAlign: 'center', padding: 30, color: 'var(--ink-faint)' }}>No sales in this period</td></tr>
                         : salesList.map((s, i) => (
-                          <tr key={s.id} style={{ borderBottom: '1px solid #f8fafc', background: i % 2 === 0 ? '#fff' : '#fafafa' }}>
-                            <td style={{ padding: '9px 14px', color: '#94a3b8' }}>{i + 1}</td>
+                          <tr key={s.id} style={{ borderBottom: '1px solid var(--line-2)', background: i % 2 === 0 ? 'var(--panel)' : 'var(--panel-2)' }}>
+                            <td style={{ padding: '9px 14px', color: 'var(--ink-faint)' }}>{i + 1}</td>
                             <td style={{ padding: '9px 14px', color: '#1e40af', fontWeight: 700 }}>{s.invoice_no}</td>
                             <td style={{ padding: '9px 14px' }}>{s.customer || 'Walk-in'}</td>
-                            <td style={{ padding: '9px 14px', color: '#64748b' }}>{pkt(s.created_at)}</td>
-                            <td style={{ padding: '9px 14px' }}><span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: 20, fontSize: 11 }}>{s.payment_method}</span></td>
+                            <td style={{ padding: '9px 14px', color: 'var(--ink-muted)' }}>{pkt(s.created_at)}</td>
+                            <td style={{ padding: '9px 14px' }}><span style={{ background: 'var(--panel-3)', padding: '2px 8px', borderRadius: 20, fontSize: 11 }}>{s.payment_method}</span></td>
                             <td style={{ padding: '9px 14px' }}><span style={{ background: '#d1fae5', color: '#065f46', padding: '2px 8px', borderRadius: 20, fontSize: 11, fontWeight: 700 }}>{s.status}</span></td>
                             <td style={{ padding: '9px 14px', fontWeight: 700, textAlign: 'right', color: '#10b981' }}>Rs. {s.total?.toLocaleString()}</td>
                           </tr>
@@ -310,26 +310,26 @@ export default function Reports() {
                 </div>
 
                 {/* Purchases Table */}
-                <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0', overflow: 'hidden' }}>
+                <div style={{ background: 'var(--panel)', borderRadius: 16, border: '1px solid var(--line)', overflow: 'hidden' }}>
                   <div style={{ background: 'linear-gradient(135deg,#d97706,#f59e0b)', padding: '12px 20px' }}>
                     <h3 style={{ color: '#fff', fontWeight: 800, fontSize: 15 }}>🛒 Purchases — {purchasesList.length} Orders &nbsp;|&nbsp; Total: Rs. {totalPurchases.toLocaleString()}</h3>
                   </div>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-                    <thead><tr style={{ background: '#f8fafc' }}>
+                    <thead><tr style={{ background: 'var(--panel-2)' }}>
                       {['#', 'PO Number', 'Supplier', 'Date', 'Payment', 'Status', 'Total'].map(h => (
-                        <th key={h} style={{ padding: '10px 14px', textAlign: h === 'Total' ? 'right' : 'left', fontWeight: 600, fontSize: 12, color: '#64748b' }}>{h}</th>
+                        <th key={h} style={{ padding: '10px 14px', textAlign: h === 'Total' ? 'right' : 'left', fontWeight: 600, fontSize: 12, color: 'var(--ink-muted)' }}>{h}</th>
                       ))}
                     </tr></thead>
                     <tbody>
-                      {summaryLoading ? <tr><td colSpan={7} style={{ textAlign: 'center', padding: 30, color: '#94a3b8' }}>Loading...</td></tr>
-                        : purchasesList.length === 0 ? <tr><td colSpan={7} style={{ textAlign: 'center', padding: 30, color: '#94a3b8' }}>No purchases in this period</td></tr>
+                      {summaryLoading ? <tr><td colSpan={7} style={{ textAlign: 'center', padding: 30, color: 'var(--ink-faint)' }}>Loading...</td></tr>
+                        : purchasesList.length === 0 ? <tr><td colSpan={7} style={{ textAlign: 'center', padding: 30, color: 'var(--ink-faint)' }}>No purchases in this period</td></tr>
                         : purchasesList.map((p, i) => (
-                          <tr key={p.id} style={{ borderBottom: '1px solid #f8fafc', background: i % 2 === 0 ? '#fff' : '#fafafa' }}>
-                            <td style={{ padding: '9px 14px', color: '#94a3b8' }}>{i + 1}</td>
+                          <tr key={p.id} style={{ borderBottom: '1px solid var(--line-2)', background: i % 2 === 0 ? 'var(--panel)' : 'var(--panel-2)' }}>
+                            <td style={{ padding: '9px 14px', color: 'var(--ink-faint)' }}>{i + 1}</td>
                             <td style={{ padding: '9px 14px', color: '#d97706', fontWeight: 700 }}>{p.po_number}</td>
                             <td style={{ padding: '9px 14px' }}>{p.supplier}</td>
-                            <td style={{ padding: '9px 14px', color: '#64748b' }}>{pkt(p.created_at)}</td>
-                            <td style={{ padding: '9px 14px' }}><span style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: 20, fontSize: 11 }}>{p.payment_method}</span></td>
+                            <td style={{ padding: '9px 14px', color: 'var(--ink-muted)' }}>{pkt(p.created_at)}</td>
+                            <td style={{ padding: '9px 14px' }}><span style={{ background: 'var(--panel-3)', padding: '2px 8px', borderRadius: 20, fontSize: 11 }}>{p.payment_method}</span></td>
                             <td style={{ padding: '9px 14px' }}><span style={{ background: '#d1fae5', color: '#065f46', padding: '2px 8px', borderRadius: 20, fontSize: 11, fontWeight: 700 }}>{p.status}</span></td>
                             <td style={{ padding: '9px 14px', fontWeight: 700, textAlign: 'right', color: '#ef4444' }}>Rs. {p.total?.toLocaleString()}</td>
                           </tr>
@@ -344,13 +344,13 @@ export default function Reports() {
 
                 {/* Net Summary */}
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <div style={{ width: 300, borderRadius: 12, overflow: 'hidden', border: '1px solid #e2e8f0' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', fontSize: 14 }}>
-                      <span style={{ color: '#64748b' }}>Total Sales</span>
+                  <div style={{ width: 300, borderRadius: 12, overflow: 'hidden', border: '1px solid var(--line)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', background: 'var(--panel-2)', fontSize: 14 }}>
+                      <span style={{ color: 'var(--ink-muted)' }}>Total Sales</span>
                       <span style={{ fontWeight: 700, color: '#10b981' }}>Rs. {totalSales.toLocaleString()}</span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', fontSize: 14, borderTop: '1px solid #e2e8f0' }}>
-                      <span style={{ color: '#64748b' }}>Total Purchases</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', background: 'var(--panel-2)', fontSize: 14, borderTop: '1px solid var(--line)' }}>
+                      <span style={{ color: 'var(--ink-muted)' }}>Total Purchases</span>
                       <span style={{ fontWeight: 700, color: '#ef4444' }}>Rs. {totalPurchases.toLocaleString()}</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 16px', background: profit >= 0 ? '#1e40af' : '#ef4444', fontSize: 18, fontWeight: 900, color: '#fff' }}>
@@ -385,17 +385,17 @@ export default function Reports() {
                   ].map(({ label, value, color, bg, icon }) => (
                     <div key={label} style={{ background: bg, borderRadius: 14, padding: '20px 22px', border: `2px solid ${color}20` }}>
                       <div style={{ fontSize: 22, marginBottom: 6 }}>{icon}</div>
-                      <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, marginBottom: 4 }}>{label}</div>
+                      <div style={{ fontSize: 12, color: 'var(--ink-muted)', fontWeight: 600, marginBottom: 4 }}>{label}</div>
                       <div style={{ fontSize: 22, fontWeight: 900, color }}>{value}</div>
                     </div>
                   ))}
                 </div>
 
                 {/* Income Statement */}
-                <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0', overflow: 'hidden' }}>
+                <div style={{ background: 'var(--panel)', borderRadius: 16, border: '1px solid var(--line)', overflow: 'hidden' }}>
                   <div style={{ background: 'linear-gradient(135deg,#1e40af,#3b82f6)', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h3 style={{ color: '#fff', fontWeight: 800, fontSize: 16 }}>📋 Profit & Loss Statement — This Month</h3>
-                    <button onClick={printPL} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 16px', background: '#fff', color: '#1e40af', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+                    <button onClick={printPL} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 16px', background: 'var(--panel)', color: '#1e40af', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
                       <Printer size={14} /> Print P&L
                     </button>
                   </div>
@@ -407,8 +407,8 @@ export default function Reports() {
                       ['Sales Revenue (This Month)', revenue],
                       ["Today's Sales", stats.today_sales || 0],
                     ].map(([label, val]) => (
-                      <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #f1f5f9', fontSize: 14 }}>
-                        <span style={{ color: '#475569' }}>{label}</span>
+                      <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid var(--line-2)', fontSize: 14 }}>
+                        <span style={{ color: 'var(--ink-2)' }}>{label}</span>
                         <span style={{ fontWeight: 700, color: '#10b981' }}>Rs. {val.toLocaleString()}</span>
                       </div>
                     ))}
@@ -420,8 +420,8 @@ export default function Reports() {
                   {/* COGS Section */}
                   <div style={{ padding: '0 24px 20px' }}>
                     <div style={{ fontWeight: 800, fontSize: 13, color: '#ef4444', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10, paddingBottom: 6, borderBottom: '2px solid #fee2e2' }}>📦 Cost of Goods Sold</div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #f1f5f9', fontSize: 14 }}>
-                      <span style={{ color: '#475569' }}>Purchases / Stock Cost (This Month)</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid var(--line-2)', fontSize: 14 }}>
+                      <span style={{ color: 'var(--ink-2)' }}>Purchases / Stock Cost (This Month)</span>
                       <span style={{ fontWeight: 700, color: '#ef4444' }}>Rs. {cogs.toLocaleString()}</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', background: '#fef2f2', borderRadius: 8, marginTop: 8, fontWeight: 800, fontSize: 15 }}>
@@ -451,8 +451,8 @@ export default function Reports() {
                       ['Accounts Payable (you owe suppliers)', stats.total_payables || 0, '#ef4444'],
                       ['Net Position', (stats.total_receivables || 0) - (stats.total_payables || 0), ((stats.total_receivables || 0) - (stats.total_payables || 0)) >= 0 ? '#10b981' : '#ef4444'],
                     ].map(([label, val, color]) => (
-                      <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #f1f5f9', fontSize: 14 }}>
-                        <span style={{ color: '#475569' }}>{label}</span>
+                      <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid var(--line-2)', fontSize: 14 }}>
+                        <span style={{ color: 'var(--ink-2)' }}>{label}</span>
                         <span style={{ fontWeight: 800, color, fontSize: 15 }}>Rs. {val.toLocaleString()}</span>
                       </div>
                     ))}
@@ -461,7 +461,7 @@ export default function Reports() {
 
                 {/* Monthly P&L Chart */}
                 {monthlyData.length > 0 && (
-                  <div style={{ background: '#fff', borderRadius: 16, padding: 28, border: '1px solid #e2e8f0' }}>
+                  <div style={{ background: 'var(--panel)', borderRadius: 16, padding: 28, border: '1px solid var(--line)' }}>
                     <h3 style={{ fontWeight: 700, marginBottom: 20 }}>Monthly Profit Trend</h3>
                     <ResponsiveContainer width="100%" height={260}>
                       <BarChart data={monthlyData.map(m => ({ ...m, profit: m.sales - m.purchases }))} barGap={4}>
@@ -487,7 +487,7 @@ export default function Reports() {
 
       {tab === 'sales' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-          <div style={{ background: '#fff', borderRadius: 16, padding: 28, border: '1px solid #e2e8f0' }}>
+          <div style={{ background: 'var(--panel)', borderRadius: 16, padding: 28, border: '1px solid var(--line)' }}>
             <h3 style={{ fontWeight: 700, marginBottom: 20 }}>Daily Sales — Last 7 Days</h3>
             <ResponsiveContainer width="100%" height={280}>
               <LineChart data={salesChart}>
@@ -501,7 +501,7 @@ export default function Reports() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-            <div style={{ background: '#fff', borderRadius: 16, padding: 28, border: '1px solid #e2e8f0' }}>
+            <div style={{ background: 'var(--panel)', borderRadius: 16, padding: 28, border: '1px solid var(--line)' }}>
               <h3 style={{ fontWeight: 700, marginBottom: 20 }}>Top Products by Revenue</h3>
               {topProducts.length > 0 ? (
                 <ResponsiveContainer width="100%" height={250}>
@@ -515,10 +515,10 @@ export default function Reports() {
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
-              ) : <p style={{ textAlign: 'center', color: '#94a3b8', paddingTop: 80 }}>No data</p>}
+              ) : <p style={{ textAlign: 'center', color: 'var(--ink-faint)', paddingTop: 80 }}>No data</p>}
             </div>
 
-            <div style={{ background: '#fff', borderRadius: 16, padding: 28, border: '1px solid #e2e8f0' }}>
+            <div style={{ background: 'var(--panel)', borderRadius: 16, padding: 28, border: '1px solid var(--line)' }}>
               <h3 style={{ fontWeight: 700, marginBottom: 20 }}>Revenue Split</h3>
               {topProducts.length > 0 ? (
                 <>
@@ -535,20 +535,20 @@ export default function Reports() {
                     {topProducts.map((p, i) => (
                       <div key={p.name} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, fontSize: 13 }}>
                         <div style={{ width: 10, height: 10, borderRadius: '50%', background: COLORS[i % COLORS.length], flexShrink: 0 }} />
-                        <span style={{ flex: 1, color: '#475569' }}>{p.name}</span>
+                        <span style={{ flex: 1, color: 'var(--ink-2)' }}>{p.name}</span>
                         <span style={{ fontWeight: 700 }}>Rs. {p.revenue?.toLocaleString()}</span>
                       </div>
                     ))}
                   </div>
                 </>
-              ) : <p style={{ textAlign: 'center', color: '#94a3b8', paddingTop: 80 }}>No data</p>}
+              ) : <p style={{ textAlign: 'center', color: 'var(--ink-faint)', paddingTop: 80 }}>No data</p>}
             </div>
           </div>
         </div>
       )}
 
       {tab === 'comparison' && (
-        <div style={{ background: '#fff', borderRadius: 16, padding: 28, border: '1px solid #e2e8f0' }}>
+        <div style={{ background: 'var(--panel)', borderRadius: 16, padding: 28, border: '1px solid var(--line)' }}>
           <h3 style={{ fontWeight: 700, marginBottom: 20 }}>Sales vs Purchases — Last 6 Months</h3>
           <ResponsiveContainer width="100%" height={360}>
             <BarChart data={monthlyData} barGap={4}>
@@ -563,11 +563,11 @@ export default function Reports() {
           </ResponsiveContainer>
           <div style={{ marginTop: 24, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16 }}>
             {monthlyData.map(m => (
-              <div key={m.month} style={{ background: '#f8fafc', borderRadius: 10, padding: '14px 16px' }}>
-                <div style={{ fontWeight: 700, marginBottom: 8, color: '#1e293b' }}>{m.month}</div>
-                <div style={{ fontSize: 13, color: '#64748b', marginBottom: 4 }}>Sales: <b style={{ color: '#3b82f6' }}>Rs. {m.sales?.toLocaleString()}</b></div>
-                <div style={{ fontSize: 13, color: '#64748b', marginBottom: 4 }}>Purchases: <b style={{ color: '#f59e0b' }}>Rs. {m.purchases?.toLocaleString()}</b></div>
-                <div style={{ fontSize: 13, color: '#64748b' }}>Profit: <b style={{ color: m.sales > m.purchases ? '#10b981' : '#ef4444' }}>Rs. {(m.sales - m.purchases).toLocaleString()}</b></div>
+              <div key={m.month} style={{ background: 'var(--panel-2)', borderRadius: 10, padding: '14px 16px' }}>
+                <div style={{ fontWeight: 700, marginBottom: 8, color: 'var(--ink)' }}>{m.month}</div>
+                <div style={{ fontSize: 13, color: 'var(--ink-muted)', marginBottom: 4 }}>Sales: <b style={{ color: '#3b82f6' }}>Rs. {m.sales?.toLocaleString()}</b></div>
+                <div style={{ fontSize: 13, color: 'var(--ink-muted)', marginBottom: 4 }}>Purchases: <b style={{ color: '#f59e0b' }}>Rs. {m.purchases?.toLocaleString()}</b></div>
+                <div style={{ fontSize: 13, color: 'var(--ink-muted)' }}>Profit: <b style={{ color: m.sales > m.purchases ? '#10b981' : '#ef4444' }}>Rs. {(m.sales - m.purchases).toLocaleString()}</b></div>
               </div>
             ))}
           </div>
@@ -582,7 +582,7 @@ export default function Reports() {
           </button>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-          <div style={{ background: '#fff', borderRadius: 16, padding: 28, border: '1px solid #e2e8f0' }}>
+          <div style={{ background: 'var(--panel)', borderRadius: 16, padding: 28, border: '1px solid var(--line)' }}>
             <h3 style={{ fontWeight: 700, marginBottom: 20 }}>Inventory Summary</h3>
             {[
               ['Total Products', stats.total_products, '#3b82f6'],
@@ -591,21 +591,21 @@ export default function Reports() {
               ['Total Suppliers', stats.total_suppliers, '#8b5cf6'],
               ['Total Employees', stats.total_employees, '#f59e0b'],
             ].map(([label, value, color]) => (
-              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #f1f5f9' }}>
-                <span style={{ color: '#64748b', fontSize: 15 }}>{label}</span>
+              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid var(--line-2)' }}>
+                <span style={{ color: 'var(--ink-muted)', fontSize: 15 }}>{label}</span>
                 <span style={{ fontWeight: 700, color, fontSize: 16 }}>{value}</span>
               </div>
             ))}
           </div>
-          <div style={{ background: '#fff', borderRadius: 16, padding: 28, border: '1px solid #e2e8f0' }}>
+          <div style={{ background: 'var(--panel)', borderRadius: 16, padding: 28, border: '1px solid var(--line)' }}>
             <h3 style={{ fontWeight: 700, marginBottom: 20 }}>Financial Position</h3>
             {[
               ['Total Receivables', `Rs. ${stats.total_receivables?.toLocaleString()}`, '#10b981'],
               ['Total Payables', `Rs. ${stats.total_payables?.toLocaleString()}`, '#ef4444'],
               ['Net Position', `Rs. ${(stats.total_receivables - stats.total_payables).toLocaleString()}`, stats.total_receivables > stats.total_payables ? '#10b981' : '#ef4444'],
             ].map(([label, value, color]) => (
-              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid #f1f5f9' }}>
-                <span style={{ color: '#64748b', fontSize: 15 }}>{label}</span>
+              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid var(--line-2)' }}>
+                <span style={{ color: 'var(--ink-muted)', fontSize: 15 }}>{label}</span>
                 <span style={{ fontWeight: 800, color, fontSize: 18 }}>{value}</span>
               </div>
             ))}

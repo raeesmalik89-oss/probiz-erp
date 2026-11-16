@@ -653,7 +653,7 @@ const sections = [
 
   // ─── SETTINGS ──────────────────────────────────────────────────────────────
   {
-    id: 'settings', icon: Settings, label: 'Settings', color: '#64748b',
+    id: 'settings', icon: Settings, label: 'Settings', color: 'var(--ink-muted)',
     content: {
       title: 'Settings',
       subtitle: 'Company configuration, user management, password change and system tools.',
@@ -927,15 +927,15 @@ function ContentRenderer({ body }) {
     <div>
       {body.map((block, i) => (
         <div key={i} style={{ marginBottom: 32 }}>
-          <h3 style={{ fontSize: 17, fontWeight: 700, color: '#1e293b', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--ink)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ width: 4, height: 18, background: '#1e40af', borderRadius: 2, display: 'inline-block', flexShrink: 0 }} />
             {block.heading}
           </h3>
-          {block.text && <p style={{ color: '#475569', fontSize: 14, lineHeight: 1.8, margin: 0 }}>{block.text}</p>}
+          {block.text && <p style={{ color: 'var(--ink-2)', fontSize: 14, lineHeight: 1.8, margin: 0 }}>{block.text}</p>}
           {block.bullets && (
             <ul style={{ margin: 0, paddingLeft: 0, listStyle: 'none' }}>
               {block.bullets.map((b, j) => (
-                <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '6px 0', color: '#475569', fontSize: 14, borderBottom: '1px solid #f8fafc' }}>
+                <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '6px 0', color: 'var(--ink-2)', fontSize: 14, borderBottom: '1px solid var(--line-2)' }}>
                   <CheckCircle size={15} color="#10b981" style={{ marginTop: 2, flexShrink: 0 }} />
                   {b}
                 </li>
@@ -945,28 +945,28 @@ function ContentRenderer({ body }) {
           {block.steps && (
             <ol style={{ margin: 0, paddingLeft: 0, listStyle: 'none' }}>
               {block.steps.map((s, j) => (
-                <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '8px 0', borderBottom: '1px solid #f8fafc' }}>
+                <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '8px 0', borderBottom: '1px solid var(--line-2)' }}>
                   <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#1e40af', color: '#fff', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{j + 1}</div>
-                  <span style={{ color: '#475569', fontSize: 14, paddingTop: 3 }}>{s}</span>
+                  <span style={{ color: 'var(--ink-2)', fontSize: 14, paddingTop: 3 }}>{s}</span>
                 </li>
               ))}
             </ol>
           )}
           {block.table && (
-            <div style={{ overflowX: 'auto', borderRadius: 10, border: '1px solid #e2e8f0' }}>
+            <div style={{ overflowX: 'auto', borderRadius: 10, border: '1px solid var(--line)' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                 <thead>
-                  <tr style={{ background: '#f1f5f9' }}>
+                  <tr style={{ background: 'var(--panel-3)' }}>
                     {block.table.headers.map(h => (
-                      <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontWeight: 700, color: '#374151', whiteSpace: 'nowrap' }}>{h}</th>
+                      <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontWeight: 700, color: 'var(--ink-label)', whiteSpace: 'nowrap' }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {block.table.rows.map((row, ri) => (
-                    <tr key={ri} style={{ borderTop: '1px solid #f1f5f9', background: ri % 2 === 0 ? '#fff' : '#fafafa' }}>
+                    <tr key={ri} style={{ borderTop: '1px solid var(--line-2)', background: ri % 2 === 0 ? 'var(--panel)' : 'var(--panel-2)' }}>
                       {row.map((cell, ci) => (
-                        <td key={ci} style={{ padding: '9px 14px', color: ci === 0 ? '#1e293b' : '#475569', fontWeight: ci === 0 ? 600 : 400 }}>{cell}</td>
+                        <td key={ci} style={{ padding: '9px 14px', color: ci === 0 ? 'var(--ink)' : 'var(--ink-2)', fontWeight: ci === 0 ? 600 : 400 }}>{cell}</td>
                       ))}
                     </tr>
                   ))}
@@ -996,22 +996,22 @@ export default function Docs() {
   return (
     <div>
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 26, fontWeight: 800, color: '#1e293b' }}>Documentation</h1>
-        <p style={{ color: '#64748b', marginTop: 2 }}>Complete guide to ProBiz ERP — how every module works</p>
+        <h1 style={{ fontSize: 26, fontWeight: 800, color: 'var(--ink)' }}>Documentation</h1>
+        <p style={{ color: 'var(--ink-muted)', marginTop: 2 }}>Complete guide to ProBiz ERP — how every module works</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 24, alignItems: 'start' }}>
 
         {/* Sidebar nav */}
-        <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0', overflow: 'hidden', position: 'sticky', top: 80 }}>
-          <div style={{ padding: '14px 16px', borderBottom: '1px solid #f1f5f9' }}>
+        <div style={{ background: 'var(--panel)', borderRadius: 16, border: '1px solid var(--line)', overflow: 'hidden', position: 'sticky', top: 80 }}>
+          <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--line-2)' }}>
             <div style={{ position: 'relative' }}>
               <Search size={14} color="#94a3b8" style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)' }} />
               <input
                 placeholder="Search docs..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                style={{ width: '100%', padding: '8px 10px 8px 30px', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 13, outline: 'none', boxSizing: 'border-box', fontFamily: 'Inter, sans-serif' }}
+                style={{ width: '100%', padding: '8px 10px 8px 30px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 13, outline: 'none', boxSizing: 'border-box', fontFamily: 'Inter, sans-serif' }}
               />
             </div>
           </div>
@@ -1022,11 +1022,11 @@ export default function Docs() {
                   display: 'flex', alignItems: 'center', gap: 10, width: '100%',
                   padding: '9px 12px', borderRadius: 8, border: 'none', cursor: 'pointer',
                   background: active === id ? '#dbeafe' : 'transparent',
-                  color: active === id ? '#1e40af' : '#475569',
+                  color: active === id ? '#1e40af' : 'var(--ink-2)',
                   fontWeight: active === id ? 700 : 400, fontSize: 13,
                   textAlign: 'left', marginBottom: 2,
                 }}>
-                <div style={{ width: 28, height: 28, borderRadius: 7, background: active === id ? '#bfdbfe' : '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 7, background: active === id ? '#bfdbfe' : 'var(--panel-3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <Icon size={14} color={active === id ? '#1e40af' : color} />
                 </div>
                 {label}
@@ -1037,17 +1037,17 @@ export default function Docs() {
         </div>
 
         {/* Content */}
-        <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0', padding: 32 }}>
+        <div style={{ background: 'var(--panel)', borderRadius: 16, border: '1px solid var(--line)', padding: 32 }}>
           {current ? (
             <>
-              <div style={{ marginBottom: 28, paddingBottom: 24, borderBottom: '1px solid #f1f5f9' }}>
+              <div style={{ marginBottom: 28, paddingBottom: 24, borderBottom: '1px solid var(--line-2)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
                   <div style={{ width: 44, height: 44, borderRadius: 12, background: '#dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <current.icon size={22} color="#1e40af" />
                   </div>
                   <div>
-                    <h2 style={{ fontSize: 22, fontWeight: 800, color: '#1e293b', margin: 0 }}>{current.content.title}</h2>
-                    <p style={{ color: '#64748b', fontSize: 14, margin: 0, marginTop: 2 }}>{current.content.subtitle}</p>
+                    <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--ink)', margin: 0 }}>{current.content.title}</h2>
+                    <p style={{ color: 'var(--ink-muted)', fontSize: 14, margin: 0, marginTop: 2 }}>{current.content.subtitle}</p>
                   </div>
                 </div>
               </div>
@@ -1059,10 +1059,10 @@ export default function Docs() {
                 const next = sections[idx + 1];
                 if (!next) return null;
                 return (
-                  <div style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid #f1f5f9' }}>
+                  <div style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid var(--line-2)' }}>
                     <button onClick={() => setActive(next.id)} style={{
                       display: 'flex', alignItems: 'center', gap: 10, padding: '12px 20px',
-                      background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10,
+                      background: 'var(--panel-2)', border: '1px solid var(--line)', borderRadius: 10,
                       cursor: 'pointer', color: '#1e40af', fontWeight: 600, fontSize: 14,
                     }}>
                       Next: {next.label} →
@@ -1072,7 +1072,7 @@ export default function Docs() {
               })()}
             </>
           ) : (
-            <div style={{ textAlign: 'center', padding: '60px 0', color: '#94a3b8' }}>
+            <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--ink-faint)' }}>
               <BookOpen size={40} style={{ marginBottom: 12 }} />
               <p>No results found for "{search}"</p>
             </div>
