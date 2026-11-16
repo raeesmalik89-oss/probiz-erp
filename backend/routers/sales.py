@@ -14,12 +14,16 @@ router = APIRouter(prefix="/api/sales", tags=["sales"])
 
 
 def _business_info(db: Session) -> dict:
+    # Prefer the company settings saved on the Settings page; fall back to the
+    # subscription contact fields, then to defaults.
+    cs = db.query(models.CompanySettings).first()
     sub = db.query(models.Subscription).first()
-    return {
-        "name": (sub.business_name if sub and sub.business_name else "ProBiz ERP"),
-        "phone": (sub.contact_phone if sub else None),
-        "email": (sub.contact_email if sub else None),
-    }
+    name = (cs.company_name if cs and cs.company_name
+            else sub.business_name if sub and sub.business_name
+            else "ProBiz ERP")
+    phone = (cs.phone if cs and cs.phone else sub.contact_phone if sub else None)
+    email = (cs.email if cs and cs.email else sub.contact_email if sub else None)
+    return {"name": name, "phone": phone, "email": email, "address": (cs.address if cs else None)}
 
 class SaleItemIn(BaseModel):
     product_id: int

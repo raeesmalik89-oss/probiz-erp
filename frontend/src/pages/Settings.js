@@ -32,9 +32,29 @@ export default function Settings() {
   const [companyEmail, setCompanyEmail] = useState('raees.malik89@gmail.com');
   const [currency, setCurrency] = useState('PKR (Rs.)');
   const [taxRate, setTaxRate] = useState('0');
+  const [invoicePrefix, setInvoicePrefix] = useState('INV-');
+  const [poPrefix, setPoPrefix] = useState('PO-');
+  const [fiscalYearStart, setFiscalYearStart] = useState('January');
+  const [savingSettings, setSavingSettings] = useState(false);
   const [notifications, setNotifications] = useState({ lowStock: true, salesAlert: false, payroll: true });
   const [resetting, setResetting] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
+
+  // Load persisted company settings. Keep the on-screen defaults for any field
+  // the backend hasn't stored yet (first run), so the user can just click Save.
+  useEffect(() => {
+    API.get('/api/settings').then(({ data }) => {
+      if (data.company_name) setCompanyName(data.company_name);
+      if (data.address) setCompanyAddress(data.address);
+      if (data.phone) setCompanyPhone(data.phone);
+      if (data.email) setCompanyEmail(data.email);
+      if (data.currency) setCurrency(data.currency);
+      if (data.tax_rate != null) setTaxRate(String(data.tax_rate));
+      if (data.invoice_prefix) setInvoicePrefix(data.invoice_prefix);
+      if (data.po_prefix) setPoPrefix(data.po_prefix);
+      if (data.fiscal_year_start) setFiscalYearStart(data.fiscal_year_start);
+    }).catch(() => {});
+  }, []);
 
   // Change password
   const [pwForm, setPwForm] = useState({ current_password: '', new_password: '', confirm: '' });
@@ -112,7 +132,27 @@ export default function Settings() {
     } finally { setActivating(false); }
   };
 
-  const save = () => toast.success('Settings saved successfully!');
+  const save = async () => {
+    setSavingSettings(true);
+    try {
+      await API.put('/api/settings', {
+        company_name: companyName,
+        address: companyAddress,
+        phone: companyPhone,
+        email: companyEmail,
+        currency,
+        tax_rate: parseFloat(taxRate) || 0,
+        invoice_prefix: invoicePrefix,
+        po_prefix: poPrefix,
+        fiscal_year_start: fiscalYearStart,
+      });
+      toast.success('Settings saved successfully!');
+    } catch (e) {
+      toast.error(e.response?.data?.detail || 'Failed to save settings');
+    } finally {
+      setSavingSettings(false);
+    }
+  };
 
   const handleReset = async () => {
     if (!confirmReset) { setConfirmReset(true); return; }
@@ -332,17 +372,17 @@ export default function Settings() {
           </div>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 6 }}>Fiscal Year Start</label>
-            <select style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 14, background: 'var(--panel)' }}>
+            <select value={fiscalYearStart} onChange={e => setFiscalYearStart(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 14, background: 'var(--panel)' }}>
               <option>January</option><option>July</option><option>April</option>
             </select>
           </div>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 6 }}>Invoice Prefix</label>
-            <input defaultValue="INV-" style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 14, outline: 'none' }} />
+            <input value={invoicePrefix} onChange={e => setInvoicePrefix(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 14, outline: 'none' }} />
           </div>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 6 }}>PO Prefix</label>
-            <input defaultValue="PO-" style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 14, outline: 'none' }} />
+            <input value={poPrefix} onChange={e => setPoPrefix(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 14, outline: 'none' }} />
           </div>
         </div>
       </Section>
@@ -430,7 +470,7 @@ export default function Settings() {
       </Section>
 
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <button onClick={save} style={{ padding: '12px 32px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: 15, cursor: 'pointer' }}>Save All Settings</button>
+        <button onClick={save} disabled={savingSettings} style={{ padding: '12px 32px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: 15, cursor: savingSettings ? 'not-allowed' : 'pointer', opacity: savingSettings ? 0.7 : 1 }}>{savingSettings ? 'Saving…' : 'Save All Settings'}</button>
       </div>
     </div>
   );
