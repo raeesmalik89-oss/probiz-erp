@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 480
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
     ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:80,http://localhost"
-    APP_NAME: str = "ProBiz ERP"
+    APP_NAME: str = "MediCloud"
     APP_VERSION: str = "2.0.0"
     DEBUG: bool = False
 

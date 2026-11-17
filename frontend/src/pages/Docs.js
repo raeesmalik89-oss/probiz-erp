@@ -12,13 +12,13 @@ const sections = [
   {
     id: 'start', icon: Play, label: 'Getting Started', color: '#10b981',
     content: {
-      title: 'Getting Started with ProBiz ERP',
+      title: 'Getting Started with MediCloud',
       subtitle: 'Set up your system in under 30 minutes — follow these steps in order.',
       body: [
         {
           heading: 'Step 1 — Log In',
           steps: [
-            'Open https://probiz-erp-poru.vercel.app in your browser',
+            'Open https://probiz-erp.raees-malik89.workers.dev in your browser',
             'Enter your email and password',
             'You will land on the Dashboard',
             'Bookmark the URL so you can access it from any device',
@@ -90,12 +90,12 @@ const sections = [
   {
     id: 'overview', icon: Zap, label: 'System Overview', color: '#1e40af',
     content: {
-      title: 'ProBiz ERP — System Overview',
+      title: 'MediCloud — System Overview',
       subtitle: 'A complete cloud-based Enterprise Resource Planning system built for Pakistani businesses.',
       body: [
         {
-          heading: 'What is ProBiz ERP?',
-          text: 'ProBiz ERP is an all-in-one business management platform that connects every part of your business — inventory, sales, purchasing, accounting, HR and payroll — into a single real-time system. Instead of running separate software for each department, everything talks to each other automatically. Built specifically for Pakistani pharmacies, hospitals, cash & carry stores, and wholesale businesses.'
+          heading: 'What is MediCloud?',
+          text: 'MediCloud is an all-in-one business management platform that connects every part of your business — inventory, sales, purchasing, accounting, HR and payroll — into a single real-time system. Instead of running separate software for each department, everything talks to each other automatically. Built specifically for Pakistani pharmacies, hospitals, cash & carry stores, and wholesale businesses.'
         },
         {
           heading: 'Key Capabilities',
@@ -444,7 +444,7 @@ const sections = [
       body: [
         {
           heading: 'What is Double-Entry Accounting?',
-          text: 'Every financial transaction affects two accounts — one is debited and one is credited for the same amount. This ensures the books always balance (Assets = Liabilities + Equity). ProBiz automatically creates the correct journal entries for every sale, purchase and payment — you do not need to do this manually.'
+          text: 'Every financial transaction affects two accounts — one is debited and one is credited for the same amount. This ensures the books always balance (Assets = Liabilities + Equity). MediCloud automatically creates the correct journal entries for every sale, purchase and payment — you do not need to do this manually.'
         },
         {
           heading: 'Account Types',
@@ -603,7 +603,7 @@ const sections = [
       body: [
         {
           heading: 'Free Trial',
-          text: 'Every new ProBiz installation starts with a 14-day free trial. You get full access to all features — no credit card required, no limitations. The trial banner at the top of the screen shows how many days remain. When the trial ends, the system shows a paywall — you need to activate a paid plan to continue.'
+          text: 'Every new MediCloud installation starts with a 14-day free trial. You get full access to all features — no credit card required, no limitations. The trial banner at the top of the screen shows how many days remain. When the trial ends, the system shows a paywall — you need to activate a paid plan to continue.'
         },
         {
           heading: 'Available Plans',
@@ -771,7 +771,7 @@ const sections = [
       body: [
         {
           heading: 'How Multi-Branch Works',
-          text: 'Every record in ProBiz (products, sales, purchases, employees) is linked to a branch. Superadmin can see consolidated data from all branches in reports. Branch managers and cashiers only see data for their own branch — they cannot access another branch\'s data.'
+          text: 'Every record in MediCloud (products, sales, purchases, employees) is linked to a branch. Superadmin can see consolidated data from all branches in reports. Branch managers and cashiers only see data for their own branch — they cannot access another branch\'s data.'
         },
         {
           heading: 'What is Tracked Per Branch',
@@ -806,11 +806,11 @@ const sections = [
     id: 'faq', icon: Hash, label: 'FAQ', color: '#a855f7',
     content: {
       title: 'Frequently Asked Questions',
-      subtitle: 'Common questions about using ProBiz ERP.',
+      subtitle: 'Common questions about using MediCloud.',
       body: [
         {
-          heading: 'Can I use ProBiz on my mobile phone?',
-          text: 'Yes. ProBiz ERP is a web application accessible from any browser including Chrome on Android and Safari on iPhone. The layout works on both desktop and mobile, though desktop gives the best experience for data entry and reports.'
+          heading: 'Can I use MediCloud on my mobile phone?',
+          text: 'Yes. MediCloud is a web application accessible from any browser including Chrome on Android and Safari on iPhone. The layout works on both desktop and mobile, though desktop gives the best experience for data entry and reports.'
         },
         {
           heading: 'What happens to my data if I close the browser?',
@@ -818,7 +818,7 @@ const sections = [
         },
         {
           heading: 'Can multiple staff log in at the same time?',
-          text: 'Yes. ProBiz supports concurrent users. A cashier can be making sales while the accountant runs reports and the manager checks inventory — all simultaneously with no conflicts.'
+          text: 'Yes. MediCloud supports concurrent users. A cashier can be making sales while the accountant runs reports and the manager checks inventory — all simultaneously with no conflicts.'
         },
         {
           heading: 'How do I add my real products and remove demo data?',
@@ -834,7 +834,7 @@ const sections = [
         },
         {
           heading: 'What is the difference between Cost Price and Sale Price?',
-          text: 'Cost Price is what you paid the supplier. Sale Price is what you charge the customer. The difference (Sale Price − Cost Price) × Quantity = your profit on that item. ProBiz tracks both so it calculates real profit per sale automatically.'
+          text: 'Cost Price is what you paid the supplier. Sale Price is what you charge the customer. The difference (Sale Price − Cost Price) × Quantity = your profit on that item. MediCloud tracks both so it calculates real profit per sale automatically.'
         },
         {
           heading: 'How do I record a payment from a customer?',
@@ -905,7 +905,7 @@ const sections = [
         },
         {
           heading: 'Requesting a Feature',
-          text: 'ProBiz ERP is actively developed. If you need a specific feature (e.g. Urdu invoices, SMS notifications, online ordering integration), WhatsApp us with the details. New features are added regularly based on customer feedback.'
+          text: 'MediCloud is actively developed. If you need a specific feature (e.g. Urdu invoices, SMS notifications, online ordering integration), WhatsApp us with the details. New features are added regularly based on customer feedback.'
         },
         {
           heading: 'Reporting a Problem',
@@ -997,7 +997,7 @@ export default function Docs() {
     <div>
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: 26, fontWeight: 800, color: 'var(--ink)' }}>Documentation</h1>
-        <p style={{ color: 'var(--ink-muted)', marginTop: 2 }}>Complete guide to ProBiz ERP — how every module works</p>
+        <p style={{ color: 'var(--ink-muted)', marginTop: 2 }}>Complete guide to MediCloud — how every module works</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 24, alignItems: 'start' }}>

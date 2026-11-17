@@ -32,7 +32,7 @@ const PrintInvoice = ({ sale }) => {
       .footer strong{color:#1e40af}.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#d1fae5;color:#065f46}
       @media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}.page{padding:10mm}}</style></head>
       <body><div class="page">
-      <div class="header"><div><div class="brand-name">ProBiz ERP</div><div class="brand-sub">Advanced Pharmacy & Business Management</div><div class="brand-contact">📍 House 124, Street 39, I-14/3, Islamabad</div><div class="brand-contact">📞 0316-8818693 &nbsp;|&nbsp; ✉️ raees.malik89@gmail.com</div></div>
+      <div class="header"><div><div class="brand-name">MediCloud</div><div class="brand-sub">Advanced Pharmacy & Business Management</div><div class="brand-contact">📍 House 124, Street 39, I-14/3, Islamabad</div><div class="brand-contact">📞 0316-8818693 &nbsp;|&nbsp; ✉️ raees.malik89@gmail.com</div></div>
       <div class="invoice-title"><h2>INVOICE</h2><div class="inv-no">${sale.invoice_no}</div><div class="inv-date">${new Date(new Date(sale.created_at).getTime() + 5*60*60*1000).toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' })}</div><div style="margin-top:6px"><span class="badge">${(sale.status || 'completed').toUpperCase()}</span></div></div></div>
       <div class="info-section"><div class="info-box"><h4>Bill To</h4><p>${sale.customer?.name || 'Walk-in Customer'}</p>${sale.customer?.phone ? `<span>📞 ${sale.customer.phone}</span>` : ''}${sale.customer?.city ? `<br/><span>📍 ${sale.customer.city}</span>` : ''}</div>
       <div class="info-box"><h4>Payment Info</h4><p>${(sale.payment_method || 'Cash').replace('_', ' ').toUpperCase()}</p><span>Date: ${new Date(new Date(sale.created_at).getTime() + 5*60*60*1000).toLocaleDateString('en-PK')}</span><br/><span>Time: ${new Date(new Date(sale.created_at).getTime() + 5*60*60*1000).toLocaleTimeString('en-PK', { hour: '2-digit', minute: '2-digit', hour12: true })}</span></div></div>
@@ -41,7 +41,7 @@ const PrintInvoice = ({ sale }) => {
       <div class="totals"><div class="totals-box"><div class="totals-row"><span>Subtotal</span><span>Rs. ${sale.subtotal?.toLocaleString()}</span></div>${sale.discount > 0 ? `<div class="totals-row"><span>Discount</span><span style="color:#ef4444">- Rs. ${sale.discount?.toLocaleString()}</span></div>` : ''}${sale.tax > 0 ? `<div class="totals-row"><span>Tax</span><span>Rs. ${sale.tax?.toLocaleString()}</span></div>` : ''}
       <div class="total-final"><span>TOTAL</span><span>Rs. ${sale.total?.toLocaleString()}</span></div><div class="paid-row"><span>✓ Paid</span><span>Rs. ${sale.paid?.toLocaleString()}</span></div>${(sale.balance || 0) > 0 ? `<div class="change-row"><span>Balance Due</span><span>Rs. ${sale.balance?.toLocaleString()}</span></div>` : ''}${(sale.paid - sale.total) > 0 ? `<div class="change-row"><span>Change</span><span>Rs. ${(sale.paid - sale.total)?.toLocaleString()}</span></div>` : ''}</div></div>
       <div style="display:flex;justify-content:space-between;margin-top:32px;margin-bottom:24px;gap:24px">${['Pharmacist Signature','Manager Signature','Customer Signature'].map(s => `<div style="flex:1;text-align:center"><div style="border-top:2px solid #1e40af;padding-top:8px;margin-top:40px"><div style="font-size:13px;font-weight:700;color:#1e293b">${s}</div><div style="font-size:11px;color:#64748b;margin-top:2px">${s === 'Pharmacist Signature' ? 'Licensed Pharmacist' : s === 'Manager Signature' ? 'Authorized Signatory' : 'Received By'}</div></div></div>`).join('')}</div>
-      <div class="footer"><p>Thank you for your business! &nbsp;|&nbsp; <strong>ProBiz ERP</strong> &nbsp;|&nbsp; probiz-erp-poru.vercel.app</p><p style="margin-top:4px;font-size:10px">Computer-generated invoice. Valid subject to authorized signatures above.</p></div>
+      <div class="footer"><p>Thank you for your business! &nbsp;|&nbsp; <strong>MediCloud</strong> &nbsp;|&nbsp; probiz-erp.raees-malik89.workers.dev</p><p style="margin-top:4px;font-size:10px">Computer-generated invoice. Valid subject to authorized signatures above.</p></div>
       </div><script>window.onload=()=>window.print()</script></body></html>`;
     printWindow.document.write(content);
     printWindow.document.close();
@@ -316,7 +316,7 @@ export default function Sales() {
           <div className="bg-gradient-to-r from-blue-800 to-blue-600 rounded-xl p-4 mb-4 text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-xl font-extrabold">ProBiz ERP</p>
+                <p className="text-xl font-extrabold">MediCloud</p>
                 <p className="text-xs opacity-75">House 124, Street 39, I-14/3, Islamabad</p>
                 <p className="text-xs opacity-75">📞 0316-8818693</p>
               </div>

@@ -20,7 +20,7 @@ def _business_info(db: Session) -> dict:
     sub = db.query(models.Subscription).first()
     name = (cs.company_name if cs and cs.company_name
             else sub.business_name if sub and sub.business_name
-            else "ProBiz ERP")
+            else "MediCloud")
     phone = (cs.phone if cs and cs.phone else sub.contact_phone if sub else None)
     email = (cs.email if cs and cs.email else sub.contact_email if sub else None)
     return {"name": name, "phone": phone, "email": email, "address": (cs.address if cs else None)}

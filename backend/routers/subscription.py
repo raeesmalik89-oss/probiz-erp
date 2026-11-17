@@ -22,7 +22,7 @@ def get_or_create_subscription(db: Session):
         today = datetime.now().date()
         trial_end = today + timedelta(days=14)
         sub = models.Subscription(
-            business_name="ProBiz Pharmacy",
+            business_name="MediCloud Pharmacy",
             plan="trial",
             status="active",
             trial_start=str(today),

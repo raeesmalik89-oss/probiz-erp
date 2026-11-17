@@ -82,7 +82,7 @@ export default function Reports() {
     @media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}</style></head>
     <body><div class="page">
     <div class="header">
-      <div><div class="brand">ProBiz ERP</div><div class="sub">Advanced Pharmacy & Business Management</div><div class="sub">📍 House 124, Street 39, I-14/3, Islamabad &nbsp;|&nbsp; 📞 0316-8818693</div></div>
+      <div><div class="brand">MediCloud</div><div class="sub">Advanced Pharmacy & Business Management</div><div class="sub">📍 House 124, Street 39, I-14/3, Islamabad &nbsp;|&nbsp; 📞 0316-8818693</div></div>
       <div style="text-align:right"><div style="font-size:20px;font-weight:900;color:#1e40af">SUMMARY REPORT</div><div style="font-size:11px;color:#64748b;margin-top:4px">Period: ${fromDate} to ${toDate}</div><div style="font-size:11px;color:#64748b">Generated: ${new Date(Date.now()+5*3600000).toLocaleString('en-PK')}</div></div>
     </div>
     <div class="kpi">
@@ -105,7 +105,7 @@ export default function Reports() {
       <div class="pr"><span>Total Purchases</span><span style="color:#ef4444;font-weight:700">Rs. ${totalPurchases.toLocaleString()}</span></div>
       <div class="pr-final"><span>${profit>=0?'GROSS PROFIT':'NET LOSS'}</span><span>Rs. ${profit.toLocaleString()}</span></div>
     </div></div>
-    <div class="footer"><p>ProBiz ERP &nbsp;|&nbsp; probiz-erp-poru.vercel.app &nbsp;|&nbsp; Confidential — Superadmin Report</p></div>
+    <div class="footer"><p>MediCloud &nbsp;|&nbsp; probiz-erp.raees-malik89.workers.dev &nbsp;|&nbsp; Confidential — Superadmin Report</p></div>
     </div><script>window.onload=()=>window.print()</script></body></html>`);
     w.document.close();
   };
@@ -154,7 +154,7 @@ export default function Reports() {
     @media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}</style></head>
     <body><div class="page">
     <div class="header">
-      <div><div class="brand">ProBiz ERP</div><div class="sub">Advanced Pharmacy & Business Management</div><div class="sub">House 124, Street 39, I-14/3, Islamabad &nbsp;|&nbsp; 0316-8818693</div></div>
+      <div><div class="brand">MediCloud</div><div class="sub">Advanced Pharmacy & Business Management</div><div class="sub">House 124, Street 39, I-14/3, Islamabad &nbsp;|&nbsp; 0316-8818693</div></div>
       <div class="title"><h2>PROFIT & LOSS<br/>STATEMENT</h2><p>This Month &nbsp;|&nbsp; Generated: ${new Date().toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' })}</p></div>
     </div>
     <div class="kpi">
@@ -186,7 +186,7 @@ export default function Reports() {
       <div class="row"><span>Accounts Payable (you owe suppliers)</span><span class="loss">Rs. ${(stats.total_payables || 0).toLocaleString()}</span></div>
       <div class="row"><span>Net Position</span><span style="font-weight:700;color:${(stats.total_receivables - stats.total_payables) >= 0 ? '#065f46' : '#991b1b'}">Rs. ${((stats.total_receivables || 0) - (stats.total_payables || 0)).toLocaleString()}</span></div>
     </div>
-    <div class="footer"><p><strong>ProBiz ERP</strong> &nbsp;|&nbsp; probiz-erp-poru.vercel.app &nbsp;|&nbsp; Superadmin Report &nbsp;|&nbsp; Confidential</p></div>
+    <div class="footer"><p><strong>MediCloud</strong> &nbsp;|&nbsp; probiz-erp.raees-malik89.workers.dev &nbsp;|&nbsp; Superadmin Report &nbsp;|&nbsp; Confidential</p></div>
     </div><script>window.onload=()=>window.print()</script></body></html>`);
     w.document.close();
   };

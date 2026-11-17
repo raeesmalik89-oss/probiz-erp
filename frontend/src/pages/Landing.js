@@ -68,7 +68,7 @@ export default function Landing() {
             <div className="w-9 h-9 rounded-[10px] bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
               <TrendingUp size={20} className="text-white" />
             </div>
-            <span className="font-extrabold text-[22px] text-blue-800">ProBiz</span>
+            <span className="font-extrabold text-[22px] text-blue-800">MediCloud</span>
             <span className="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-widest">ERP</span>
           </div>
           <div className="hidden md:flex gap-8 items-center">
@@ -111,7 +111,7 @@ export default function Landing() {
               <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">Smarter &amp; Faster</span>
             </h1>
             <p className="text-[17px] text-white/70 leading-relaxed mb-10 max-w-lg">
-              ProBiz ERP is a complete business management platform built for Pakistani businesses.
+              MediCloud is a complete business management platform built for Pakistani businesses.
               Manage inventory, sales, accounting, payroll and analytics — all in one place.
             </p>
             <div className="flex gap-4 flex-wrap">
@@ -147,10 +147,10 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Why ProBiz */}
+      {/* Why MediCloud */}
       <section className="py-20 md:py-24 px-5 bg-white">
         <div className="max-w-6xl mx-auto">
-          <SectionHeading tag="WHY PROBIZ" title="Designed for How You Work" subtitle="Built from the ground up for Pakistani business operations." />
+          <SectionHeading tag="WHY MEDICLOUD" title="Designed for How You Work" subtitle="Built from the ground up for Pakistani business operations." />
           <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
             {whyUs.map(({ icon: Icon, title, desc }) => (
               <div key={title} className="bg-slate-50 rounded-2xl p-7 border border-slate-200">
@@ -187,7 +187,7 @@ export default function Landing() {
       <section id="industries" className="py-20 px-5 bg-gradient-to-br from-blue-900 to-blue-700">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-3.5">Suitable for Your Industry</h2>
-          <p className="text-white/65 text-base mb-12">ProBiz ERP adapts to the workflow of different business types</p>
+          <p className="text-white/65 text-base mb-12">MediCloud adapts to the workflow of different business types</p>
           <div className="flex flex-wrap gap-3.5 justify-center">
             {industries.map(ind => (
               <div key={ind} className="bg-white/10 border border-white/20 rounded-full px-5 py-2.5 text-white font-semibold text-sm flex items-center gap-2">
@@ -244,7 +244,7 @@ export default function Landing() {
             <SectionTag>CONTACT US</SectionTag>
             <h2 className="text-3xl md:text-4xl font-extrabold mt-5 mb-4">Let's Talk About Your Business</h2>
             <p className="text-slate-500 text-base leading-relaxed mb-10">
-              Get in touch for a free demo or to discuss how ProBiz ERP can work for your business.
+              Get in touch for a free demo or to discuss how MediCloud can work for your business.
               We'll walk you through the system and answer all your questions.
             </p>
             {[
@@ -310,14 +310,14 @@ export default function Landing() {
             <div className="w-8 h-8 bg-gradient-to-br from-blue-700 to-blue-500 rounded-lg flex items-center justify-center">
               <TrendingUp size={17} className="text-white" />
             </div>
-            <span className="text-white font-extrabold text-lg">ProBiz ERP</span>
+            <span className="text-white font-extrabold text-lg">MediCloud</span>
           </div>
           <p className="text-sm mb-1.5">Complete business management software for Pakistani businesses.</p>
           <p className="text-[13px] text-white/40 mb-6">
             Dr Muhammad Raees RPh &nbsp;|&nbsp; raees.malik89@gmail.com &nbsp;|&nbsp; 0316-8818693 &nbsp;|&nbsp; Islamabad, Pakistan
           </p>
           <div className="border-t border-white/10 pt-5 flex justify-between text-[13px] flex-wrap gap-2.5">
-            <span>© 2024 ProBiz ERP. All rights reserved.</span>
+            <span>© 2024 MediCloud. All rights reserved.</span>
             <span>Made in Pakistan 🇵🇰</span>
           </div>
         </div>
