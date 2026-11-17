@@ -105,7 +105,8 @@ def get_product_by_barcode(barcode: str, db: Session = Depends(get_db), _=Depend
     if not p:
         raise HTTPException(status_code=404, detail="No product with that barcode")
     return {
-        "id": p.id, "name": p.name, "barcode": p.barcode, "sku": p.sku,
+        "id": p.id, "name": p.name, "generic_name": p.generic_name,
+        "barcode": p.barcode, "sku": p.sku,
         "category": p.category.name if p.category else None,
         "unit": p.unit, "sale_price": p.sale_price, "stock": p.stock,
     }

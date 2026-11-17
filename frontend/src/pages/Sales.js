@@ -7,7 +7,7 @@ import Pagination, { usePagination } from '../components/ui/Pagination';
 import { PageSpinner } from '../components/ui/Spinner';
 import { exportCSV } from '../utils/csvExport';
 import { downloadFile } from '../utils/download';
-import { Plus, Search, ShoppingCart, Trash2, Eye, Printer, Download, TrendingUp, DollarSign, ScanLine, FileDown } from 'lucide-react';
+import { Plus, Search, ShoppingCart, Trash2, Eye, Printer, Download, TrendingUp, DollarSign, ScanLine, FileDown, AlertTriangle } from 'lucide-react';
 
 // ─── Printable Invoice (unchanged logic) ──────────────────────────────────────
 const PrintInvoice = ({ sale }) => {
@@ -62,6 +62,7 @@ export default function Sales() {
   const [showPOS, setShowPOS]                   = useState(false);
   const [viewSale, setViewSale]                 = useState(null);
   const [cartItems, setCartItems]               = useState([]);
+  const [rxWarnings, setRxWarnings]             = useState([]);
   const [posForm, setPosForm]                   = useState({ customer_id: '', discount: 0, tax: 0, paid: 0, payment_method: 'cash' });
   const [productSearch, setProductSearch]       = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -95,7 +96,7 @@ export default function Sales() {
   const addToCart = (product) => {
     const existing = cartItems.find(i => i.product_id === product.id);
     if (existing) setCartItems(cartItems.map(i => i.product_id === product.id ? { ...i, qty: i.qty + 1, total: (i.qty + 1) * i.price } : i));
-    else setCartItems([...cartItems, { product_id: product.id, name: product.name, price: product.sale_price, qty: 1, total: product.sale_price, discount: 0 }]);
+    else setCartItems([...cartItems, { product_id: product.id, name: product.name, generic_name: product.generic_name, price: product.sale_price, qty: 1, total: product.sale_price, discount: 0 }]);
     setProductSearch(''); setFilteredProducts([]);
   };
 
@@ -106,7 +107,7 @@ export default function Sales() {
     if (!code) return;
     try {
       const { data } = await API.get(`/api/inventory/products/by-barcode/${encodeURIComponent(code)}`);
-      addToCart({ id: data.id, name: data.name, sale_price: data.sale_price, unit: data.unit, stock: data.stock });
+      addToCart({ id: data.id, name: data.name, generic_name: data.generic_name, sale_price: data.sale_price, unit: data.unit, stock: data.stock });
       toast.success(`Added ${data.name}`);
     } catch {
       toast.error(`No product with barcode "${code}"`);
@@ -119,6 +120,17 @@ export default function Sales() {
     if (qty <= 0) { removeFromCart(id); return; }
     setCartItems(cartItems.map(i => i.product_id === id ? { ...i, qty, total: qty * i.price - i.discount } : i));
   };
+
+  // Check the cart for major drug–drug interactions whenever it changes.
+  useEffect(() => {
+    if (cartItems.length < 2) { setRxWarnings([]); return; }
+    let cancelled = false;
+    API.post('/api/interactions/check', {
+      items: cartItems.map(i => ({ product_id: i.product_id, name: i.name, generic_name: i.generic_name || '' })),
+    }).then(({ data }) => { if (!cancelled) setRxWarnings(data.warnings || []); })
+      .catch(() => { if (!cancelled) setRxWarnings([]); });
+    return () => { cancelled = true; };
+  }, [cartItems]);
 
   const subtotal = cartItems.reduce((s, i) => s + i.total, 0);
   const total2   = subtotal - parseFloat(posForm.discount || 0) + parseFloat(posForm.tax || 0);
@@ -272,6 +284,22 @@ export default function Sales() {
                   </div>
                 ))}
               </div>
+              {rxWarnings.length > 0 && (
+                <div className="mt-3 bg-red-50 border border-red-200 rounded-xl p-3">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <AlertTriangle size={16} className="text-red-600" />
+                    <span className="text-sm font-bold text-red-700">Drug Interaction Warning</span>
+                    <span className="text-[11px] bg-red-600 text-white font-bold px-1.5 py-0.5 rounded-full">{rxWarnings.length} major</span>
+                  </div>
+                  {rxWarnings.map((w, idx) => (
+                    <div key={idx} className="text-xs text-red-700 py-0.5">
+                      <span className="font-semibold">{w.drug_a} + {w.drug_b}</span>
+                      <span className="text-red-500"> — {w.product_a} / {w.product_b}</span>
+                    </div>
+                  ))}
+                  <p className="text-[11px] text-red-400 mt-1.5">Review before dispensing. Clinical aid only — verify with a pharmacist.</p>
+                </div>
+              )}
             </div>
 
             {/* Right: order summary */}
