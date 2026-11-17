@@ -41,7 +41,7 @@ export default function Inventory() {
   const [showModal, setShowModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
   const [activeTab, setActiveTab] = useState('products');
-  const [form, setForm] = useState({ name: '', sku: '', barcode: '', category_id: '', unit: 'pcs', cost_price: '', sale_price: '', stock: '', min_stock: '10', description: '' });
+  const [form, setForm] = useState({ name: '', generic_name: '', sku: '', barcode: '', category_id: '', unit: 'pcs', cost_price: '', sale_price: '', stock: '', min_stock: '10', description: '' });
   const { page, setPage, paginated, total, pageSize } = usePagination(products, 25);
 
   const load = async () => {
@@ -59,8 +59,8 @@ export default function Inventory() {
 
   useEffect(() => { load(); }, [search, catFilter, lowStockOnly]);
 
-  const openAdd = () => { setEditProduct(null); setForm({ name: '', sku: '', barcode: '', category_id: '', unit: 'pcs', cost_price: '', sale_price: '', stock: '', min_stock: '10', description: '', batch_no: '', mfg_date: '', expiry_date: '' }); setShowModal(true); };
-  const openEdit = (p) => { setEditProduct(p); setForm({ name: p.name, sku: p.sku || '', barcode: p.barcode || '', category_id: p.category_id || '', unit: p.unit, cost_price: p.cost_price, sale_price: p.sale_price, stock: p.stock, min_stock: p.min_stock, description: '', batch_no: p.batch_no || '', mfg_date: p.mfg_date || '', expiry_date: p.expiry_date || '' }); setShowModal(true); };
+  const openAdd = () => { setEditProduct(null); setForm({ name: '', generic_name: '', sku: '', barcode: '', category_id: '', unit: 'pcs', cost_price: '', sale_price: '', stock: '', min_stock: '10', description: '', batch_no: '', mfg_date: '', expiry_date: '' }); setShowModal(true); };
+  const openEdit = (p) => { setEditProduct(p); setForm({ name: p.name, generic_name: p.generic_name || '', sku: p.sku || '', barcode: p.barcode || '', category_id: p.category_id || '', unit: p.unit, cost_price: p.cost_price, sale_price: p.sale_price, stock: p.stock, min_stock: p.min_stock, description: '', batch_no: p.batch_no || '', mfg_date: p.mfg_date || '', expiry_date: p.expiry_date || '' }); setShowModal(true); };
 
   const handleSave = async () => {
     try {
@@ -85,7 +85,7 @@ export default function Inventory() {
           <p style={{ color: 'var(--ink-muted)', marginTop: 2 }}>Manage products, categories, and stock levels</p>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={() => exportCSV(products.map(p => ({ Name: p.name, SKU: p.sku, Category: p.category, 'Cost Price': p.cost_price, 'Sale Price': p.sale_price, Stock: p.stock, Unit: p.unit, Status: p.low_stock ? 'Low Stock' : 'In Stock' })), 'inventory.csv')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 16px', background: 'var(--panel-3)', color: 'var(--ink-label)', border: '1px solid var(--line)', borderRadius: 10, fontWeight: 600, fontSize: 14, cursor: 'pointer' }}>
+          <button onClick={() => exportCSV(products.map(p => ({ Name: p.name, 'Generic/Salt': p.generic_name, SKU: p.sku, Category: p.category, 'Cost Price': p.cost_price, 'Sale Price': p.sale_price, Stock: p.stock, Unit: p.unit, Status: p.low_stock ? 'Low Stock' : 'In Stock' })), 'inventory.csv')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 16px', background: 'var(--panel-3)', color: 'var(--ink-label)', border: '1px solid var(--line)', borderRadius: 10, fontWeight: 600, fontSize: 14, cursor: 'pointer' }}>
             <Download size={16} /> Export CSV
           </button>
           <button onClick={openAdd} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 600, fontSize: 14, cursor: 'pointer' }}>
@@ -107,7 +107,7 @@ export default function Inventory() {
           <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
             <div style={{ position: 'relative', flex: 1, minWidth: 200 }}>
               <Search size={16} color="#94a3b8" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} />
-              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search products..." style={{ width: '100%', padding: '10px 12px 10px 36px', border: '1px solid var(--line)', borderRadius: 10, fontSize: 14, outline: 'none' }} />
+              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by name, salt/generic, barcode, SKU..." style={{ width: '100%', padding: '10px 12px 10px 36px', border: '1px solid var(--line)', borderRadius: 10, fontSize: 14, outline: 'none' }} />
             </div>
             <select value={catFilter} onChange={e => setCatFilter(e.target.value)} style={{ padding: '10px 14px', border: '1px solid var(--line)', borderRadius: 10, fontSize: 14, outline: 'none', background: 'var(--panel)' }}>
               <option value="">All Categories</option>
@@ -135,7 +135,10 @@ export default function Inventory() {
                   <tr><td colSpan={8} style={{ textAlign: 'center', padding: 40, color: 'var(--ink-faint)' }}><Package size={40} style={{ margin: '0 auto 12px', display: 'block', opacity: 0.3 }} />No products found</td></tr>
                 ) : paginated.map(p => (
                   <tr key={p.id} style={{ borderBottom: '1px solid var(--line-2)' }} onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'} onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
-                    <td style={{ padding: '12px 16px', fontWeight: 600 }}>{p.name}</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 600 }}>
+                      {p.name}
+                      {p.generic_name && <div style={{ fontWeight: 400, fontSize: 12, color: 'var(--ink-faint)', marginTop: 2 }}>{p.generic_name}</div>}
+                    </td>
                     <td style={{ padding: '12px 16px', color: 'var(--ink-muted)', fontFamily: 'monospace', fontSize: 12 }}>{p.sku || '-'}</td>
                     <td style={{ padding: '12px 16px' }}>{p.category ? <span style={{ background: '#dbeafe', color: '#1e40af', padding: '3px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>{p.category}</span> : '-'}</td>
                     <td style={{ padding: '12px 16px', color: 'var(--ink-muted)' }}>Rs. {p.cost_price?.toLocaleString()}</td>
@@ -166,6 +169,7 @@ export default function Inventory() {
         <Modal title={editProduct ? 'Edit Product' : 'Add New Product'} onClose={() => setShowModal(false)}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 16px' }}>
             <div style={{ gridColumn: '1/-1' }}><Input label="Product Name *" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} /></div>
+            <div style={{ gridColumn: '1/-1' }}><Input label="Generic / Salt Name" value={form.generic_name} onChange={e => setForm({ ...form, generic_name: e.target.value })} placeholder="e.g. Paracetamol, Amoxicillin + Clavulanic Acid" /></div>
             <Input label="SKU Code" value={form.sku} onChange={e => setForm({ ...form, sku: e.target.value })} />
             <Input label="Barcode" value={form.barcode} onChange={e => setForm({ ...form, barcode: e.target.value })} />
             <Select label="Category" value={form.category_id} onChange={e => setForm({ ...form, category_id: e.target.value })}>

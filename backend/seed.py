@@ -3,8 +3,40 @@ from database import engine, SessionLocal
 import models
 from auth import get_password_hash
 from datetime import datetime
+from sqlalchemy import inspect, text
 import os
 import secrets
+
+
+# Lightweight additive migrations: columns added to models over time that must
+# also be added to an EXISTING table (create_all never alters existing tables).
+# Maps table -> {column_name: column DDL type}. Safe/idempotent on every boot.
+_NEW_COLUMNS = {
+    "products": {"generic_name": "VARCHAR(200)"},
+}
+
+
+def ensure_columns():
+    """Add any missing model columns to existing tables (no-op if present).
+
+    Idempotent and safe to run on every boot: the ALTER is guarded so a column
+    already present (stale reflection, or a concurrent boot) is simply skipped.
+    """
+    insp = inspect(engine)
+    tables = set(insp.get_table_names())
+    for table, cols in _NEW_COLUMNS.items():
+        if table not in tables:
+            continue  # create_all will build it with all columns
+        have = {c["name"] for c in insp.get_columns(table)}
+        for col, ddl in cols.items():
+            if col in have:
+                continue
+            try:
+                with engine.begin() as conn:
+                    conn.execute(text(f'ALTER TABLE {table} ADD COLUMN {col} {ddl}'))
+                print(f"Migration: added column {table}.{col}")
+            except Exception as exc:  # already added elsewhere — safe to ignore
+                print(f"Migration note: skipped {table}.{col} ({exc.__class__.__name__}).")
 
 
 def _password(env_name):
@@ -44,6 +76,7 @@ def _apply_env_passwords(db):
 
 def seed():
     models.Base.metadata.create_all(bind=engine)
+    ensure_columns()
     db = SessionLocal()
 
     # Check if already seeded
