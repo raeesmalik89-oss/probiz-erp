@@ -7,6 +7,7 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
+import Assistant from './pages/Assistant';
 import Inventory from './pages/Inventory';
 import Sales from './pages/Sales';
 import Purchases from './pages/Purchases';
@@ -33,6 +34,7 @@ function AppRoutes() {
       <Route path="/app" element={<PrivateRoute><Layout /></PrivateRoute>}>
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
+        <Route path="assistant" element={<Assistant />} />
         <Route path="inventory" element={<Inventory />} />
         <Route path="sales" element={<Sales />} />
         <Route path="purchases" element={<Purchases />} />

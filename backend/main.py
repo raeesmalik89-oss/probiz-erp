@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from database import engine
 from config import settings
 import models
-from routers import auth, inventory, sales, purchases, accounting, payroll, dashboard, admin, subscription, demo_requests, exports, interactions
+from routers import auth, inventory, sales, purchases, accounting, payroll, dashboard, admin, subscription, demo_requests, exports, interactions, assistant
 from routers import settings as settings_router  # aliased: `settings` is the config object above
 import time
 import logging
@@ -62,6 +62,7 @@ app.include_router(subscription.router)
 app.include_router(demo_requests.router)
 app.include_router(exports.router)
 app.include_router(interactions.router)
+app.include_router(assistant.router)
 app.include_router(settings_router.router)
 
 @app.get("/")
