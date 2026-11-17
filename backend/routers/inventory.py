@@ -39,6 +39,7 @@ def delete_category(cat_id: int, db: Session = Depends(get_db), _=Depends(get_cu
 # --- Products ---
 class ProductCreate(BaseModel):
     name: str
+    generic_name: Optional[str] = None
     barcode: Optional[str] = None
     sku: Optional[str] = None
     category_id: Optional[int] = None
@@ -69,6 +70,7 @@ def get_products(
     if search:
         q = q.filter(or_(
             models.Product.name.ilike(f"%{search}%"),
+            models.Product.generic_name.ilike(f"%{search}%"),
             models.Product.barcode.ilike(f"%{search}%"),
             models.Product.sku.ilike(f"%{search}%"),
         ))
@@ -81,7 +83,8 @@ def get_products(
     return {
         "total": total,
         "products": [{
-            "id": p.id, "name": p.name, "barcode": p.barcode, "sku": p.sku,
+            "id": p.id, "name": p.name, "generic_name": p.generic_name,
+            "barcode": p.barcode, "sku": p.sku,
             "category": p.category.name if p.category else None,
             "category_id": p.category_id,
             "unit": p.unit, "cost_price": p.cost_price, "sale_price": p.sale_price,
@@ -114,7 +117,8 @@ def get_product(product_id: int, db: Session = Depends(get_db), _=Depends(get_cu
     if not p:
         raise HTTPException(status_code=404, detail="Product not found")
     return {
-        "id": p.id, "name": p.name, "barcode": p.barcode, "sku": p.sku,
+        "id": p.id, "name": p.name, "generic_name": p.generic_name,
+        "barcode": p.barcode, "sku": p.sku,
         "category_id": p.category_id, "unit": p.unit, "description": p.description,
         "cost_price": p.cost_price, "sale_price": p.sale_price,
         "wholesale_price": p.wholesale_price, "stock": p.stock,

@@ -1,12 +1,25 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import func, extract
 from database import get_db
 from auth import get_current_user
 import models
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 router = APIRouter(prefix="/api/dashboard", tags=["dashboard"])
+
+
+def _parse_date(value):
+    """Parse a stored expiry/mfg date string into a date, or None."""
+    if not value:
+        return None
+    s = str(value).strip()[:10]
+    for fmt in ("%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%m/%d/%Y"):
+        try:
+            return datetime.strptime(s, fmt).date()
+        except ValueError:
+            continue
+    return None
 
 @router.get("/stats")
 def get_dashboard_stats(db: Session = Depends(get_db), _=Depends(get_current_user)):
@@ -100,6 +113,33 @@ def get_low_stock(db: Session = Depends(get_db), _=Depends(get_current_user)):
         models.Product.stock <= models.Product.min_stock
     ).limit(10).all()
     return [{"id": p.id, "name": p.name, "stock": p.stock, "min_stock": p.min_stock, "unit": p.unit} for p in products]
+
+@router.get("/near-expiry")
+def get_near_expiry(days: int = Query(90, ge=1, le=730), db: Session = Depends(get_db), _=Depends(get_current_user)):
+    """Products already expired or expiring within `days` days, soonest first."""
+    today = date.today()
+    cutoff = today + timedelta(days=days)
+    rows = db.query(models.Product).filter(
+        models.Product.is_active == True,
+        models.Product.expiry_date.isnot(None),
+        models.Product.expiry_date != "",
+        models.Product.stock > 0,
+    ).all()
+    out = []
+    for p in rows:
+        exp = _parse_date(p.expiry_date)
+        if not exp or exp > cutoff:
+            continue
+        days_left = (exp - today).days
+        out.append({
+            "id": p.id, "name": p.name, "generic_name": p.generic_name,
+            "batch_no": p.batch_no, "stock": p.stock, "unit": p.unit,
+            "expiry_date": p.expiry_date, "days_left": days_left,
+            "expired": days_left < 0,
+        })
+    out.sort(key=lambda x: x["days_left"])
+    return out[:50]
+
 
 @router.get("/recent-sales")
 def get_recent_sales(db: Session = Depends(get_db), _=Depends(get_current_user)):

@@ -7,7 +7,7 @@ import API from '../api/client';
 import { PageSpinner } from '../components/ui/Spinner';
 import {
   TrendingUp, Package, Users, ShoppingCart, AlertTriangle,
-  DollarSign, Truck, UserCheck, ArrowUpRight, RefreshCw
+  DollarSign, Truck, UserCheck, ArrowUpRight, RefreshCw, CalendarClock
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -60,6 +60,7 @@ export default function Dashboard() {
   const [salesChart, setSalesChart] = useState([]);
   const [topProducts, setTopProducts] = useState([]);
   const [lowStock, setLowStock]     = useState([]);
+  const [nearExpiry, setNearExpiry] = useState([]);
   const [recentSales, setRecentSales] = useState([]);
   const [monthlyData, setMonthlyData] = useState([]);
   const [loading, setLoading]       = useState(true);
@@ -69,16 +70,17 @@ export default function Dashboard() {
     if (!silent) setLoading(true);
     else setRefreshing(true);
     try {
-      const [s, sc, tp, ls, rs, mc] = await Promise.all([
+      const [s, sc, tp, ls, ne, rs, mc] = await Promise.all([
         API.get('/api/dashboard/stats'),
         API.get('/api/dashboard/sales-chart'),
         API.get('/api/dashboard/top-products'),
         API.get('/api/dashboard/low-stock'),
+        API.get('/api/dashboard/near-expiry'),
         API.get('/api/dashboard/recent-sales'),
         API.get('/api/dashboard/monthly-comparison'),
       ]);
       setStats(s.data); setSalesChart(sc.data); setTopProducts(tp.data);
-      setLowStock(ls.data); setRecentSales(rs.data); setMonthlyData(mc.data);
+      setLowStock(ls.data); setNearExpiry(ne.data); setRecentSales(rs.data); setMonthlyData(mc.data);
       if (silent) toast.success('Dashboard refreshed');
     } catch {
       toast.error('Failed to load dashboard');
@@ -233,6 +235,36 @@ export default function Dashboard() {
                 <p className="text-xs text-gray-400 dark:text-slate-500">Min: {p.min_stock}</p>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Near expiry alert */}
+      {nearExpiry.length > 0 && (
+        <div className="card border border-red-100 overflow-hidden">
+          <div className="flex items-center gap-2.5 px-5 py-4 bg-red-50 border-b border-red-100">
+            <CalendarClock size={18} className="text-red-500" />
+            <h3 className="font-semibold text-red-800 text-sm">Expiry Alerts</h3>
+            <span className="badge-red ml-1">{nearExpiry.length} items</span>
+            <span className="text-xs text-gray-400 dark:text-slate-500 ml-auto">Expiring within 90 days</span>
+          </div>
+          <div className="p-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            {nearExpiry.map(p => {
+              const expired = p.expired;
+              const soon = !expired && p.days_left <= 30;
+              const cls = expired ? 'bg-red-100 border-red-200'
+                : soon ? 'bg-red-50 border-red-100' : 'bg-orange-50 border-orange-100';
+              return (
+                <div key={p.id} className={`border rounded-xl p-3 ${cls}`}>
+                  <p className="font-semibold text-sm text-gray-800 dark:text-slate-100 truncate mb-1">{p.name}</p>
+                  {p.generic_name && <p className="text-[11px] text-gray-400 dark:text-slate-500 truncate -mt-1 mb-1">{p.generic_name}</p>}
+                  <p className={`text-xs font-bold ${expired ? 'text-red-700' : soon ? 'text-red-600' : 'text-orange-600'}`}>
+                    {expired ? `EXPIRED ${-p.days_left}d ago` : `${p.days_left}d left`}
+                  </p>
+                  <p className="text-xs text-gray-400 dark:text-slate-500">{p.expiry_date} · {p.stock} {p.unit}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
