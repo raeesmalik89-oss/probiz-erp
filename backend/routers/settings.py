@@ -16,6 +16,8 @@ class SettingsIn(BaseModel):
     address: Optional[str] = None
     phone: Optional[str] = None
     email: Optional[str] = None
+    ntn: Optional[str] = None
+    strn: Optional[str] = None
     currency: Optional[str] = None
     tax_rate: Optional[float] = None
     invoice_prefix: Optional[str] = None
@@ -39,6 +41,8 @@ def _serialize(s: models.CompanySettings) -> dict:
         "address": s.address or "",
         "phone": s.phone or "",
         "email": s.email or "",
+        "ntn": s.ntn or "",
+        "strn": s.strn or "",
         "currency": s.currency or "PKR (Rs.)",
         "tax_rate": s.tax_rate or 0.0,
         "invoice_prefix": s.invoice_prefix or "INV-",

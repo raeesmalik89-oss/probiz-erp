@@ -63,10 +63,14 @@ def build_invoice_pdf(sale, items, customer, business):
         sub.append(business["phone"])
     if business.get("email"):
         sub.append(business["email"])
+    if business.get("ntn"):
+        sub.append(f"NTN: {business['ntn']}")
+    if business.get("strn"):
+        sub.append(f"STRN: {business['strn']}")
     header = Table([[
         [Paragraph(business.get("name", "ProBiz ERP"), h_brand),
          Paragraph(" &nbsp;|&nbsp; ".join(sub) if sub else "Business Management System", small)],
-        [Paragraph("INVOICE", inv_title),
+        [Paragraph("SALES TAX INVOICE" if business.get("strn") else "INVOICE", inv_title),
          Paragraph(sale.invoice_no, right),
          Paragraph(_local(sale.created_at), right)],
     ]], colWidths=[None, 65 * mm])
@@ -125,7 +129,11 @@ def build_invoice_pdf(sale, items, customer, business):
     if (sale.discount or 0) > 0:
         totals_rows.append(["Discount", "- " + _fmt(sale.discount)])
     if (sale.tax or 0) > 0:
-        totals_rows.append(["Tax", _fmt(sale.tax)])
+        taxable = (sale.subtotal or 0) - (sale.discount or 0)
+        rate = business.get("tax_rate") or (round((sale.tax / taxable) * 100, 2) if taxable else 0)
+        rate_lbl = f"Sales Tax @ {rate:g}%" if rate else "Sales Tax"
+        totals_rows.append(["Value excl. Tax", _fmt(taxable)])
+        totals_rows.append([rate_lbl, _fmt(sale.tax)])
     totals_rows.append(["TOTAL", _fmt(sale.total)])
     totals_rows.append(["Paid", _fmt(sale.paid)])
     if (sale.balance or 0) > 0:
@@ -151,6 +159,10 @@ def build_invoice_pdf(sale, items, customer, business):
     story.append(Paragraph(
         f"Thank you for your business! &nbsp;|&nbsp; {business.get('name', 'ProBiz ERP')} &nbsp;|&nbsp; "
         "Computer-generated invoice.", small))
+
+    if business.get("strn"):
+        story += [Spacer(1, 4), Paragraph(
+            "This is a computer-generated Sales Tax Invoice issued under the Sales Tax Act, 1990.", small)]
 
     doc.build(story)
     buf.seek(0)
