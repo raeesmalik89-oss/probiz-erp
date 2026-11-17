@@ -57,14 +57,14 @@ def build_invoice_pdf(sale, items, customer, business):
     story = []
 
     # Header: brand (left) + INVOICE (right)
-    contact_lines = business.get("name", "ProBiz ERP")
+    contact_lines = business.get("name", "MediCloud")
     sub = []
     if business.get("phone"):
         sub.append(business["phone"])
     if business.get("email"):
         sub.append(business["email"])
     header = Table([[
-        [Paragraph(business.get("name", "ProBiz ERP"), h_brand),
+        [Paragraph(business.get("name", "MediCloud"), h_brand),
          Paragraph(" &nbsp;|&nbsp; ".join(sub) if sub else "Business Management System", small)],
         [Paragraph("INVOICE", inv_title),
          Paragraph(sale.invoice_no, right),
@@ -149,7 +149,7 @@ def build_invoice_pdf(sale, items, customer, business):
     story += [totals, Spacer(1, 16)]
 
     story.append(Paragraph(
-        f"Thank you for your business! &nbsp;|&nbsp; {business.get('name', 'ProBiz ERP')} &nbsp;|&nbsp; "
+        f"Thank you for your business! &nbsp;|&nbsp; {business.get('name', 'MediCloud')} &nbsp;|&nbsp; "
         "Computer-generated invoice.", small))
 
     doc.build(story)

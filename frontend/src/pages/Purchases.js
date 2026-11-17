@@ -97,7 +97,7 @@ export default function Purchases() {
     @media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}</style></head>
     <body><div class="page">
     <div class="header">
-      <div><div class="brand">ProBiz ERP</div><div class="sub">Advanced Pharmacy & Business Management</div><div class="sub">📍 House 124, Street 39, I-14/3, Islamabad</div><div class="sub">📞 0316-8818693</div></div>
+      <div><div class="brand">MediCloud</div><div class="sub">Advanced Pharmacy & Business Management</div><div class="sub">📍 House 124, Street 39, I-14/3, Islamabad</div><div class="sub">📞 0316-8818693</div></div>
       <div class="po-title"><h2>PURCHASE ORDER</h2><div style="font-size:14px;font-weight:700;color:#475569;margin-top:4px">${po.po_number}</div><div style="font-size:12px;color:#64748b">${po.created_at ? new Date(po.created_at).toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}</div></div>
     </div>
     <div class="info">
@@ -115,7 +115,7 @@ export default function Purchases() {
       <div class="t-paid"><span>✓ Paid</span><span>Rs. ${po.paid?.toLocaleString()}</span></div>
       ${po.balance > 0 ? `<div class="t-bal"><span>Balance Due</span><span>Rs. ${po.balance?.toLocaleString()}</span></div>` : ''}
     </div></div>
-    <div class="footer"><p>ProBiz ERP &nbsp;|&nbsp; probiz-erp-poru.vercel.app &nbsp;|&nbsp; Computer-generated document</p></div>
+    <div class="footer"><p>MediCloud &nbsp;|&nbsp; probiz-erp.raees-malik89.workers.dev &nbsp;|&nbsp; Computer-generated document</p></div>
     </div><script>window.onload=()=>window.print()</script></body></html>`);
     w.document.close();
   };
@@ -272,7 +272,7 @@ export default function Purchases() {
           <div className="bg-gradient-to-r from-blue-800 to-blue-600 rounded-xl p-4 mb-4 text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-xl font-extrabold">ProBiz ERP</p>
+                <p className="text-xl font-extrabold">MediCloud</p>
                 <p className="text-xs opacity-75">House 124, Street 39, I-14/3, Islamabad</p>
                 <p className="text-xs opacity-75">📞 0316-8818693</p>
               </div>

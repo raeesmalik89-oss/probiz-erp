@@ -71,7 +71,7 @@ export default function Layout() {
         </div>
         {(!collapsed || mobile) && (
           <div>
-            <div className="text-white font-bold text-lg leading-none">ProBiz</div>
+            <div className="text-white font-bold text-lg leading-none">MediCloud</div>
             <div className="text-white/50 text-[11px] mt-0.5">ERP System</div>
           </div>
         )}

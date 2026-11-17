@@ -1,6 +1,6 @@
 {
   "appId": "com.probiz.erp",
-  "appName": "ProBiz ERP",
+  "appName": "MediCloud",
   "webDir": "dist",
   "server": {
     "allowNavigation": ["raees1989.pythonanywhere.com"],

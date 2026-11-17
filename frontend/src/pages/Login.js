@@ -50,7 +50,7 @@ export default function Login() {
             <div className="w-11 h-11 rounded-xl bg-white/20 flex items-center justify-center">
               <TrendingUp size={24} className="text-white" />
             </div>
-            <span className="text-white font-extrabold text-2xl">ProBiz ERP</span>
+            <span className="text-white font-extrabold text-2xl">MediCloud</span>
           </div>
           <h2 className="text-white text-4xl font-extrabold leading-tight mb-4">
             Your Complete<br />Business Platform
@@ -80,7 +80,7 @@ export default function Login() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
               <TrendingUp size={20} className="text-white" />
             </div>
-            <span className="font-extrabold text-xl text-slate-900 dark:text-white">ProBiz ERP</span>
+            <span className="font-extrabold text-xl text-slate-900 dark:text-white">MediCloud</span>
           </div>
 
           <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">Sign In</h1>

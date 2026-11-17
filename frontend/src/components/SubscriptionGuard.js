@@ -34,7 +34,7 @@ const PaywallScreen = ({ sub, onContact }) => {
       <div style={{ fontSize: 64, marginBottom: 16 }}>🔒</div>
       <h1 style={{ color: '#fff', fontSize: 28, fontWeight: 900, marginBottom: 8 }}>Trial Expired</h1>
       <p style={{ color: '#94a3b8', fontSize: 15, marginBottom: 32, textAlign: 'center', maxWidth: 400 }}>
-        Your 14-day free trial has ended. Choose a plan to continue using <strong style={{ color: '#3b82f6' }}>ProBiz ERP</strong>.
+        Your 14-day free trial has ended. Choose a plan to continue using <strong style={{ color: '#3b82f6' }}>MediCloud</strong>.
       </p>
 
       {/* Plans */}
@@ -74,7 +74,7 @@ const UpgradeModal = ({ onClose }) => (
   <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 9998, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
     <div style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 20, padding: 36, maxWidth: 420, width: '100%', textAlign: 'center' }}>
       <div style={{ fontSize: 40, marginBottom: 12 }}>🚀</div>
-      <h2 style={{ color: '#fff', fontWeight: 900, fontSize: 22, marginBottom: 8 }}>Upgrade ProBiz ERP</h2>
+      <h2 style={{ color: '#fff', fontWeight: 900, fontSize: 22, marginBottom: 8 }}>Upgrade MediCloud</h2>
       <p style={{ color: '#94a3b8', fontSize: 14, marginBottom: 24 }}>Contact us to upgrade your plan and keep all your data safe.</p>
       <div style={{ background: '#0f172a', borderRadius: 12, padding: 20, marginBottom: 24 }}>
         <p style={{ color: '#3b82f6', fontWeight: 700, fontSize: 18 }}>📞 0316-8818693</p>
