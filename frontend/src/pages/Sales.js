@@ -245,6 +245,31 @@ export default function Sales() {
                 <option value="">Walk-in Customer</option>
                 {customers.map(c => <option key={c.id} value={c.id}>{c.name} — {c.phone}</option>)}
               </select>
+              {/* Product search — primary */}
+              <div className="relative">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-teal-500" />
+                <input
+                  className="input text-sm pl-9"
+                  value={productSearch}
+                  onChange={e => setProductSearch(e.target.value)}
+                  placeholder="Search product by name or salt / generic…"
+                  autoFocus
+                />
+                {filteredProducts.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl z-20 max-h-56 overflow-y-auto shadow-xl mt-1">
+                    {filteredProducts.map(p => (
+                      <div key={p.id} onClick={() => addToCart(p)} className="flex justify-between items-center px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-slate-800/50 cursor-pointer border-b border-gray-50 last:border-0">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-800 dark:text-slate-100">{p.name}</p>
+                          <p className="text-xs text-gray-400 dark:text-slate-500">{p.generic_name ? `${p.generic_name} · ` : ''}Stock: {p.stock} {p.unit}</p>
+                        </div>
+                        <span className="font-bold text-emerald-600 text-sm">Rs. {p.sale_price?.toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {/* Barcode scanner — secondary */}
               <div className="relative">
                 <ScanLine size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-teal-500" />
                 <input
@@ -252,25 +277,8 @@ export default function Sales() {
                   value={barcode}
                   onChange={e => setBarcode(e.target.value)}
                   onKeyDown={handleBarcode}
-                  placeholder="Scan barcode, then Enter to add…"
-                  autoFocus
+                  placeholder="Or scan a barcode, then press Enter"
                 />
-              </div>
-              <div className="relative">
-                <input className="input text-sm" value={productSearch} onChange={e => setProductSearch(e.target.value)} placeholder="Search product by name or barcode..." />
-                {filteredProducts.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl z-20 max-h-56 overflow-y-auto shadow-xl mt-1">
-                    {filteredProducts.map(p => (
-                      <div key={p.id} onClick={() => addToCart(p)} className="flex justify-between items-center px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-slate-800/50 cursor-pointer border-b border-gray-50 last:border-0">
-                        <div>
-                          <p className="text-sm font-semibold text-gray-800 dark:text-slate-100">{p.name}</p>
-                          <p className="text-xs text-gray-400 dark:text-slate-500">Stock: {p.stock} {p.unit}</p>
-                        </div>
-                        <span className="font-bold text-emerald-600 text-sm">Rs. {p.sale_price?.toLocaleString()}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
               </div>
               <div className="bg-gray-50 dark:bg-slate-800/50 rounded-xl p-3 min-h-[180px]">
                 {cartItems.length === 0 ? (
