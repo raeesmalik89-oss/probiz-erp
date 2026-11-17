@@ -138,7 +138,7 @@ export default function Layout() {
   };
 
   return (
-    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden">
+    <div className="flex h-screen bg-[#eef6f5] dark:bg-slate-950 overflow-hidden">
       {/* Desktop sidebar */}
       <div className="hidden md:flex shrink-0" style={{ width: collapsed ? 70 : 256, transition: 'width 0.3s' }}>
         <Sidebar />

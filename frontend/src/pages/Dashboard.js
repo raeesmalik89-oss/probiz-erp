@@ -16,29 +16,29 @@ const fmt = (n) =>
   : n >= 1000  ? `Rs. ${(n / 1000).toFixed(1)}K`
   : `Rs. ${n?.toFixed(0) || 0}`;
 
-const PIE_COLORS = ['#14b8a6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'];
+const PIE_COLORS = ['#14b8a6', '#0ea5e9', '#8b5cf6', '#f43f5e', '#f59e0b'];
 
 const STAT_CONFIG = (s) => [
-  { icon: TrendingUp, label: "Today's Sales",  value: fmt(s?.today_sales),     sub: 'Completed transactions', iconCls: 'text-emerald-600', bgCls: 'bg-emerald-50', border: 'border-emerald-100' },
-  { icon: DollarSign, label: 'Month Revenue',  value: fmt(s?.month_sales),     sub: 'This month',             iconCls: 'text-teal-600',    bgCls: 'bg-teal-50',    border: 'border-teal-100' },
-  { icon: Package,    label: 'Total Products', value: s?.total_products,       sub: `${s?.low_stock_count} low stock`, iconCls: 'text-amber-600', bgCls: 'bg-amber-50', border: 'border-amber-100' },
-  { icon: Users,      label: 'Customers',      value: s?.total_customers,      sub: `Rs. ${((s?.total_receivables||0)/1000).toFixed(0)}K receivable`, iconCls: 'text-violet-600', bgCls: 'bg-violet-50', border: 'border-violet-100' },
-  { icon: Truck,      label: 'Suppliers',      value: s?.total_suppliers,      sub: `Rs. ${((s?.total_payables||0)/1000).toFixed(0)}K payable`, iconCls: 'text-red-500', bgCls: 'bg-red-50', border: 'border-red-100' },
-  { icon: UserCheck,  label: 'Employees',      value: s?.total_employees,      sub: 'Active staff',           iconCls: 'text-sky-600',    bgCls: 'bg-sky-50',     border: 'border-sky-100' },
+  { icon: TrendingUp, label: "Today's Sales",  value: fmt(s?.today_sales),     sub: 'Completed transactions', grad: 'from-teal-500 to-teal-600' },
+  { icon: DollarSign, label: 'Month Revenue',  value: fmt(s?.month_sales),     sub: 'This month',             grad: 'from-cyan-500 to-sky-600' },
+  { icon: Package,    label: 'Total Products', value: s?.total_products,       sub: `${s?.low_stock_count} low stock`, grad: 'from-violet-500 to-purple-600' },
+  { icon: Users,      label: 'Customers',      value: s?.total_customers,      sub: `Rs. ${((s?.total_receivables||0)/1000).toFixed(0)}K receivable`, grad: 'from-rose-400 to-pink-500' },
+  { icon: Truck,      label: 'Suppliers',      value: s?.total_suppliers,      sub: `Rs. ${((s?.total_payables||0)/1000).toFixed(0)}K payable`, grad: 'from-amber-400 to-orange-500' },
+  { icon: UserCheck,  label: 'Employees',      value: s?.total_employees,      sub: 'Active staff',           grad: 'from-emerald-500 to-teal-600' },
 ];
 
-function StatCard({ icon: Icon, label, value, sub, iconCls, bgCls, border }) {
+function StatCard({ icon: Icon, label, value, sub, grad }) {
   return (
-    <div className={`card border ${border} p-5 flex items-start gap-4 hover:shadow-md transition-shadow`}>
-      <div className={`w-12 h-12 rounded-2xl ${bgCls} flex items-center justify-center shrink-0`}>
-        <Icon size={22} className={iconCls} />
+    <div className={`rounded-2xl p-5 flex items-start gap-4 text-white bg-gradient-to-br ${grad} shadow-sm hover:shadow-lg transition-shadow`}>
+      <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+        <Icon size={22} className="text-white" />
       </div>
       <div className="min-w-0">
-        <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">{label}</p>
-        <p className="text-2xl font-extrabold text-gray-900 dark:text-white leading-none">{value ?? '—'}</p>
-        {sub && <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">{sub}</p>}
+        <p className="text-xs text-white/80 mb-1">{label}</p>
+        <p className="text-2xl font-extrabold leading-none">{value ?? '—'}</p>
+        {sub && <p className="text-xs text-white/75 mt-1">{sub}</p>}
       </div>
-      <ArrowUpRight size={14} className="text-gray-300 dark:text-slate-600 ml-auto shrink-0 mt-1" />
+      <ArrowUpRight size={14} className="text-white/60 ml-auto shrink-0 mt-1" />
     </div>
   );
 }
