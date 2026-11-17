@@ -12,6 +12,36 @@ def _password(env_name):
     value = os.getenv(env_name, "").strip()
     return value if value else secrets.token_urlsafe(12)
 
+
+def _apply_env_passwords(db):
+    """Reset user passwords from env vars on every boot, if provided.
+
+    Lets you choose/rotate the login password without wiping the database:
+    set SEED_ADMIN_PASSWORD / SEED_DEMO_PASSWORD (and redeploy) and the
+    matching accounts are updated. No-op when the vars are unset.
+    """
+    admin_email = os.getenv("SEED_ADMIN_EMAIL", "").strip() or "admin@probiz.pk"
+    admin_pw = os.getenv("SEED_ADMIN_PASSWORD", "").strip()
+    demo_pw = os.getenv("SEED_DEMO_PASSWORD", "").strip()
+
+    updates = {}
+    if admin_pw:
+        updates[admin_email] = admin_pw
+    if demo_pw:
+        updates["manager@probiz.pk"] = demo_pw
+        updates["cashier@probiz.pk"] = demo_pw
+
+    changed = False
+    for email, pw in updates.items():
+        user = db.query(models.User).filter(models.User.email == email).first()
+        if user:
+            user.hashed_password = get_password_hash(pw)
+            changed = True
+    if changed:
+        db.commit()
+        print("Applied login password(s) from SEED_ADMIN_PASSWORD / SEED_DEMO_PASSWORD.")
+
+
 def seed():
     models.Base.metadata.create_all(bind=engine)
     db = SessionLocal()
@@ -19,6 +49,7 @@ def seed():
     # Check if already seeded
     if db.query(models.User).count() > 0:
         print("Database already seeded.")
+        _apply_env_passwords(db)
         db.close()
         return
 
