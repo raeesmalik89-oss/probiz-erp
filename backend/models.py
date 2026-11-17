@@ -265,6 +265,21 @@ class Subscription(Base):
     max_branches = Column(Integer, default=1)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
+class CompanySettings(Base):
+    """Single-row business/company settings edited from the Settings page."""
+    __tablename__ = "company_settings"
+    id = Column(Integer, primary_key=True, index=True)
+    company_name = Column(String(200), default="")
+    address = Column(Text, default="")
+    phone = Column(String(50), default="")
+    email = Column(String(120), default="")
+    currency = Column(String(30), default="PKR (Rs.)")
+    tax_rate = Column(Float, default=0.0)
+    invoice_prefix = Column(String(20), default="INV-")
+    po_prefix = Column(String(20), default="PO-")
+    fiscal_year_start = Column(String(20), default="January")
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
 class DemoRequest(Base):
     __tablename__ = "demo_requests"
     id = Column(Integer, primary_key=True, index=True)
