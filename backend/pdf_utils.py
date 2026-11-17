@@ -10,8 +10,8 @@ from reportlab.platypus import (
     SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer,
 )
 
-BRAND = colors.HexColor("#1e40af")
-BRAND_LIGHT = colors.HexColor("#dbeafe")
+BRAND = colors.HexColor("#0f766e")
+BRAND_LIGHT = colors.HexColor("#ccfbf1")
 MUTED = colors.HexColor("#64748b")
 LINE = colors.HexColor("#e2e8f0")
 
