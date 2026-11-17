@@ -89,7 +89,12 @@ export default function Sales() {
 
   useEffect(() => {
     if (productSearch.length > 1)
-      setFilteredProducts(products.filter(p => p.name.toLowerCase().includes(productSearch.toLowerCase()) || (p.barcode && p.barcode.includes(productSearch))));
+      setFilteredProducts(products.filter(p => {
+        const q = productSearch.toLowerCase();
+        return p.name.toLowerCase().includes(q)
+          || (p.generic_name && p.generic_name.toLowerCase().includes(q))
+          || (p.barcode && p.barcode.includes(productSearch));
+      }));
     else setFilteredProducts([]);
   }, [productSearch, products]);
 
