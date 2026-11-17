@@ -134,7 +134,7 @@ export default function Inventory() {
                 ) : products.length === 0 ? (
                   <tr><td colSpan={8} style={{ textAlign: 'center', padding: 40, color: 'var(--ink-faint)' }}><Package size={40} style={{ margin: '0 auto 12px', display: 'block', opacity: 0.3 }} />No products found</td></tr>
                 ) : paginated.map(p => (
-                  <tr key={p.id} style={{ borderBottom: '1px solid var(--line-2)' }} onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'} onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
+                  <tr key={p.id} style={{ borderBottom: '1px solid var(--line-2)' }} onMouseEnter={e => e.currentTarget.style.background = 'var(--panel-2)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                     <td style={{ padding: '12px 16px', fontWeight: 600 }}>
                       {p.name}
                       {p.generic_name && <div style={{ fontWeight: 400, fontSize: 12, color: 'var(--ink-faint)', marginTop: 2 }}>{p.generic_name}</div>}
