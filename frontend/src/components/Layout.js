@@ -6,11 +6,12 @@ import SubscriptionGuard from './SubscriptionGuard';
 import {
   LayoutDashboard, Package, ShoppingCart, Truck, Users, Building2,
   BookOpen, UserCheck, BarChart3, Settings, LogOut, Menu, X,
-  Briefcase, FileText, ChevronRight, CalendarDays, Sun, Moon
+  Briefcase, FileText, ChevronRight, CalendarDays, Sun, Moon, Sparkles
 } from 'lucide-react';
 
 const navItems = [
   { to: '/app/dashboard',  icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/app/assistant',  icon: Sparkles,        label: 'Ask MediCloud' },
   { to: '/app/inventory',  icon: Package,         label: 'Inventory' },
   { to: '/app/sales',      icon: ShoppingCart,    label: 'Sales / POS' },
   { to: '/app/purchases',  icon: Truck,           label: 'Purchases' },

@@ -24,3 +24,7 @@ python-dotenv==1.2.4
 reportlab==5.1.0
 openpyxl==3.1.5
 python-dateutil==4.0.0
+
+# AI assistant (optional at runtime — only used when ANTHROPIC_API_KEY is set).
+# Range, not a hard pin: the simple Messages API usage is stable across 0.x/1.x.
+anthropic>=0.40,<2.0
