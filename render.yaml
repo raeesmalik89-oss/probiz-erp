@@ -12,6 +12,12 @@ services:
         value: "false"
       - key: ALLOWED_ORIGINS
         value: "https://probiz-erp.raees-malik89.workers.dev,http://localhost:3000"
+      # TEMPORARY testing login. CHANGE these before using real data —
+      # edit the values here (or in the Render dashboard) and redeploy.
+      - key: SEED_ADMIN_PASSWORD
+        value: "admin123"
+      - key: SEED_DEMO_PASSWORD
+        value: "demo123"
       - key: DATABASE_URL
         fromDatabase:
           name: probiz-db
