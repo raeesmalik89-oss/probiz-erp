@@ -23,7 +23,13 @@ def _business_info(db: Session) -> dict:
             else "MediCloud")
     phone = (cs.phone if cs and cs.phone else sub.contact_phone if sub else None)
     email = (cs.email if cs and cs.email else sub.contact_email if sub else None)
-    return {"name": name, "phone": phone, "email": email, "address": (cs.address if cs else None)}
+    return {
+        "name": name, "phone": phone, "email": email,
+        "address": (cs.address if cs else None),
+        "ntn": (cs.ntn if cs else None),
+        "strn": (cs.strn if cs else None),
+        "tax_rate": (cs.tax_rate if cs else None),
+    }
 
 class SaleItemIn(BaseModel):
     product_id: int
