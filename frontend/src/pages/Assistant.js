@@ -42,7 +42,7 @@ export default function Assistant() {
     <div className="max-w-3xl mx-auto flex flex-col" style={{ height: 'calc(100vh - 120px)' }}>
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-teal-600 to-violet-600 flex items-center justify-center">
           <Sparkles size={20} className="text-white" />
         </div>
         <div>
@@ -62,7 +62,7 @@ export default function Assistant() {
       <div className="flex-1 overflow-y-auto card p-4 space-y-3">
         {messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center gap-4 py-8">
-            <Sparkles size={32} className="text-blue-400" />
+            <Sparkles size={32} className="text-teal-400" />
             <p className="text-gray-500 dark:text-slate-400 text-sm">Ask anything about your business. Try:</p>
             <div className="flex flex-wrap justify-center gap-2 max-w-lg">
               {SUGGESTIONS.map(s => (
@@ -77,7 +77,7 @@ export default function Assistant() {
           <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm whitespace-pre-wrap ${
               m.role === 'user'
-                ? 'bg-blue-600 text-white rounded-br-sm'
+                ? 'bg-teal-600 text-white rounded-br-sm'
                 : 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-100 rounded-bl-sm'}`}>
               {m.content}
             </div>
@@ -99,10 +99,10 @@ export default function Assistant() {
           value={input}
           onChange={e => setInput(e.target.value)}
           placeholder="Ask about your sales, stock, expiry…"
-          className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm outline-none focus:ring-2 focus:ring-teal-500"
         />
         <button type="submit" disabled={sending || !input.trim()}
-          className="w-12 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white flex items-center justify-center transition-colors">
+          className="w-12 h-12 rounded-xl bg-teal-600 hover:bg-teal-700 disabled:opacity-40 text-white flex items-center justify-center transition-colors">
           <Send size={18} />
         </button>
       </form>

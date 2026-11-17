@@ -6,7 +6,7 @@ import { exportCSV } from '../utils/csvExport';
 import { downloadFile } from '../utils/download';
 import toast from 'react-hot-toast';
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#0ea5e9'];
+const COLORS = ['#14b8a6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#0ea5e9'];
 
 export default function Reports() {
   const [tab, setTab] = useState('summary');
@@ -62,12 +62,12 @@ export default function Reports() {
     w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"/><title>Summary Report</title>
     <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;color:#1e293b;font-size:13px}
     .page{width:210mm;min-height:297mm;margin:0 auto;padding:15mm}
-    .header{border-bottom:3px solid #1e40af;padding-bottom:14px;margin-bottom:20px;display:flex;justify-content:space-between}
-    .brand{font-size:24px;font-weight:900;color:#1e40af}.sub{font-size:11px;color:#64748b;margin-top:2px}
+    .header{border-bottom:3px solid #0f766e;padding-bottom:14px;margin-bottom:20px;display:flex;justify-content:space-between}
+    .brand{font-size:24px;font-weight:900;color:#0f766e}.sub{font-size:11px;color:#64748b;margin-top:2px}
     .kpi{display:flex;gap:12px;margin-bottom:20px}
     .kpi-box{flex:1;border-radius:8px;padding:14px;text-align:center}
     .kpi-val{font-size:18px;font-weight:900;margin-bottom:2px}.kpi-lbl{font-size:10px;color:#64748b}
-    h3{font-size:13px;font-weight:800;background:#1e40af;color:#fff;padding:7px 12px;border-radius:6px 6px 0 0;margin-top:16px}
+    h3{font-size:13px;font-weight:800;background:#0f766e;color:#fff;padding:7px 12px;border-radius:6px 6px 0 0;margin-top:16px}
     table{width:100%;border-collapse:collapse;margin-bottom:4px}
     th{background:#f1f5f9;padding:7px 10px;text-align:left;font-size:11px;font-weight:700;color:#475569}
     th:last-child,td:last-child{text-align:right}
@@ -77,27 +77,27 @@ export default function Reports() {
     .profit-box{display:flex;justify-content:flex-end;margin-top:16px}
     .profit-inner{width:260px;border-radius:8px;overflow:hidden}
     .pr{display:flex;justify-content:space-between;padding:9px 14px;font-size:13px;border-bottom:1px solid var(--line)}
-    .pr-final{display:flex;justify-content:space-between;padding:11px 14px;font-size:16px;font-weight:900;background:#1e40af;color:#fff}
+    .pr-final{display:flex;justify-content:space-between;padding:11px 14px;font-size:16px;font-weight:900;background:#0f766e;color:#fff}
     .footer{text-align:center;border-top:2px solid var(--line);padding-top:12px;font-size:10px;color:#94a3b8;margin-top:20px}
     @media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}</style></head>
     <body><div class="page">
     <div class="header">
       <div><div class="brand">MediCloud</div><div class="sub">Advanced Pharmacy & Business Management</div><div class="sub">📍 House 124, Street 39, I-14/3, Islamabad &nbsp;|&nbsp; 📞 0316-8818693</div></div>
-      <div style="text-align:right"><div style="font-size:20px;font-weight:900;color:#1e40af">SUMMARY REPORT</div><div style="font-size:11px;color:#64748b;margin-top:4px">Period: ${fromDate} to ${toDate}</div><div style="font-size:11px;color:#64748b">Generated: ${new Date(Date.now()+5*3600000).toLocaleString('en-PK')}</div></div>
+      <div style="text-align:right"><div style="font-size:20px;font-weight:900;color:#0f766e">SUMMARY REPORT</div><div style="font-size:11px;color:#64748b;margin-top:4px">Period: ${fromDate} to ${toDate}</div><div style="font-size:11px;color:#64748b">Generated: ${new Date(Date.now()+5*3600000).toLocaleString('en-PK')}</div></div>
     </div>
     <div class="kpi">
-      <div class="kpi-box" style="background:#dbeafe"><div class="kpi-val" style="color:#1e40af">Rs. ${totalSales.toLocaleString()}</div><div class="kpi-lbl">Total Sales (${salesList.length} invoices)</div></div>
+      <div class="kpi-box" style="background:#ccfbf1"><div class="kpi-val" style="color:#0f766e">Rs. ${totalSales.toLocaleString()}</div><div class="kpi-lbl">Total Sales (${salesList.length} invoices)</div></div>
       <div class="kpi-box" style="background:#fef3c7"><div class="kpi-val" style="color:#d97706">Rs. ${totalPurchases.toLocaleString()}</div><div class="kpi-lbl">Total Purchases (${purchasesList.length} orders)</div></div>
       <div class="kpi-box" style="background:${profit>=0?'#d1fae5':'#fee2e2'}"><div class="kpi-val" style="color:${profit>=0?'#065f46':'#991b1b'}">Rs. ${profit.toLocaleString()}</div><div class="kpi-lbl">${profit>=0?'Gross Profit':'Net Loss'}</div></div>
     </div>
     <h3>📦 SALES DETAIL</h3>
     <table><thead><tr><th>#</th><th>Invoice No</th><th>Customer</th><th>Date</th><th>Payment</th><th>Status</th><th>Total</th></tr></thead>
-    <tbody>${salesList.map((s,i)=>`<tr><td style="color:#94a3b8">${i+1}</td><td style="color:#1e40af;font-weight:700">${s.invoice_no}</td><td>${s.customer||'Walk-in'}</td><td>${pkt(s.created_at)}</td><td>${(s.payment_method||'').replace('_',' ')}</td><td>${s.status||''}</td><td>Rs. ${(s.total||0).toLocaleString()}</td></tr>`).join('')}
+    <tbody>${salesList.map((s,i)=>`<tr><td style="color:#94a3b8">${i+1}</td><td style="color:#0f766e;font-weight:700">${s.invoice_no}</td><td>${s.customer||'Walk-in'}</td><td>${pkt(s.created_at)}</td><td>${(s.payment_method||'').replace('_',' ')}</td><td>${s.status||''}</td><td>Rs. ${(s.total||0).toLocaleString()}</td></tr>`).join('')}
     <tr class="tfoot"><td colspan="6" style="text-align:right;padding-right:10px">TOTAL SALES</td><td>Rs. ${totalSales.toLocaleString()}</td></tr>
     </tbody></table>
     <h3>🛒 PURCHASES DETAIL</h3>
     <table><thead><tr><th>#</th><th>PO Number</th><th>Supplier</th><th>Date</th><th>Payment</th><th>Status</th><th>Total</th></tr></thead>
-    <tbody>${purchasesList.map((p,i)=>`<tr><td style="color:#94a3b8">${i+1}</td><td style="color:#1e40af;font-weight:700">${p.po_number}</td><td>${p.supplier||''}</td><td>${pkt(p.created_at)}</td><td>${(p.payment_method||'').replace('_',' ')}</td><td>${p.status||''}</td><td>Rs. ${(p.total||0).toLocaleString()}</td></tr>`).join('')}
+    <tbody>${purchasesList.map((p,i)=>`<tr><td style="color:#94a3b8">${i+1}</td><td style="color:#0f766e;font-weight:700">${p.po_number}</td><td>${p.supplier||''}</td><td>${pkt(p.created_at)}</td><td>${(p.payment_method||'').replace('_',' ')}</td><td>${p.status||''}</td><td>Rs. ${(p.total||0).toLocaleString()}</td></tr>`).join('')}
     <tr class="tfoot"><td colspan="6" style="text-align:right;padding-right:10px">TOTAL PURCHASES</td><td>Rs. ${totalPurchases.toLocaleString()}</td></tr>
     </tbody></table>
     <div class="profit-box"><div class="profit-inner">
@@ -137,14 +137,14 @@ export default function Reports() {
     w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"/><title>Profit & Loss Report</title>
     <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;color:#1e293b}
     .page{width:210mm;min-height:297mm;margin:0 auto;padding:12mm 16mm}
-    .header{border-bottom:3px solid #1e40af;padding-bottom:10px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
-    .brand{font-size:22px;font-weight:900;color:#1e40af}.sub{font-size:10px;color:#64748b;margin-top:2px}
-    .title{text-align:right}.title h2{font-size:20px;font-weight:900;color:#1e40af;line-height:1.2}
+    .header{border-bottom:3px solid #0f766e;padding-bottom:10px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+    .brand{font-size:22px;font-weight:900;color:#0f766e}.sub{font-size:10px;color:#64748b;margin-top:2px}
+    .title{text-align:right}.title h2{font-size:20px;font-weight:900;color:#0f766e;line-height:1.2}
     .title p{font-size:11px;color:#64748b;margin-top:3px}
-    .section{margin-bottom:16px}.section h3{font-size:13px;font-weight:700;background:#1e40af;color:#fff;padding:6px 12px;border-radius:6px;margin-bottom:0}
+    .section{margin-bottom:16px}.section h3{font-size:13px;font-weight:700;background:#0f766e;color:#fff;padding:6px 12px;border-radius:6px;margin-bottom:0}
     .row{display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--line-2);font-size:13px}
     .row:nth-child(even){background:#f8fafc}
-    .row-total{display:flex;justify-content:space-between;padding:10px 12px;font-size:14px;font-weight:800;background:#1e40af;color:#fff;border-radius:0 0 6px 6px;margin-bottom:12px}
+    .row-total{display:flex;justify-content:space-between;padding:10px 12px;font-size:14px;font-weight:800;background:#0f766e;color:#fff;border-radius:0 0 6px 6px;margin-bottom:12px}
     .profit{color:#10b981}.loss{color:#ef4444}
     .kpi{display:flex;gap:12px;margin-bottom:16px}
     .kpi-box{flex:1;border-radius:8px;padding:12px;text-align:center}
@@ -158,7 +158,7 @@ export default function Reports() {
       <div class="title"><h2>PROFIT & LOSS<br/>STATEMENT</h2><p>This Month &nbsp;|&nbsp; Generated: ${new Date().toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' })}</p></div>
     </div>
     <div class="kpi">
-      <div class="kpi-box" style="background:#dbeafe"><div class="val" style="color:#1e40af">Rs. ${revenue.toLocaleString()}</div><div class="lbl">Total Revenue</div></div>
+      <div class="kpi-box" style="background:#ccfbf1"><div class="val" style="color:#0f766e">Rs. ${revenue.toLocaleString()}</div><div class="lbl">Total Revenue</div></div>
       <div class="kpi-box" style="background:#fef3c7"><div class="val" style="color:#d97706">Rs. ${cogs.toLocaleString()}</div><div class="lbl">Cost of Goods</div></div>
       <div class="kpi-box" style="background:${grossProfit >= 0 ? '#d1fae5' : '#fee2e2'}"><div class="val" style="color:${grossProfit >= 0 ? '#065f46' : '#991b1b'}">Rs. ${grossProfit.toLocaleString()}</div><div class="lbl">Gross Profit</div></div>
       <div class="kpi-box" style="background:#f0fdf4"><div class="val" style="color:#16a34a">${grossMargin}%</div><div class="lbl">Profit Margin</div></div>
@@ -203,7 +203,7 @@ export default function Reports() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16, marginBottom: 28 }}>
           {[
             ["Today's Sales", `Rs. ${stats.today_sales?.toLocaleString()}`, '#10b981'],
-            ["Month Revenue", `Rs. ${stats.month_sales?.toLocaleString()}`, '#3b82f6'],
+            ["Month Revenue", `Rs. ${stats.month_sales?.toLocaleString()}`, '#14b8a6'],
             ["Month Purchases", `Rs. ${stats.month_purchases?.toLocaleString()}`, '#f59e0b'],
             ["Gross Profit", `Rs. ${(stats.month_sales - stats.month_purchases).toLocaleString()}`, stats.month_sales > stats.month_purchases ? '#10b981' : '#ef4444'],
           ].map(([label, value, color]) => (
@@ -218,7 +218,7 @@ export default function Reports() {
       {/* Tabs */}
       <div style={{ display: 'flex', gap: 4, background: 'var(--panel-3)', padding: 4, borderRadius: 10, marginBottom: 24, width: 'fit-content' }}>
         {tabs.map(({ id, label }) => (
-          <button key={id} onClick={() => setTab(id)} style={{ padding: '8px 20px', borderRadius: 8, border: 'none', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: tab === id ? 'var(--panel)' : 'transparent', color: tab === id ? '#1e40af' : '#64748b', boxShadow: tab === id ? '0 1px 4px rgba(0,0,0,0.1)' : 'none' }}>{label}</button>
+          <button key={id} onClick={() => setTab(id)} style={{ padding: '8px 20px', borderRadius: 8, border: 'none', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: tab === id ? 'var(--panel)' : 'transparent', color: tab === id ? '#0f766e' : '#64748b', boxShadow: tab === id ? '0 1px 4px rgba(0,0,0,0.1)' : 'none' }}>{label}</button>
         ))}
       </div>
 
@@ -249,7 +249,7 @@ export default function Reports() {
               <button onClick={() => exportExcel(`/api/exports/purchases.xlsx?from_date=${fromDate}&to_date=${toDate}`, 'purchases-report.xlsx')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', background: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
                 <FileSpreadsheet size={14} /> Purchases Excel
               </button>
-              <button onClick={printSummary} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 18px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+              <button onClick={printSummary} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 18px', background: 'linear-gradient(135deg,#0f766e,#14b8a6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
                 <Printer size={14} /> Print Summary
               </button>
             </div>
@@ -264,7 +264,7 @@ export default function Reports() {
               <>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
                   {[
-                    { label: `Total Sales`, sub: `${salesList.length} invoices`, value: `Rs. ${totalSales.toLocaleString()}`, color: '#1e40af', bg: '#dbeafe' },
+                    { label: `Total Sales`, sub: `${salesList.length} invoices`, value: `Rs. ${totalSales.toLocaleString()}`, color: '#0f766e', bg: '#ccfbf1' },
                     { label: `Total Purchases`, sub: `${purchasesList.length} orders`, value: `Rs. ${totalPurchases.toLocaleString()}`, color: '#d97706', bg: '#fef3c7' },
                     { label: profit >= 0 ? 'Gross Profit' : 'Net Loss', sub: totalSales > 0 ? `${((profit/totalSales)*100).toFixed(1)}% margin` : '', value: `Rs. ${profit.toLocaleString()}`, color: profit >= 0 ? '#065f46' : '#991b1b', bg: profit >= 0 ? '#d1fae5' : '#fee2e2' },
                   ].map(({ label, sub, value, color, bg }) => (
@@ -278,7 +278,7 @@ export default function Reports() {
 
                 {/* Sales Table */}
                 <div style={{ background: 'var(--panel)', borderRadius: 16, border: '1px solid var(--line)', overflow: 'hidden' }}>
-                  <div style={{ background: 'linear-gradient(135deg,#1e40af,#3b82f6)', padding: '12px 20px' }}>
+                  <div style={{ background: 'linear-gradient(135deg,#0f766e,#14b8a6)', padding: '12px 20px' }}>
                     <h3 style={{ color: '#fff', fontWeight: 800, fontSize: 15 }}>📦 Sales — {salesList.length} Invoices &nbsp;|&nbsp; Total: Rs. {totalSales.toLocaleString()}</h3>
                   </div>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
@@ -293,7 +293,7 @@ export default function Reports() {
                         : salesList.map((s, i) => (
                           <tr key={s.id} style={{ borderBottom: '1px solid var(--line-2)', background: i % 2 === 0 ? 'var(--panel)' : 'var(--panel-2)' }}>
                             <td style={{ padding: '9px 14px', color: 'var(--ink-faint)' }}>{i + 1}</td>
-                            <td style={{ padding: '9px 14px', color: '#1e40af', fontWeight: 700 }}>{s.invoice_no}</td>
+                            <td style={{ padding: '9px 14px', color: '#0f766e', fontWeight: 700 }}>{s.invoice_no}</td>
                             <td style={{ padding: '9px 14px' }}>{s.customer || 'Walk-in'}</td>
                             <td style={{ padding: '9px 14px', color: 'var(--ink-muted)' }}>{pkt(s.created_at)}</td>
                             <td style={{ padding: '9px 14px' }}><span style={{ background: 'var(--panel-3)', padding: '2px 8px', borderRadius: 20, fontSize: 11 }}>{s.payment_method}</span></td>
@@ -301,9 +301,9 @@ export default function Reports() {
                             <td style={{ padding: '9px 14px', fontWeight: 700, textAlign: 'right', color: '#10b981' }}>Rs. {s.total?.toLocaleString()}</td>
                           </tr>
                         ))}
-                      <tr style={{ background: '#dbeafe', borderTop: '2px solid #1e40af' }}>
-                        <td colSpan={6} style={{ padding: '10px 14px', fontWeight: 800, textAlign: 'right', color: '#1e40af' }}>TOTAL SALES</td>
-                        <td style={{ padding: '10px 14px', fontWeight: 900, textAlign: 'right', color: '#1e40af', fontSize: 15 }}>Rs. {totalSales.toLocaleString()}</td>
+                      <tr style={{ background: '#ccfbf1', borderTop: '2px solid #0f766e' }}>
+                        <td colSpan={6} style={{ padding: '10px 14px', fontWeight: 800, textAlign: 'right', color: '#0f766e' }}>TOTAL SALES</td>
+                        <td style={{ padding: '10px 14px', fontWeight: 900, textAlign: 'right', color: '#0f766e', fontSize: 15 }}>Rs. {totalSales.toLocaleString()}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -353,7 +353,7 @@ export default function Reports() {
                       <span style={{ color: 'var(--ink-muted)' }}>Total Purchases</span>
                       <span style={{ fontWeight: 700, color: '#ef4444' }}>Rs. {totalPurchases.toLocaleString()}</span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 16px', background: profit >= 0 ? '#1e40af' : '#ef4444', fontSize: 18, fontWeight: 900, color: '#fff' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 16px', background: profit >= 0 ? '#0f766e' : '#ef4444', fontSize: 18, fontWeight: 900, color: '#fff' }}>
                       <span>{profit >= 0 ? 'GROSS PROFIT' : 'NET LOSS'}</span>
                       <span>Rs. {profit.toLocaleString()}</span>
                     </div>
@@ -378,7 +378,7 @@ export default function Reports() {
               <>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
                   {[
-                    { label: 'Total Revenue', value: `Rs. ${revenue.toLocaleString()}`, color: '#1e40af', bg: '#dbeafe', icon: '📈' },
+                    { label: 'Total Revenue', value: `Rs. ${revenue.toLocaleString()}`, color: '#0f766e', bg: '#ccfbf1', icon: '📈' },
                     { label: 'Cost of Goods', value: `Rs. ${cogs.toLocaleString()}`, color: '#d97706', bg: '#fef3c7', icon: '📦' },
                     { label: 'Gross Profit', value: `Rs. ${grossProfit.toLocaleString()}`, color: grossProfit >= 0 ? '#065f46' : '#991b1b', bg: grossProfit >= 0 ? '#d1fae5' : '#fee2e2', icon: grossProfit >= 0 ? '💰' : '📉' },
                     { label: 'Profit Margin', value: `${margin}%`, color: '#16a34a', bg: '#f0fdf4', icon: '📊' },
@@ -393,9 +393,9 @@ export default function Reports() {
 
                 {/* Income Statement */}
                 <div style={{ background: 'var(--panel)', borderRadius: 16, border: '1px solid var(--line)', overflow: 'hidden' }}>
-                  <div style={{ background: 'linear-gradient(135deg,#1e40af,#3b82f6)', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ background: 'linear-gradient(135deg,#0f766e,#14b8a6)', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h3 style={{ color: '#fff', fontWeight: 800, fontSize: 16 }}>📋 Profit & Loss Statement — This Month</h3>
-                    <button onClick={printPL} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 16px', background: 'var(--panel)', color: '#1e40af', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+                    <button onClick={printPL} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 16px', background: 'var(--panel)', color: '#0f766e', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
                       <Printer size={14} /> Print P&L
                     </button>
                   </div>
@@ -430,7 +430,7 @@ export default function Reports() {
                   </div>
 
                   {/* Gross Profit */}
-                  <div style={{ margin: '0 24px 20px', background: grossProfit >= 0 ? '#1e40af' : '#ef4444', borderRadius: 12, padding: '16px 20px', color: '#fff' }}>
+                  <div style={{ margin: '0 24px 20px', background: grossProfit >= 0 ? '#0f766e' : '#ef4444', borderRadius: 12, padding: '16px 20px', color: '#fff' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>
                         <div style={{ fontSize: 12, opacity: 0.8, marginBottom: 4 }}>GROSS PROFIT = Revenue − COGS</div>
@@ -470,7 +470,7 @@ export default function Reports() {
                         <YAxis tick={{ fontSize: 12, fill: '#94a3b8' }} />
                         <Tooltip formatter={(v, name) => [`Rs. ${v.toLocaleString()}`, name]} />
                         <Legend />
-                        <Bar dataKey="sales" fill="#3b82f6" radius={[4,4,0,0]} name="Revenue" barSize={22} />
+                        <Bar dataKey="sales" fill="#14b8a6" radius={[4,4,0,0]} name="Revenue" barSize={22} />
                         <Bar dataKey="purchases" fill="#f59e0b" radius={[4,4,0,0]} name="Cost" barSize={22} />
                         <Bar dataKey="profit" radius={[4,4,0,0]} name="Profit" barSize={22}>
                           {monthlyData.map((m, i) => <Cell key={i} fill={(m.sales - m.purchases) >= 0 ? '#10b981' : '#ef4444'} />)}
@@ -495,7 +495,7 @@ export default function Reports() {
                 <XAxis dataKey="date" tick={{ fontSize: 13, fill: '#94a3b8' }} />
                 <YAxis tick={{ fontSize: 13, fill: '#94a3b8' }} />
                 <Tooltip formatter={(v) => [`Rs. ${v.toLocaleString()}`, 'Sales']} />
-                <Line type="monotone" dataKey="sales" stroke="#3b82f6" strokeWidth={3} dot={{ fill: '#3b82f6', r: 5 }} activeDot={{ r: 7 }} />
+                <Line type="monotone" dataKey="sales" stroke="#14b8a6" strokeWidth={3} dot={{ fill: '#14b8a6', r: 5 }} activeDot={{ r: 7 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -510,7 +510,7 @@ export default function Reports() {
                     <XAxis type="number" tick={{ fontSize: 11, fill: '#94a3b8' }} />
                     <YAxis dataKey="name" type="category" width={120} tick={{ fontSize: 11, fill: '#475569' }} />
                     <Tooltip formatter={(v) => `Rs. ${v.toLocaleString()}`} />
-                    <Bar dataKey="revenue" fill="#3b82f6" radius={[0, 4, 4, 0]}>
+                    <Bar dataKey="revenue" fill="#14b8a6" radius={[0, 4, 4, 0]}>
                       {topProducts.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                     </Bar>
                   </BarChart>
@@ -557,7 +557,7 @@ export default function Reports() {
               <YAxis tick={{ fontSize: 13, fill: '#94a3b8' }} />
               <Tooltip formatter={(v) => `Rs. ${v.toLocaleString()}`} />
               <Legend />
-              <Bar dataKey="sales" fill="#3b82f6" radius={[6, 6, 0, 0]} name="Sales" barSize={28} />
+              <Bar dataKey="sales" fill="#14b8a6" radius={[6, 6, 0, 0]} name="Sales" barSize={28} />
               <Bar dataKey="purchases" fill="#f59e0b" radius={[6, 6, 0, 0]} name="Purchases" barSize={28} />
             </BarChart>
           </ResponsiveContainer>
@@ -565,7 +565,7 @@ export default function Reports() {
             {monthlyData.map(m => (
               <div key={m.month} style={{ background: 'var(--panel-2)', borderRadius: 10, padding: '14px 16px' }}>
                 <div style={{ fontWeight: 700, marginBottom: 8, color: 'var(--ink)' }}>{m.month}</div>
-                <div style={{ fontSize: 13, color: 'var(--ink-muted)', marginBottom: 4 }}>Sales: <b style={{ color: '#3b82f6' }}>Rs. {m.sales?.toLocaleString()}</b></div>
+                <div style={{ fontSize: 13, color: 'var(--ink-muted)', marginBottom: 4 }}>Sales: <b style={{ color: '#14b8a6' }}>Rs. {m.sales?.toLocaleString()}</b></div>
                 <div style={{ fontSize: 13, color: 'var(--ink-muted)', marginBottom: 4 }}>Purchases: <b style={{ color: '#f59e0b' }}>Rs. {m.purchases?.toLocaleString()}</b></div>
                 <div style={{ fontSize: 13, color: 'var(--ink-muted)' }}>Profit: <b style={{ color: m.sales > m.purchases ? '#10b981' : '#ef4444' }}>Rs. {(m.sales - m.purchases).toLocaleString()}</b></div>
               </div>
@@ -585,7 +585,7 @@ export default function Reports() {
           <div style={{ background: 'var(--panel)', borderRadius: 16, padding: 28, border: '1px solid var(--line)' }}>
             <h3 style={{ fontWeight: 700, marginBottom: 20 }}>Inventory Summary</h3>
             {[
-              ['Total Products', stats.total_products, '#3b82f6'],
+              ['Total Products', stats.total_products, '#14b8a6'],
               ['Low Stock Alerts', stats.low_stock_count, '#ef4444'],
               ['Total Customers', stats.total_customers, '#10b981'],
               ['Total Suppliers', stats.total_suppliers, '#8b5cf6'],

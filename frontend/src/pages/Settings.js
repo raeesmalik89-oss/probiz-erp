@@ -7,8 +7,8 @@ import API from '../api/client';
 const Section = ({ title, icon: Icon, children }) => (
   <div style={{ background: 'var(--panel)', borderRadius: 16, padding: 28, border: '1px solid var(--line)', marginBottom: 20 }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid var(--line-2)' }}>
-      <div style={{ width: 36, height: 36, background: '#dbeafe', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Icon size={18} color="#1e40af" />
+      <div style={{ width: 36, height: 36, background: '#ccfbf1', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Icon size={18} color="#0f766e" />
       </div>
       <h3 style={{ fontWeight: 700, fontSize: 16 }}>{title}</h3>
     </div>
@@ -184,7 +184,7 @@ export default function Settings() {
 
       {/* ── Subscription Management (superadmin only) ── */}
       {user?.role === 'superadmin' && (
-        <div style={{ background: 'linear-gradient(135deg,#0f172a,#1e3a5f)', borderRadius: 16, padding: 28, marginBottom: 20, border: '1px solid #1e40af' }}>
+        <div style={{ background: 'linear-gradient(135deg,#0f172a,#1e3a5f)', borderRadius: 16, padding: 28, marginBottom: 20, border: '1px solid #0f766e' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
             <Crown size={22} color="#fbbf24" />
             <h3 style={{ fontWeight: 800, fontSize: 17, color: '#fff', margin: 0 }}>Subscription Management</h3>
@@ -198,7 +198,7 @@ export default function Settings() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12, marginBottom: 24 }}>
               {[
                 { icon: <Crown size={16} />, label: 'Plan', value: subStatus.plan_name, color: '#fbbf24' },
-                { icon: <Calendar size={16} />, label: subStatus.plan === 'trial' ? 'Trial Ends' : 'Paid Until', value: subStatus.trial_end || subStatus.paid_until || 'N/A', color: '#60a5fa' },
+                { icon: <Calendar size={16} />, label: subStatus.plan === 'trial' ? 'Trial Ends' : 'Paid Until', value: subStatus.trial_end || subStatus.paid_until || 'N/A', color: '#2dd4bf' },
                 { icon: <Zap size={16} />, label: 'Days Left', value: subStatus.days_remaining, color: subStatus.days_remaining <= 3 ? '#ef4444' : '#34d399' },
                 { icon: <Users size={16} />, label: 'Max Users', value: subStatus.max_users, color: '#a78bfa' },
               ].map((item, i) => (
@@ -229,7 +229,7 @@ export default function Settings() {
                   {[1,2,3,6,12].map(m => <option key={m} value={m}>{m} month{m > 1 ? 's' : ''}{m === 12 ? ' (1 Year)' : ''}</option>)}
                 </select>
               </div>
-              <button onClick={handleActivatePlan} disabled={activating} style={{ width: '100%', padding: '11px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>
+              <button onClick={handleActivatePlan} disabled={activating} style={{ width: '100%', padding: '11px', background: 'linear-gradient(135deg,#0f766e,#14b8a6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>
                 {activating ? '⏳ Activating...' : '✅ Activate Plan'}
               </button>
             </div>
@@ -298,14 +298,14 @@ export default function Settings() {
                       <td style={{ padding: '10px 12px', color: 'var(--ink-faint)', whiteSpace: 'nowrap' }}>{req.created_at?.slice(0,10)}</td>
                       <td style={{ padding: '10px 12px' }}>
                         <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700,
-                          background: req.status === 'new' ? '#fef3c7' : req.status === 'activated' ? '#dcfce7' : req.status === 'contacted' ? '#dbeafe' : '#f1f5f9',
-                          color: req.status === 'new' ? '#d97706' : req.status === 'activated' ? '#16a34a' : req.status === 'contacted' ? '#1e40af' : '#64748b'
+                          background: req.status === 'new' ? '#fef3c7' : req.status === 'activated' ? '#dcfce7' : req.status === 'contacted' ? '#ccfbf1' : '#f1f5f9',
+                          color: req.status === 'new' ? '#d97706' : req.status === 'activated' ? '#16a34a' : req.status === 'contacted' ? '#0f766e' : '#64748b'
                         }}>{req.status}</span>
                       </td>
                       <td style={{ padding: '10px 12px' }}>
                         <div style={{ display: 'flex', gap: 6 }}>
                           {req.status === 'new' && (
-                            <button onClick={() => updateDemoStatus(req.id, 'contacted')} style={{ padding: '5px 10px', background: '#dbeafe', color: '#1e40af', border: 'none', borderRadius: 6, fontWeight: 600, fontSize: 12, cursor: 'pointer' }}>
+                            <button onClick={() => updateDemoStatus(req.id, 'contacted')} style={{ padding: '5px 10px', background: '#ccfbf1', color: '#0f766e', border: 'none', borderRadius: 6, fontWeight: 600, fontSize: 12, cursor: 'pointer' }}>
                               📞 Contacted
                             </button>
                           )}
@@ -345,7 +345,7 @@ export default function Settings() {
                 style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', borderRadius: 8, fontSize: 14, outline: 'none', fontFamily: 'Inter, sans-serif', boxSizing: 'border-box' }} />
             </div>
           ))}
-          <button onClick={handleChangePassword} disabled={pwLoading} style={{ padding: '11px 28px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: 'pointer', marginTop: 4 }}>
+          <button onClick={handleChangePassword} disabled={pwLoading} style={{ padding: '11px 28px', background: 'linear-gradient(135deg,#0f766e,#14b8a6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: 'pointer', marginTop: 4 }}>
             {pwLoading ? '⏳ Changing...' : '🔒 Change Password'}
           </button>
         </div>
@@ -405,7 +405,7 @@ export default function Settings() {
             <span style={{ fontSize: 15, color: 'var(--ink-2)' }}>{label}</span>
             <button onClick={() => setNotifications({ ...notifications, [key]: !notifications[key] })} style={{
               width: 48, height: 26, borderRadius: 13, border: 'none', cursor: 'pointer',
-              background: notifications[key] ? '#1e40af' : '#e2e8f0', position: 'relative', transition: 'background 0.2s',
+              background: notifications[key] ? '#0f766e' : '#e2e8f0', position: 'relative', transition: 'background 0.2s',
             }}>
               <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'var(--panel)', position: 'absolute', top: 3, left: notifications[key] ? 25 : 3, transition: 'left 0.2s', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }} />
             </button>
@@ -478,7 +478,7 @@ export default function Settings() {
       </Section>
 
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <button onClick={save} disabled={savingSettings} style={{ padding: '12px 32px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: 15, cursor: savingSettings ? 'not-allowed' : 'pointer', opacity: savingSettings ? 0.7 : 1 }}>{savingSettings ? 'Saving…' : 'Save All Settings'}</button>
+        <button onClick={save} disabled={savingSettings} style={{ padding: '12px 32px', background: 'linear-gradient(135deg,#0f766e,#14b8a6)', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: 15, cursor: savingSettings ? 'not-allowed' : 'pointer', opacity: savingSettings ? 0.7 : 1 }}>{savingSettings ? 'Saving…' : 'Save All Settings'}</button>
       </div>
     </div>
   );

@@ -223,7 +223,7 @@ export default function Attendance() {
                   const d = new Date(year, month, i + 1);
                   const isToday = d.toISOString().slice(0, 10) === todayStr;
                   return (
-                    <th key={i} className={`px-2 py-3 text-center font-semibold min-w-[36px] ${isToday ? 'bg-blue-50 text-blue-700' : 'text-gray-500 dark:text-slate-400'}`}>
+                    <th key={i} className={`px-2 py-3 text-center font-semibold min-w-[36px] ${isToday ? 'bg-teal-50 text-teal-700' : 'text-gray-500 dark:text-slate-400'}`}>
                       <div>{i + 1}</div>
                       <div className="font-normal text-[10px] text-gray-400 dark:text-slate-500">{d.toLocaleString('default', { weekday: 'short' })}</div>
                     </th>
@@ -242,7 +242,7 @@ export default function Attendance() {
                   <tr key={emp.id} className={`border-b border-gray-50 ${idx % 2 === 0 ? '' : 'bg-gray-50/50'}`}>
                     <td className="sticky left-0 bg-inherit px-4 py-2.5 font-medium text-gray-800 dark:text-slate-100 z-10">
                       <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-[10px] shrink-0">
+                        <div className="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold text-[10px] shrink-0">
                           {emp.name?.charAt(0)}
                         </div>
                         <span className="truncate max-w-[100px]">{emp.name}</span>
@@ -258,7 +258,7 @@ export default function Attendance() {
                       return (
                         <td
                           key={i}
-                          className={`px-1 py-2.5 text-center cursor-pointer transition-colors hover:bg-blue-50 ${isWeekend ? 'bg-gray-50/80' : ''}`}
+                          className={`px-1 py-2.5 text-center cursor-pointer transition-colors hover:bg-teal-50 ${isWeekend ? 'bg-gray-50/80' : ''}`}
                           onClick={() => setModal({ mode: 'edit', date, employee: emp, record: rec })}
                         >
                           {rec ? (
@@ -266,7 +266,7 @@ export default function Attendance() {
                               rec.status === 'present'  ? 'bg-emerald-100 text-emerald-700' :
                               rec.status === 'absent'   ? 'bg-red-100 text-red-600' :
                               rec.status === 'late'     ? 'bg-amber-100 text-amber-700' :
-                              rec.status === 'half_day' ? 'bg-blue-100 text-blue-700' :
+                              rec.status === 'half_day' ? 'bg-teal-100 text-teal-700' :
                               'bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-slate-400'
                             }`}>
                               {rec.status === 'present' ? 'P' : rec.status === 'absent' ? 'A' : rec.status === 'late' ? 'L' : rec.status === 'half_day' ? 'H' : 'Lv'}

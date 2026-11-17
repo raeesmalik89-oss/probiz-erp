@@ -69,7 +69,7 @@ export default function Suppliers() {
       {/* Summary cards */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: 'Total Suppliers', value: suppliers.length, icon: Building2, iconCls: 'text-blue-600', bgCls: 'bg-blue-50' },
+          { label: 'Total Suppliers', value: suppliers.length, icon: Building2, iconCls: 'text-teal-600', bgCls: 'bg-teal-50' },
           { label: 'Total Payable', value: `Rs. ${totalPayable.toLocaleString()}`, icon: DollarSign, iconCls: 'text-red-500', bgCls: 'bg-red-50' },
           { label: 'Active Suppliers', value: suppliers.length, icon: Truck, iconCls: 'text-emerald-600', bgCls: 'bg-emerald-50' },
         ].map(c => (
@@ -121,7 +121,7 @@ export default function Suppliers() {
                   </td>
                   <td className="table-cell">
                     <button onClick={() => openEdit(s)} className="p-1.5 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
-                      <Edit2 size={13} className="text-blue-500" />
+                      <Edit2 size={13} className="text-teal-500" />
                     </button>
                   </td>
                 </tr>

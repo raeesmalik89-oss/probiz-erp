@@ -16,11 +16,11 @@ const fmt = (n) =>
   : n >= 1000  ? `Rs. ${(n / 1000).toFixed(1)}K`
   : `Rs. ${n?.toFixed(0) || 0}`;
 
-const PIE_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'];
+const PIE_COLORS = ['#14b8a6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'];
 
 const STAT_CONFIG = (s) => [
   { icon: TrendingUp, label: "Today's Sales",  value: fmt(s?.today_sales),     sub: 'Completed transactions', iconCls: 'text-emerald-600', bgCls: 'bg-emerald-50', border: 'border-emerald-100' },
-  { icon: DollarSign, label: 'Month Revenue',  value: fmt(s?.month_sales),     sub: 'This month',             iconCls: 'text-blue-600',    bgCls: 'bg-blue-50',    border: 'border-blue-100' },
+  { icon: DollarSign, label: 'Month Revenue',  value: fmt(s?.month_sales),     sub: 'This month',             iconCls: 'text-teal-600',    bgCls: 'bg-teal-50',    border: 'border-teal-100' },
   { icon: Package,    label: 'Total Products', value: s?.total_products,       sub: `${s?.low_stock_count} low stock`, iconCls: 'text-amber-600', bgCls: 'bg-amber-50', border: 'border-amber-100' },
   { icon: Users,      label: 'Customers',      value: s?.total_customers,      sub: `Rs. ${((s?.total_receivables||0)/1000).toFixed(0)}K receivable`, iconCls: 'text-violet-600', bgCls: 'bg-violet-50', border: 'border-violet-100' },
   { icon: Truck,      label: 'Suppliers',      value: s?.total_suppliers,      sub: `Rs. ${((s?.total_payables||0)/1000).toFixed(0)}K payable`, iconCls: 'text-red-500', bgCls: 'bg-red-50', border: 'border-red-100' },
@@ -125,8 +125,8 @@ export default function Dashboard() {
               <AreaChart data={salesChart}>
                 <defs>
                   <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%"  stopColor="#3b82f6" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                    <stop offset="5%"  stopColor="#14b8a6" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#14b8a6" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
@@ -136,7 +136,7 @@ export default function Dashboard() {
                   contentStyle={{ borderRadius: 10, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', fontSize: 12 }}
                   formatter={(v) => [`Rs. ${v?.toLocaleString()}`, 'Sales']}
                 />
-                <Area type="monotone" dataKey="sales" stroke="#3b82f6" strokeWidth={2.5} fill="url(#salesGrad)" dot={false} activeDot={{ r: 4 }} />
+                <Area type="monotone" dataKey="sales" stroke="#14b8a6" strokeWidth={2.5} fill="url(#salesGrad)" dot={false} activeDot={{ r: 4 }} />
               </AreaChart>
             </ResponsiveContainer>
           </SectionCard>
@@ -180,7 +180,7 @@ export default function Dashboard() {
               <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
               <Tooltip contentStyle={{ borderRadius: 10, fontSize: 12 }} />
               <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
-              <Bar dataKey="sales"     fill="#3b82f6" radius={[4, 4, 0, 0]} name="Sales" />
+              <Bar dataKey="sales"     fill="#14b8a6" radius={[4, 4, 0, 0]} name="Sales" />
               <Bar dataKey="purchases" fill="#f59e0b" radius={[4, 4, 0, 0]} name="Purchases" />
             </BarChart>
           </ResponsiveContainer>
@@ -201,7 +201,7 @@ export default function Dashboard() {
                   <tr><td colSpan={4} className="text-center py-8 text-gray-400 dark:text-slate-500 text-sm">No recent sales</td></tr>
                 ) : recentSales.map(s => (
                   <tr key={s.id} className="table-row">
-                    <td className="table-cell pl-5 font-semibold text-blue-700">{s.invoice_no}</td>
+                    <td className="table-cell pl-5 font-semibold text-teal-700">{s.invoice_no}</td>
                     <td className="table-cell max-w-[120px] truncate">{s.customer}</td>
                     <td className="table-cell font-semibold">Rs. {s.total?.toLocaleString()}</td>
                     <td className="table-cell pr-5">
