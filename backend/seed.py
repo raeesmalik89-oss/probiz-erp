@@ -75,6 +75,29 @@ def _apply_env_passwords(db):
         print("Applied login password(s) from SEED_ADMIN_PASSWORD / SEED_DEMO_PASSWORD.")
 
 
+# Salt/generic names for the demo products, by SKU. Backfilled on boot so an
+# already-seeded database (created before the generic_name field existed) gets
+# them without a wipe — makes salt search and the interaction checker work.
+_DEMO_GENERICS = {
+    "MED001": "Paracetamol",
+    "MED002": "Amoxicillin + Clavulanic Acid",
+    "GEN001": "Chloroxylenol",
+}
+
+
+def backfill_generics(db):
+    """Fill generic_name on the demo products where it's still empty."""
+    changed = False
+    for sku, generic in _DEMO_GENERICS.items():
+        p = db.query(models.Product).filter(models.Product.sku == sku).first()
+        if p and not (p.generic_name or "").strip():
+            p.generic_name = generic
+            changed = True
+    if changed:
+        db.commit()
+        print("Backfilled salt/generic names for demo products.")
+
+
 def seed():
     models.Base.metadata.create_all(bind=engine)
     ensure_columns()
@@ -84,6 +107,7 @@ def seed():
     if db.query(models.User).count() > 0:
         print("Database already seeded.")
         _apply_env_passwords(db)
+        backfill_generics(db)
         db.close()
         return
 
@@ -121,9 +145,9 @@ def seed():
 
     # Products - just 3 demo products
     products = [
-        models.Product(name="Panadol 500mg", sku="MED001", category_id=categories[0].id, branch_id=branch.id, unit="strips", cost_price=80, sale_price=100, stock=50, min_stock=10),
-        models.Product(name="Augmentin 625mg", sku="MED002", category_id=categories[0].id, branch_id=branch.id, unit="strips", cost_price=450, sale_price=520, stock=20, min_stock=5),
-        models.Product(name="Dettol Antiseptic", sku="GEN001", category_id=categories[1].id, branch_id=branch.id, unit="pcs", cost_price=120, sale_price=150, stock=60, min_stock=10),
+        models.Product(name="Panadol 500mg", generic_name="Paracetamol", sku="MED001", category_id=categories[0].id, branch_id=branch.id, unit="strips", cost_price=80, sale_price=100, stock=50, min_stock=10),
+        models.Product(name="Augmentin 625mg", generic_name="Amoxicillin + Clavulanic Acid", sku="MED002", category_id=categories[0].id, branch_id=branch.id, unit="strips", cost_price=450, sale_price=520, stock=20, min_stock=5),
+        models.Product(name="Dettol Antiseptic", generic_name="Chloroxylenol", sku="GEN001", category_id=categories[1].id, branch_id=branch.id, unit="pcs", cost_price=120, sale_price=150, stock=60, min_stock=10),
     ]
     db.add_all(products)
     db.flush()
