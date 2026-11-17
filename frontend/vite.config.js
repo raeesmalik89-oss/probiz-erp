@@ -17,6 +17,16 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    rollupOptions: {
+      output: {
+        // Split heavy vendors into their own chunks so the main app bundle
+        // stays small and the charting lib is only fetched where needed.
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          charts: ['recharts'],
+        },
+      },
+    },
   },
   define: {
     'process.env.REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL || ''),
