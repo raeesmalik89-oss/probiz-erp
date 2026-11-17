@@ -274,6 +274,8 @@ class CompanySettings(Base):
     address = Column(Text, default="")
     phone = Column(String(50), default="")
     email = Column(String(120), default="")
+    ntn = Column(String(50), default="")   # FBR National Tax Number
+    strn = Column(String(50), default="")  # FBR Sales Tax Registration Number
     currency = Column(String(30), default="PKR (Rs.)")
     tax_rate = Column(Float, default=0.0)
     invoice_prefix = Column(String(20), default="INV-")

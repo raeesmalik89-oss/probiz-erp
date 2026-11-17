@@ -30,6 +30,8 @@ export default function Settings() {
   const [companyAddress, setCompanyAddress] = useState('House 124, Street 39, I-14/3, Islamabad');
   const [companyPhone, setCompanyPhone] = useState('0316-8818693');
   const [companyEmail, setCompanyEmail] = useState('raees.malik89@gmail.com');
+  const [ntn, setNtn] = useState('');
+  const [strn, setStrn] = useState('');
   const [currency, setCurrency] = useState('PKR (Rs.)');
   const [taxRate, setTaxRate] = useState('0');
   const [invoicePrefix, setInvoicePrefix] = useState('INV-');
@@ -48,6 +50,8 @@ export default function Settings() {
       if (data.address) setCompanyAddress(data.address);
       if (data.phone) setCompanyPhone(data.phone);
       if (data.email) setCompanyEmail(data.email);
+      if (data.ntn != null) setNtn(data.ntn);
+      if (data.strn != null) setStrn(data.strn);
       if (data.currency) setCurrency(data.currency);
       if (data.tax_rate != null) setTaxRate(String(data.tax_rate));
       if (data.invoice_prefix) setInvoicePrefix(data.invoice_prefix);
@@ -140,6 +144,8 @@ export default function Settings() {
         address: companyAddress,
         phone: companyPhone,
         email: companyEmail,
+        ntn,
+        strn,
         currency,
         tax_rate: parseFloat(taxRate) || 0,
         invoice_prefix: invoicePrefix,
@@ -351,6 +357,8 @@ export default function Settings() {
           <Field label="Phone Number" value={companyPhone} onChange={e => setCompanyPhone(e.target.value)} />
           <div style={{ gridColumn: '1/-1' }}><Field label="Address" value={companyAddress} onChange={e => setCompanyAddress(e.target.value)} /></div>
           <Field label="Email" type="email" value={companyEmail} onChange={e => setCompanyEmail(e.target.value)} />
+          <Field label="NTN (National Tax No.)" value={ntn} onChange={e => setNtn(e.target.value)} />
+          <Field label="STRN (Sales Tax Reg. No.)" value={strn} onChange={e => setStrn(e.target.value)} />
           <Field label="Currency" value={currency} onChange={e => setCurrency(e.target.value)} />
         </div>
       </Section>
