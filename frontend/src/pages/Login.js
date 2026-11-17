@@ -41,8 +41,8 @@ export default function Login() {
   return (
     <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950">
       {/* Left brand panel */}
-      <div className="hidden lg:flex lg:flex-1 flex-col justify-center px-[6%] py-16 bg-gradient-to-br from-slate-900 via-blue-900 to-blue-700 relative overflow-hidden">
-        <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-blue-500/10 pointer-events-none" />
+      <div className="hidden lg:flex lg:flex-1 flex-col justify-center px-[6%] py-16 bg-gradient-to-br from-slate-900 via-teal-900 to-teal-700 relative overflow-hidden">
+        <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-teal-500/10 pointer-events-none" />
         <div className="absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-violet-500/10 pointer-events-none" />
 
         <div className="relative">
@@ -77,7 +77,7 @@ export default function Login() {
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="flex lg:hidden items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-700 to-teal-500 flex items-center justify-center">
               <TrendingUp size={20} className="text-white" />
             </div>
             <span className="font-extrabold text-xl text-slate-900 dark:text-white">MediCloud</span>
@@ -97,7 +97,7 @@ export default function Login() {
                   key={acc.label}
                   type="button"
                   onClick={() => { setEmail(acc.email); setPassword(''); }}
-                  className="flex-1 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-[13px] font-semibold text-blue-700 dark:text-blue-300 hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
+                  className="flex-1 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-[13px] font-semibold text-teal-700 dark:text-teal-300 hover:border-teal-400 dark:hover:border-teal-500 transition-colors"
                 >
                   {acc.label}
                 </button>
@@ -135,13 +135,13 @@ export default function Login() {
               </div>
             </div>
             <button type="submit" disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-blue-700 to-blue-500 hover:from-blue-800 hover:to-blue-600 text-white font-bold text-base rounded-xl shadow-lg shadow-blue-600/20 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+              className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-teal-700 to-teal-500 hover:from-teal-800 hover:to-teal-600 text-white font-bold text-base rounded-xl shadow-lg shadow-teal-600/20 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
               {loading ? 'Signing in…' : <>Sign In to Dashboard <ArrowRight size={18} /></>}
             </button>
           </form>
 
           <p className="text-center mt-6 text-sm text-slate-500 dark:text-slate-400">
-            <a href="/" className="text-blue-700 dark:text-blue-400 font-semibold hover:underline">← Back to website</a>
+            <a href="/" className="text-teal-700 dark:text-teal-400 font-semibold hover:underline">← Back to website</a>
           </p>
         </div>
       </div>

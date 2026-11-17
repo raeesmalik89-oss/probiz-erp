@@ -77,20 +77,20 @@ export default function Purchases() {
     w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"/><title>PO ${po.po_number}</title>
     <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;color:#1e293b}
     .page{width:210mm;min-height:297mm;margin:0 auto;padding:20mm}
-    .header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #1e40af;padding-bottom:16px;margin-bottom:24px}
-    .brand{font-size:26px;font-weight:900;color:#1e40af}.sub{font-size:11px;color:#64748b;margin-top:3px}
-    .po-title{text-align:right}.po-title h2{font-size:28px;font-weight:900;color:#1e40af;letter-spacing:2px}
-    .info{display:flex;gap:20px;margin-bottom:24px}.info-box{flex:1;background:#f8fafc;border-radius:8px;padding:14px;border-left:4px solid #1e40af}
+    .header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #0f766e;padding-bottom:16px;margin-bottom:24px}
+    .brand{font-size:26px;font-weight:900;color:#0f766e}.sub{font-size:11px;color:#64748b;margin-top:3px}
+    .po-title{text-align:right}.po-title h2{font-size:28px;font-weight:900;color:#0f766e;letter-spacing:2px}
+    .info{display:flex;gap:20px;margin-bottom:24px}.info-box{flex:1;background:#f8fafc;border-radius:8px;padding:14px;border-left:4px solid #0f766e}
     .info-box h4{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;margin-bottom:6px}
     .info-box p{font-size:14px;font-weight:600}.info-box span{font-size:12px;color:#64748b}
     table{width:100%;border-collapse:collapse;margin-bottom:24px}
-    thead tr{background:#1e40af;color:#fff}thead th{padding:10px 14px;text-align:left;font-size:12px;font-weight:700}
+    thead tr{background:#0f766e;color:#fff}thead th{padding:10px 14px;text-align:left;font-size:12px;font-weight:700}
     thead th:last-child{text-align:right}
     tbody tr:nth-child(even){background:#f8fafc}tbody td{padding:10px 14px;font-size:13px}tbody td:last-child{text-align:right;font-weight:700}
     .total-box{display:flex;justify-content:flex-end}.totals{width:260px}
     .t-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid #f1f5f9}
     .t-row span:first-child{color:#64748b}
-    .t-final{display:flex;justify-content:space-between;padding:12px 14px;background:#1e40af;color:#fff;border-radius:8px;font-size:18px;font-weight:900;margin-top:6px}
+    .t-final{display:flex;justify-content:space-between;padding:12px 14px;background:#0f766e;color:#fff;border-radius:8px;font-size:18px;font-weight:900;margin-top:6px}
     .t-paid{display:flex;justify-content:space-between;padding:8px 14px;background:#d1fae5;border-radius:8px;font-size:14px;font-weight:700;color:#065f46;margin-top:6px}
     .t-bal{display:flex;justify-content:space-between;padding:8px 14px;background:#fee2e2;border-radius:8px;font-size:14px;font-weight:700;color:#991b1b;margin-top:4px}
     .footer{text-align:center;border-top:2px solid #e2e8f0;padding-top:16px;font-size:12px;color:#94a3b8;margin-top:24px}
@@ -146,7 +146,7 @@ export default function Purchases() {
       {/* Summary */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "Today's Orders", value: todayPO.length, icon: PackageSearch, iconCls: 'text-blue-600', bgCls: 'bg-blue-50' },
+          { label: "Today's Orders", value: todayPO.length, icon: PackageSearch, iconCls: 'text-teal-600', bgCls: 'bg-teal-50' },
           { label: "Today's Spend", value: `Rs. ${todayTotal.toLocaleString()}`, icon: DollarSign, iconCls: 'text-red-500', bgCls: 'bg-red-50' },
           { label: 'Total POs', value: purchases.length, icon: Truck, iconCls: 'text-violet-600', bgCls: 'bg-violet-50' },
         ].map(c => (
@@ -175,7 +175,7 @@ export default function Purchases() {
                 <tr><td colSpan={9} className="text-center py-12 text-gray-400 dark:text-slate-500"><Truck size={36} className="mx-auto mb-2 opacity-30" />No purchases yet</td></tr>
               ) : paginated.map(p => (
                 <tr key={p.id} className="table-row">
-                  <td className="table-cell font-bold text-blue-700">{p.po_number}</td>
+                  <td className="table-cell font-bold text-teal-700">{p.po_number}</td>
                   <td className="table-cell">{p.supplier}</td>
                   <td className="table-cell font-bold">Rs. {p.total?.toLocaleString()}</td>
                   <td className="table-cell font-semibold text-emerald-600">Rs. {p.paid?.toLocaleString()}</td>
@@ -184,7 +184,7 @@ export default function Purchases() {
                   <td className="table-cell"><span className={p.status === 'completed' ? 'badge-green' : 'badge-yellow'}>{p.status}</span></td>
                   <td className="table-cell text-xs text-gray-500 dark:text-slate-400">{p.created_at ? formatDate(p.created_at) : '—'}</td>
                   <td className="table-cell">
-                    <button onClick={async () => { const r = await API.get(`/api/purchases/${p.id}`); setViewPO(r.data); }} className="flex items-center gap-1 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800/50 text-xs text-blue-600 font-medium transition-colors">
+                    <button onClick={async () => { const r = await API.get(`/api/purchases/${p.id}`); setViewPO(r.data); }} className="flex items-center gap-1 px-2 py-1 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800/50 text-xs text-teal-600 font-medium transition-colors">
                       <Eye size={12} /> View
                     </button>
                   </td>
@@ -256,9 +256,9 @@ export default function Purchases() {
                 </select>
               </div>
               <div className="flex justify-between py-3 border-t border-gray-200 dark:border-slate-700 text-lg font-extrabold">
-                <span>TOTAL</span><span className="text-blue-700">Rs. {totalAmt.toLocaleString()}</span>
+                <span>TOTAL</span><span className="text-teal-700">Rs. {totalAmt.toLocaleString()}</span>
               </div>
-              <button onClick={handleSave} className="w-full py-3 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl text-base transition-colors">
+              <button onClick={handleSave} className="w-full py-3 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-xl text-base transition-colors">
                 Create Purchase Order
               </button>
             </div>
@@ -269,7 +269,7 @@ export default function Purchases() {
       {/* View PO Modal */}
       {viewPO && (
         <Modal title={`PO: ${viewPO.po_number}`} onClose={() => setViewPO(null)} size="md">
-          <div className="bg-gradient-to-r from-blue-800 to-blue-600 rounded-xl p-4 mb-4 text-white">
+          <div className="bg-gradient-to-r from-teal-800 to-teal-600 rounded-xl p-4 mb-4 text-white">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-xl font-extrabold">MediCloud</p>
@@ -284,7 +284,7 @@ export default function Purchases() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg p-3 border-l-4 border-blue-600">
+            <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg p-3 border-l-4 border-teal-600">
               <p className="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider mb-1">Supplier</p>
               <p className="font-bold text-sm">{viewPO.supplier?.name}</p>
               {viewPO.supplier?.phone && <p className="text-xs text-gray-500 dark:text-slate-400">{viewPO.supplier.phone}</p>}
@@ -298,7 +298,7 @@ export default function Purchases() {
           </div>
           <div className="overflow-x-auto rounded-xl border border-gray-100 dark:border-slate-800 mb-4">
             <table className="w-full text-sm">
-              <thead><tr className="bg-blue-800 text-white">{['Product', 'Qty', 'Unit Cost', 'Total'].map(h => <th key={h} className={`px-3 py-2 text-xs font-semibold ${h === 'Total' ? 'text-right' : 'text-left'}`}>{h}</th>)}</tr></thead>
+              <thead><tr className="bg-teal-800 text-white">{['Product', 'Qty', 'Unit Cost', 'Total'].map(h => <th key={h} className={`px-3 py-2 text-xs font-semibold ${h === 'Total' ? 'text-right' : 'text-left'}`}>{h}</th>)}</tr></thead>
               <tbody>
                 {viewPO.items?.map((item, i) => (
                   <tr key={i} className={i % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-gray-50 dark:bg-slate-800/50'}>
@@ -314,7 +314,7 @@ export default function Purchases() {
           <div className="bg-gray-50 dark:bg-slate-800/50 rounded-xl p-4 space-y-2">
             {viewPO.discount > 0 && <div className="flex justify-between text-sm"><span className="text-gray-500 dark:text-slate-400">Discount</span><span className="text-red-500 font-semibold">- Rs. {viewPO.discount?.toLocaleString()}</span></div>}
             {viewPO.tax > 0 && <div className="flex justify-between text-sm"><span className="text-gray-500 dark:text-slate-400">Tax</span><span>Rs. {viewPO.tax?.toLocaleString()}</span></div>}
-            <div className="flex justify-between items-center bg-blue-800 text-white rounded-xl px-4 py-3 text-lg font-extrabold">
+            <div className="flex justify-between items-center bg-teal-800 text-white rounded-xl px-4 py-3 text-lg font-extrabold">
               <span>TOTAL</span><span>Rs. {viewPO.total?.toLocaleString()}</span>
             </div>
             <div className="flex justify-between bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-2.5 text-sm font-bold text-emerald-700">

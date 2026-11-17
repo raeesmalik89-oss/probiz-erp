@@ -9,7 +9,7 @@ import { Plus, BookOpen, DollarSign, TrendingUp, TrendingDown, Download, BarChar
 
 const ACCOUNT_TYPES = ['asset', 'liability', 'equity', 'income', 'expense'];
 const TYPE_COLORS = {
-  asset:     { text: 'text-blue-600',   bg: 'bg-blue-50',   border: 'border-blue-100',   badge: 'badge-blue' },
+  asset:     { text: 'text-teal-600',   bg: 'bg-teal-50',   border: 'border-teal-100',   badge: 'badge-blue' },
   liability: { text: 'text-red-500',    bg: 'bg-red-50',    border: 'border-red-100',    badge: 'badge-red' },
   equity:    { text: 'text-violet-600', bg: 'bg-violet-50', border: 'border-violet-100', badge: 'badge-blue' },
   income:    { text: 'text-emerald-600',bg: 'bg-emerald-50',border: 'border-emerald-100',badge: 'badge-green' },
@@ -21,7 +21,7 @@ function TabBar({ tabs, active, onChange }) {
     <div className="flex gap-1 bg-gray-100 dark:bg-slate-800 p-1 rounded-xl w-fit">
       {tabs.map(t => (
         <button key={t} onClick={() => onChange(t)}
-          className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all capitalize ${active === t ? 'bg-white dark:bg-slate-900 text-blue-700 shadow-sm' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700'}`}>
+          className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all capitalize ${active === t ? 'bg-white dark:bg-slate-900 text-teal-700 shadow-sm' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700'}`}>
           {t}
         </button>
       ))}

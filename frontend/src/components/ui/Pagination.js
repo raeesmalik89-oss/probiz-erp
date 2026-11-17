@@ -28,7 +28,7 @@ export default function Pagination({ page, total, pageSize = 20, onChange }) {
           <button
             key={p}
             onClick={() => onChange(p)}
-            className={`px-3 py-1 text-xs rounded-lg transition-colors ${p === page ? 'bg-blue-600 text-white font-medium' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+            className={`px-3 py-1 text-xs rounded-lg transition-colors ${p === page ? 'bg-teal-600 text-white font-medium' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
           >
             {p}
           </button>

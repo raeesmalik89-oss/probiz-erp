@@ -88,7 +88,7 @@ export default function Inventory() {
           <button onClick={() => exportCSV(products.map(p => ({ Name: p.name, 'Generic/Salt': p.generic_name, SKU: p.sku, Category: p.category, 'Cost Price': p.cost_price, 'Sale Price': p.sale_price, Stock: p.stock, Unit: p.unit, Status: p.low_stock ? 'Low Stock' : 'In Stock' })), 'inventory.csv')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 16px', background: 'var(--panel-3)', color: 'var(--ink-label)', border: '1px solid var(--line)', borderRadius: 10, fontWeight: 600, fontSize: 14, cursor: 'pointer' }}>
             <Download size={16} /> Export CSV
           </button>
-          <button onClick={openAdd} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 600, fontSize: 14, cursor: 'pointer' }}>
+          <button onClick={openAdd} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px', background: 'linear-gradient(135deg,#0f766e,#14b8a6)', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 600, fontSize: 14, cursor: 'pointer' }}>
             <Plus size={18} /> Add Product
           </button>
         </div>
@@ -97,7 +97,7 @@ export default function Inventory() {
       {/* Tabs */}
       <div style={{ display: 'flex', gap: 4, background: 'var(--panel-3)', padding: 4, borderRadius: 10, marginBottom: 24, width: 'fit-content' }}>
         {['products', 'categories'].map(tab => (
-          <button key={tab} onClick={() => setActiveTab(tab)} style={{ padding: '8px 20px', borderRadius: 8, border: 'none', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: activeTab === tab ? 'var(--panel)' : 'transparent', color: activeTab === tab ? '#1e40af' : '#64748b', boxShadow: activeTab === tab ? '0 1px 4px rgba(0,0,0,0.1)' : 'none', textTransform: 'capitalize' }}>{tab}</button>
+          <button key={tab} onClick={() => setActiveTab(tab)} style={{ padding: '8px 20px', borderRadius: 8, border: 'none', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: activeTab === tab ? 'var(--panel)' : 'transparent', color: activeTab === tab ? '#0f766e' : '#64748b', boxShadow: activeTab === tab ? '0 1px 4px rgba(0,0,0,0.1)' : 'none', textTransform: 'capitalize' }}>{tab}</button>
         ))}
       </div>
 
@@ -140,7 +140,7 @@ export default function Inventory() {
                       {p.generic_name && <div style={{ fontWeight: 400, fontSize: 12, color: 'var(--ink-faint)', marginTop: 2 }}>{p.generic_name}</div>}
                     </td>
                     <td style={{ padding: '12px 16px', color: 'var(--ink-muted)', fontFamily: 'monospace', fontSize: 12 }}>{p.sku || '-'}</td>
-                    <td style={{ padding: '12px 16px' }}>{p.category ? <span style={{ background: '#dbeafe', color: '#1e40af', padding: '3px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>{p.category}</span> : '-'}</td>
+                    <td style={{ padding: '12px 16px' }}>{p.category ? <span style={{ background: '#ccfbf1', color: '#0f766e', padding: '3px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>{p.category}</span> : '-'}</td>
                     <td style={{ padding: '12px 16px', color: 'var(--ink-muted)' }}>Rs. {p.cost_price?.toLocaleString()}</td>
                     <td style={{ padding: '12px 16px', fontWeight: 600, color: '#10b981' }}>Rs. {p.sale_price?.toLocaleString()}</td>
                     <td style={{ padding: '12px 16px', fontWeight: 700, color: p.low_stock ? '#ef4444' : '#1e293b' }}>{p.stock} {p.unit}</td>
@@ -150,7 +150,7 @@ export default function Inventory() {
                     </td>
                     <td style={{ padding: '12px 16px' }}>
                       <div style={{ display: 'flex', gap: 8 }}>
-                        <button onClick={() => openEdit(p)} style={{ padding: '6px', border: '1px solid var(--line)', borderRadius: 6, background: 'var(--panel)', cursor: 'pointer' }}><Edit2 size={14} color="#3b82f6" /></button>
+                        <button onClick={() => openEdit(p)} style={{ padding: '6px', border: '1px solid var(--line)', borderRadius: 6, background: 'var(--panel)', cursor: 'pointer' }}><Edit2 size={14} color="#14b8a6" /></button>
                         <button onClick={() => handleDelete(p.id, p.name)} style={{ padding: '6px', border: '1px solid #fee2e2', borderRadius: 6, background: 'var(--panel)', cursor: 'pointer' }}><Trash2 size={14} color="#ef4444" /></button>
                       </div>
                     </td>
@@ -193,7 +193,7 @@ export default function Inventory() {
           </div>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end', marginTop: 8 }}>
             <button onClick={() => setShowModal(false)} style={{ padding: '10px 20px', border: '1px solid var(--line)', borderRadius: 8, background: 'var(--panel)', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
-            <button onClick={handleSave} style={{ padding: '10px 24px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>Save Product</button>
+            <button onClick={handleSave} style={{ padding: '10px 24px', background: 'linear-gradient(135deg,#0f766e,#14b8a6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>Save Product</button>
           </div>
         </Modal>
       )}
@@ -223,7 +223,7 @@ function CategoriesPanel({ categories, onRefresh }) {
         <h3 style={{ fontWeight: 700, marginBottom: 16 }}>Add Category</h3>
         <Input label="Category Name" value={name} onChange={e => setName(e.target.value)} />
         <Input label="Description" value={desc} onChange={e => setDesc(e.target.value)} />
-        <button onClick={add} style={{ width: '100%', padding: '10px', background: 'linear-gradient(135deg,#1e40af,#3b82f6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>Add Category</button>
+        <button onClick={add} style={{ width: '100%', padding: '10px', background: 'linear-gradient(135deg,#0f766e,#14b8a6)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>Add Category</button>
       </div>
       <div style={{ background: 'var(--panel)', borderRadius: 16, border: '1px solid var(--line)', overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
@@ -235,7 +235,7 @@ function CategoriesPanel({ categories, onRefresh }) {
               <tr key={c.id} style={{ borderBottom: '1px solid var(--line-2)' }}>
                 <td style={{ padding: '12px 16px', fontWeight: 600 }}>{c.name}</td>
                 <td style={{ padding: '12px 16px', color: 'var(--ink-muted)' }}>{c.description || '-'}</td>
-                <td style={{ padding: '12px 16px' }}><span style={{ background: '#dbeafe', color: '#1e40af', padding: '3px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>{c.product_count}</span></td>
+                <td style={{ padding: '12px 16px' }}><span style={{ background: '#ccfbf1', color: '#0f766e', padding: '3px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>{c.product_count}</span></td>
                 <td style={{ padding: '12px 16px' }}><button onClick={() => del(c.id, c.name)} style={{ padding: '5px', border: '1px solid #fee2e2', borderRadius: 6, background: 'var(--panel)', cursor: 'pointer' }}><Trash2 size={13} color="#ef4444" /></button></td>
               </tr>
             ))}

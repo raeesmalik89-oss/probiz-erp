@@ -11,7 +11,7 @@ import {
 const API_BASE = process.env.REACT_APP_API_URL || 'https://raees1989.pythonanywhere.com';
 
 const features = [
-  { icon: Package, title: 'Inventory Management', desc: 'Real-time stock tracking, low-stock alerts, product categories and multi-branch inventory control.', color: 'text-blue-600 bg-blue-50' },
+  { icon: Package, title: 'Inventory Management', desc: 'Real-time stock tracking, low-stock alerts, product categories and multi-branch inventory control.', color: 'text-teal-600 bg-teal-50' },
   { icon: ShoppingCart, title: 'POS & Sales', desc: 'Fast point-of-sale system with invoice generation, customer accounts and payment tracking.', color: 'text-emerald-600 bg-emerald-50' },
   { icon: BookOpen, title: 'Accounting', desc: 'Complete chart of accounts, double-entry bookkeeping, P&L statements and balance sheet reports.', color: 'text-amber-600 bg-amber-50' },
   { icon: UserCheck, title: 'HR & Payroll', desc: 'Employee management, attendance tracking, automated salary calculation and payslip generation.', color: 'text-violet-600 bg-violet-50' },
@@ -57,7 +57,7 @@ export default function Landing() {
     setFormSent(true);
   };
 
-  const inputCls = 'w-full px-3.5 py-3 border border-slate-200 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition';
+  const inputCls = 'w-full px-3.5 py-3 border border-slate-200 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition';
 
   return (
     <div className="font-sans text-slate-800 overflow-x-hidden bg-white">
@@ -65,17 +65,17 @@ export default function Landing() {
       <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div className="max-w-6xl mx-auto px-5 h-[68px] flex items-center">
           <div className="flex items-center gap-2.5 flex-1">
-            <div className="w-9 h-9 rounded-[10px] bg-gradient-to-br from-blue-700 to-blue-500 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-[10px] bg-gradient-to-br from-teal-700 to-teal-500 flex items-center justify-center">
               <TrendingUp size={20} className="text-white" />
             </div>
-            <span className="font-extrabold text-[22px] text-blue-800">MediCloud</span>
-            <span className="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-widest">ERP</span>
+            <span className="font-extrabold text-[22px] text-teal-800">MediCloud</span>
+            <span className="bg-teal-100 text-teal-800 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-widest">ERP</span>
           </div>
           <div className="hidden md:flex gap-8 items-center">
             {navLinks.map(item => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="text-slate-600 font-medium text-[15px] hover:text-blue-700 transition-colors">{item}</a>
+              <a key={item} href={`#${item.toLowerCase()}`} className="text-slate-600 font-medium text-[15px] hover:text-teal-700 transition-colors">{item}</a>
             ))}
-            <button onClick={() => navigate('/login')} className="px-5 py-2.5 bg-gradient-to-br from-blue-700 to-blue-500 text-white rounded-lg font-semibold text-sm hover:shadow-lg hover:shadow-blue-600/25 transition-all">
+            <button onClick={() => navigate('/login')} className="px-5 py-2.5 bg-gradient-to-br from-teal-700 to-teal-500 text-white rounded-lg font-semibold text-sm hover:shadow-lg hover:shadow-teal-600/25 transition-all">
               Login to ERP
             </button>
           </div>
@@ -87,9 +87,9 @@ export default function Landing() {
         {menuOpen && (
           <div className="md:hidden border-t border-slate-100 bg-white px-5 py-4 flex flex-col gap-1">
             {navLinks.map(item => (
-              <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setMenuOpen(false)} className="py-2.5 text-slate-700 font-medium hover:text-blue-700">{item}</a>
+              <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setMenuOpen(false)} className="py-2.5 text-slate-700 font-medium hover:text-teal-700">{item}</a>
             ))}
-            <button onClick={() => navigate('/login')} className="mt-2 px-5 py-2.5 bg-gradient-to-br from-blue-700 to-blue-500 text-white rounded-lg font-semibold text-sm">
+            <button onClick={() => navigate('/login')} className="mt-2 px-5 py-2.5 bg-gradient-to-br from-teal-700 to-teal-500 text-white rounded-lg font-semibold text-sm">
               Login to ERP
             </button>
           </div>
@@ -97,8 +97,8 @@ export default function Landing() {
       </nav>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-blue-800 px-5 py-20 md:py-28">
-        <div className="absolute -top-48 -left-48 w-[600px] h-[600px] rounded-full bg-blue-500/10 pointer-events-none" />
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-teal-900 to-teal-800 px-5 py-20 md:py-28">
+        <div className="absolute -top-48 -left-48 w-[600px] h-[600px] rounded-full bg-teal-500/10 pointer-events-none" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-violet-500/10 pointer-events-none" />
         <div className="relative max-w-6xl mx-auto flex items-center gap-14 flex-wrap">
           <div className="flex-1 min-w-[320px]">
@@ -108,14 +108,14 @@ export default function Landing() {
             </div>
             <h1 className="text-[clamp(34px,5vw,58px)] font-black text-white leading-[1.12] mb-6">
               Run Your Business<br />
-              <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">Smarter &amp; Faster</span>
+              <span className="bg-gradient-to-r from-teal-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">Smarter &amp; Faster</span>
             </h1>
             <p className="text-[17px] text-white/70 leading-relaxed mb-10 max-w-lg">
               MediCloud is a complete business management platform built for Pakistani businesses.
               Manage inventory, sales, accounting, payroll and analytics — all in one place.
             </p>
             <div className="flex gap-4 flex-wrap">
-              <button onClick={() => navigate('/login')} className="flex items-center gap-2 px-7 py-3.5 bg-white text-blue-800 rounded-xl font-bold text-[15px] shadow-xl shadow-black/20 hover:-translate-y-0.5 transition-transform">
+              <button onClick={() => navigate('/login')} className="flex items-center gap-2 px-7 py-3.5 bg-white text-teal-800 rounded-xl font-bold text-[15px] shadow-xl shadow-black/20 hover:-translate-y-0.5 transition-transform">
                 Try Free Demo <ArrowRight size={17} />
               </button>
               <a href="#contact" className="flex items-center gap-2 px-6 py-3.5 bg-white/10 text-white border border-white/25 rounded-xl font-semibold text-[15px] hover:bg-white/20 transition-colors">
@@ -128,7 +128,7 @@ export default function Landing() {
             <div className="bg-white/[0.06] border border-white/15 rounded-3xl p-7 w-full max-w-sm backdrop-blur-md">
               <div className="text-slate-400 text-xs font-semibold tracking-widest mb-5">WHAT'S INCLUDED</div>
               {[
-                ['Inventory & Stock Control', 'bg-blue-500'],
+                ['Inventory & Stock Control', 'bg-teal-500'],
                 ['POS & Sales Management', 'bg-emerald-500'],
                 ['Double-Entry Accounting', 'bg-amber-500'],
                 ['HR & Payroll Module', 'bg-violet-500'],
@@ -154,8 +154,8 @@ export default function Landing() {
           <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
             {whyUs.map(({ icon: Icon, title, desc }) => (
               <div key={title} className="bg-slate-50 rounded-2xl p-7 border border-slate-200">
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-                  <Icon size={24} className="text-blue-700" />
+                <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center mb-4">
+                  <Icon size={24} className="text-teal-700" />
                 </div>
                 <h3 className="text-[17px] font-bold mb-2.5">{title}</h3>
                 <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
@@ -184,7 +184,7 @@ export default function Landing() {
       </section>
 
       {/* Industries */}
-      <section id="industries" className="py-20 px-5 bg-gradient-to-br from-blue-900 to-blue-700">
+      <section id="industries" className="py-20 px-5 bg-gradient-to-br from-teal-900 to-teal-700">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-3.5">Suitable for Your Industry</h2>
           <p className="text-white/65 text-base mb-12">MediCloud adapts to the workflow of different business types</p>
@@ -204,17 +204,17 @@ export default function Landing() {
           <SectionHeading tag="PRICING" title="Simple, Transparent Pricing" subtitle="No hidden charges. No setup fees. Cancel anytime." />
           <div className="grid gap-7 md:grid-cols-3 items-center">
             {plans.map(({ name, price, period, features: planFeatures, popular }) => (
-              <div key={name} className={`rounded-3xl p-9 relative ${popular ? 'bg-gradient-to-br from-blue-900 to-blue-600 shadow-2xl shadow-blue-600/25 md:scale-105' : 'bg-white border border-slate-200'}`}>
+              <div key={name} className={`rounded-3xl p-9 relative ${popular ? 'bg-gradient-to-br from-teal-900 to-teal-600 shadow-2xl shadow-teal-600/25 md:scale-105' : 'bg-white border border-slate-200'}`}>
                 {popular && <div className="absolute top-4 right-4 bg-amber-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full">POPULAR</div>}
                 <div className={`text-xl font-bold mb-2 ${popular ? 'text-white' : 'text-slate-800'}`}>{name}</div>
                 <div className="mb-7">
                   {price !== 'Custom' ? (
                     <>
-                      <span className={`text-4xl font-black ${popular ? 'text-white' : 'text-blue-800'}`}>Rs. {price}</span>
+                      <span className={`text-4xl font-black ${popular ? 'text-white' : 'text-teal-800'}`}>Rs. {price}</span>
                       <span className={popular ? 'text-white/65 text-sm' : 'text-slate-500 text-sm'}>/{period}</span>
                     </>
                   ) : (
-                    <span className={`text-4xl font-black ${popular ? 'text-white' : 'text-blue-800'}`}>Custom</span>
+                    <span className={`text-4xl font-black ${popular ? 'text-white' : 'text-teal-800'}`}>Custom</span>
                   )}
                 </div>
                 <ul className="space-y-2.5 mb-8">
@@ -225,7 +225,7 @@ export default function Landing() {
                     </li>
                   ))}
                 </ul>
-                <button onClick={() => navigate('/login')} className={`w-full py-3 rounded-xl font-bold text-[15px] transition-all ${popular ? 'bg-white text-blue-800 hover:bg-slate-100' : 'bg-gradient-to-br from-blue-700 to-blue-500 text-white hover:shadow-lg hover:shadow-blue-600/25'}`}>
+                <button onClick={() => navigate('/login')} className={`w-full py-3 rounded-xl font-bold text-[15px] transition-all ${popular ? 'bg-white text-teal-800 hover:bg-slate-100' : 'bg-gradient-to-br from-teal-700 to-teal-500 text-white hover:shadow-lg hover:shadow-teal-600/25'}`}>
                   {name === 'Enterprise' ? 'Contact Sales' : 'Get Started'}
                 </button>
               </div>
@@ -253,8 +253,8 @@ export default function Landing() {
               [MapPin, 'House 124, Street 39, I-14/3, Islamabad', 'Head Office'],
             ].map(([Icon, value, label]) => (
               <div key={label} className="flex gap-4 mb-5">
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
-                  <Icon size={20} className="text-blue-700" />
+                <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center shrink-0">
+                  <Icon size={20} className="text-teal-700" />
                 </div>
                 <div>
                   <div className="font-semibold text-[15px] text-slate-800">{value}</div>
@@ -293,7 +293,7 @@ export default function Landing() {
                     {industries.map(i => <option key={i} className="text-slate-800">{i}</option>)}
                   </select>
                   <button type="submit" disabled={formLoading}
-                    className="w-full py-3.5 bg-gradient-to-br from-blue-700 to-blue-500 text-white rounded-xl font-bold text-[15px] hover:shadow-lg hover:shadow-blue-600/25 transition-all disabled:opacity-70">
+                    className="w-full py-3.5 bg-gradient-to-br from-teal-700 to-teal-500 text-white rounded-xl font-bold text-[15px] hover:shadow-lg hover:shadow-teal-600/25 transition-all disabled:opacity-70">
                     {formLoading ? 'Sending…' : 'Request Free Demo →'}
                   </button>
                 </form>
@@ -307,7 +307,7 @@ export default function Landing() {
       <footer className="bg-slate-950 text-white/65 px-5 pt-12 pb-7">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-2.5 mb-2.5">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-700 to-blue-500 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-teal-700 to-teal-500 rounded-lg flex items-center justify-center">
               <TrendingUp size={17} className="text-white" />
             </div>
             <span className="text-white font-extrabold text-lg">MediCloud</span>
@@ -327,7 +327,7 @@ export default function Landing() {
 }
 
 function SectionTag({ children }) {
-  return <div className="inline-block bg-blue-100 text-blue-800 px-4 py-1 rounded-full text-[13px] font-semibold">{children}</div>;
+  return <div className="inline-block bg-teal-100 text-teal-800 px-4 py-1 rounded-full text-[13px] font-semibold">{children}</div>;
 }
 
 function SectionHeading({ tag, title, subtitle }) {

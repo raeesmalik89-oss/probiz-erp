@@ -69,7 +69,7 @@ export default function Customers() {
       {/* Summary cards */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: 'Total Customers', value: customers.length, icon: Users, iconCls: 'text-blue-600', bgCls: 'bg-blue-50' },
+          { label: 'Total Customers', value: customers.length, icon: Users, iconCls: 'text-teal-600', bgCls: 'bg-teal-50' },
           { label: 'Total Receivable', value: `Rs. ${totalReceivable.toLocaleString()}`, icon: DollarSign, iconCls: 'text-red-500', bgCls: 'bg-red-50' },
           { label: 'With Credit Limit', value: customers.filter(c => c.credit_limit > 0).length, icon: CreditCard, iconCls: 'text-emerald-600', bgCls: 'bg-emerald-50' },
         ].map(c => (
@@ -113,7 +113,7 @@ export default function Customers() {
                   <td className="table-cell font-semibold text-gray-900 dark:text-white">{c.name}</td>
                   <td className="table-cell">{c.phone || '—'}</td>
                   <td className="table-cell">{c.city || '—'}</td>
-                  <td className="table-cell font-semibold text-blue-600">Rs. {c.credit_limit?.toLocaleString()}</td>
+                  <td className="table-cell font-semibold text-teal-600">Rs. {c.credit_limit?.toLocaleString()}</td>
                   <td className="table-cell font-bold">
                     <span className={c.balance > 0 ? 'text-red-500' : 'text-emerald-600'}>
                       Rs. {c.balance?.toLocaleString()}
@@ -121,7 +121,7 @@ export default function Customers() {
                   </td>
                   <td className="table-cell">
                     <button onClick={() => openEdit(c)} className="p-1.5 border border-gray-200 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
-                      <Edit2 size={13} className="text-blue-500" />
+                      <Edit2 size={13} className="text-teal-500" />
                     </button>
                   </td>
                 </tr>

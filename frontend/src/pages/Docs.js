@@ -88,7 +88,7 @@ const sections = [
 
   // ─── SYSTEM OVERVIEW ───────────────────────────────────────────────────────
   {
-    id: 'overview', icon: Zap, label: 'System Overview', color: '#1e40af',
+    id: 'overview', icon: Zap, label: 'System Overview', color: '#0f766e',
     content: {
       title: 'MediCloud — System Overview',
       subtitle: 'A complete cloud-based Enterprise Resource Planning system built for Pakistani businesses.',
@@ -143,7 +143,7 @@ const sections = [
 
   // ─── DASHBOARD ─────────────────────────────────────────────────────────────
   {
-    id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', color: '#3b82f6',
+    id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', color: '#14b8a6',
     content: {
       title: 'Dashboard',
       subtitle: 'Real-time business overview — everything important at one glance.',
@@ -928,7 +928,7 @@ function ContentRenderer({ body }) {
       {body.map((block, i) => (
         <div key={i} style={{ marginBottom: 32 }}>
           <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--ink)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ width: 4, height: 18, background: '#1e40af', borderRadius: 2, display: 'inline-block', flexShrink: 0 }} />
+            <span style={{ width: 4, height: 18, background: '#0f766e', borderRadius: 2, display: 'inline-block', flexShrink: 0 }} />
             {block.heading}
           </h3>
           {block.text && <p style={{ color: 'var(--ink-2)', fontSize: 14, lineHeight: 1.8, margin: 0 }}>{block.text}</p>}
@@ -946,7 +946,7 @@ function ContentRenderer({ body }) {
             <ol style={{ margin: 0, paddingLeft: 0, listStyle: 'none' }}>
               {block.steps.map((s, j) => (
                 <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '8px 0', borderBottom: '1px solid var(--line-2)' }}>
-                  <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#1e40af', color: '#fff', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{j + 1}</div>
+                  <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#0f766e', color: '#fff', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{j + 1}</div>
                   <span style={{ color: 'var(--ink-2)', fontSize: 14, paddingTop: 3 }}>{s}</span>
                 </li>
               ))}
@@ -1021,13 +1021,13 @@ export default function Docs() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: 10, width: '100%',
                   padding: '9px 12px', borderRadius: 8, border: 'none', cursor: 'pointer',
-                  background: active === id ? '#dbeafe' : 'transparent',
-                  color: active === id ? '#1e40af' : 'var(--ink-2)',
+                  background: active === id ? '#ccfbf1' : 'transparent',
+                  color: active === id ? '#0f766e' : 'var(--ink-2)',
                   fontWeight: active === id ? 700 : 400, fontSize: 13,
                   textAlign: 'left', marginBottom: 2,
                 }}>
-                <div style={{ width: 28, height: 28, borderRadius: 7, background: active === id ? '#bfdbfe' : 'var(--panel-3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Icon size={14} color={active === id ? '#1e40af' : color} />
+                <div style={{ width: 28, height: 28, borderRadius: 7, background: active === id ? '#99f6e4' : 'var(--panel-3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Icon size={14} color={active === id ? '#0f766e' : color} />
                 </div>
                 {label}
                 {active === id && <ChevronRight size={13} style={{ marginLeft: 'auto' }} />}
@@ -1042,8 +1042,8 @@ export default function Docs() {
             <>
               <div style={{ marginBottom: 28, paddingBottom: 24, borderBottom: '1px solid var(--line-2)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-                  <div style={{ width: 44, height: 44, borderRadius: 12, background: '#dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <current.icon size={22} color="#1e40af" />
+                  <div style={{ width: 44, height: 44, borderRadius: 12, background: '#ccfbf1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <current.icon size={22} color="#0f766e" />
                   </div>
                   <div>
                     <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--ink)', margin: 0 }}>{current.content.title}</h2>
@@ -1063,7 +1063,7 @@ export default function Docs() {
                     <button onClick={() => setActive(next.id)} style={{
                       display: 'flex', alignItems: 'center', gap: 10, padding: '12px 20px',
                       background: 'var(--panel-2)', border: '1px solid var(--line)', borderRadius: 10,
-                      cursor: 'pointer', color: '#1e40af', fontWeight: 600, fontSize: 14,
+                      cursor: 'pointer', color: '#0f766e', fontWeight: 600, fontSize: 14,
                     }}>
                       Next: {next.label} →
                     </button>
