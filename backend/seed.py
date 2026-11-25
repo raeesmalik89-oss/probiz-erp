@@ -12,7 +12,12 @@ import secrets
 # also be added to an EXISTING table (create_all never alters existing tables).
 # Maps table -> {column_name: column DDL type}. Safe/idempotent on every boot.
 _NEW_COLUMNS = {
-    "products": {"generic_name": "VARCHAR(200)"},
+    "products": {
+        "generic_name": "VARCHAR(200)",
+        "shelf_location": "VARCHAR(50)",
+        "rack": "VARCHAR(30)",
+        "bin": "VARCHAR(30)",
+    },
     "company_settings": {"ntn": "VARCHAR(50)", "strn": "VARCHAR(50)"},
 }
 

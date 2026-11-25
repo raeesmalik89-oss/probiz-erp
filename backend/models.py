@@ -91,6 +91,10 @@ class Product(Base):
     batch_no = Column(String(100), nullable=True)
     mfg_date = Column(String(20), nullable=True)
     expiry_date = Column(String(20), nullable=True)
+    # Physical location on the pharmacy floor — helps staff find/pull stock.
+    shelf_location = Column(String(50), nullable=True)
+    rack = Column(String(30), nullable=True)
+    bin = Column(String(30), nullable=True)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     category = relationship("Category", back_populates="products")

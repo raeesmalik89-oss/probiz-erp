@@ -1,13 +1,39 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Optional, List
+from datetime import datetime, date
 from database import get_db
 from auth import get_current_user
 import models
 
 router = APIRouter(prefix="/api/inventory", tags=["inventory"])
+
+# How many days out counts as "near expiry" in list/badge responses.
+NEAR_EXPIRY_DAYS = 90
+
+
+def _expiry_info(expiry_date_str: Optional[str]):
+    """Return (days_to_expiry, status) from a stored 'YYYY-MM-DD' string.
+
+    status is one of: "expired", "near_expiry", "ok". Returns (None, "ok")
+    when there is no parseable expiry date, so missing dates never flag.
+    """
+    if not expiry_date_str:
+        return None, "ok"
+    try:
+        exp = datetime.strptime(expiry_date_str.strip()[:10], "%Y-%m-%d").date()
+    except (ValueError, AttributeError):
+        return None, "ok"
+    days = (exp - date.today()).days
+    if days < 0:
+        status = "expired"
+    elif days <= NEAR_EXPIRY_DAYS:
+        status = "near_expiry"
+    else:
+        status = "ok"
+    return days, status
 
 # --- Categories ---
 class CategoryCreate(BaseModel):
@@ -55,6 +81,21 @@ class ProductCreate(BaseModel):
     batch_no: Optional[str] = None
     mfg_date: Optional[str] = None
     expiry_date: Optional[str] = None
+    shelf_location: Optional[str] = None
+    rack: Optional[str] = None
+    bin: Optional[str] = None
+
+    @field_validator("expiry_date", "mfg_date")
+    @classmethod
+    def _validate_date_format(cls, v):
+        # Keep dates as YYYY-MM-DD so near-expiry comparisons stay correct.
+        if v in (None, ""):
+            return v
+        try:
+            datetime.strptime(v, "%Y-%m-%d")
+        except ValueError:
+            raise ValueError("Date must be in YYYY-MM-DD format")
+        return v
 
 @router.get("/products")
 def get_products(
@@ -80,9 +121,10 @@ def get_products(
         q = q.filter(models.Product.stock <= models.Product.min_stock)
     total = q.count()
     products = q.offset(skip).limit(limit).all()
-    return {
-        "total": total,
-        "products": [{
+
+    def _row(p):
+        days, status = _expiry_info(p.expiry_date)
+        return {
             "id": p.id, "name": p.name, "generic_name": p.generic_name,
             "barcode": p.barcode, "sku": p.sku,
             "category": p.category.name if p.category else None,
@@ -91,9 +133,40 @@ def get_products(
             "wholesale_price": p.wholesale_price, "stock": p.stock,
             "min_stock": p.min_stock, "max_stock": p.max_stock,
             "batch_no": p.batch_no, "mfg_date": p.mfg_date, "expiry_date": p.expiry_date,
+            "shelf_location": p.shelf_location, "rack": p.rack, "bin": p.bin,
+            "days_to_expiry": days, "expiry_status": status,
             "low_stock": p.stock <= p.min_stock,
-        } for p in products]
-    }
+        }
+
+    return {"total": total, "products": [_row(p) for p in products]}
+
+
+@router.get("/near-expiry")
+def near_expiry(
+    days: int = Query(NEAR_EXPIRY_DAYS, ge=1, le=3650),
+    db: Session = Depends(get_db),
+    _=Depends(get_current_user),
+):
+    """Active products expiring within `days` (and already-expired ones),
+    soonest first, each with its shelf location for pulling off the floor."""
+    products = db.query(models.Product).filter(
+        models.Product.is_active == True,
+        models.Product.expiry_date.isnot(None),
+        models.Product.expiry_date != "",
+    ).all()
+    results = []
+    for p in products:
+        d, status = _expiry_info(p.expiry_date)
+        if d is None or d > days:
+            continue
+        results.append({
+            "id": p.id, "name": p.name, "generic_name": p.generic_name,
+            "batch_no": p.batch_no, "stock": p.stock, "unit": p.unit,
+            "shelf_location": p.shelf_location, "rack": p.rack, "bin": p.bin,
+            "expiry_date": p.expiry_date, "days_to_expiry": d, "expiry_status": status,
+        })
+    results.sort(key=lambda r: r["days_to_expiry"])
+    return {"total": len(results), "days": days, "products": results}
 
 @router.get("/products/by-barcode/{barcode}")
 def get_product_by_barcode(barcode: str, db: Session = Depends(get_db), _=Depends(get_current_user)):
@@ -104,11 +177,14 @@ def get_product_by_barcode(barcode: str, db: Session = Depends(get_db), _=Depend
     ).first()
     if not p:
         raise HTTPException(status_code=404, detail="No product with that barcode")
+    days, status = _expiry_info(p.expiry_date)
     return {
         "id": p.id, "name": p.name, "generic_name": p.generic_name,
         "barcode": p.barcode, "sku": p.sku,
         "category": p.category.name if p.category else None,
         "unit": p.unit, "sale_price": p.sale_price, "stock": p.stock,
+        "shelf_location": p.shelf_location, "rack": p.rack, "bin": p.bin,
+        "expiry_date": p.expiry_date, "days_to_expiry": days, "expiry_status": status,
     }
 
 
@@ -117,6 +193,7 @@ def get_product(product_id: int, db: Session = Depends(get_db), _=Depends(get_cu
     p = db.query(models.Product).filter(models.Product.id == product_id).first()
     if not p:
         raise HTTPException(status_code=404, detail="Product not found")
+    days, status = _expiry_info(p.expiry_date)
     return {
         "id": p.id, "name": p.name, "generic_name": p.generic_name,
         "barcode": p.barcode, "sku": p.sku,
@@ -124,6 +201,9 @@ def get_product(product_id: int, db: Session = Depends(get_db), _=Depends(get_cu
         "cost_price": p.cost_price, "sale_price": p.sale_price,
         "wholesale_price": p.wholesale_price, "stock": p.stock,
         "min_stock": p.min_stock, "max_stock": p.max_stock,
+        "batch_no": p.batch_no, "mfg_date": p.mfg_date, "expiry_date": p.expiry_date,
+        "shelf_location": p.shelf_location, "rack": p.rack, "bin": p.bin,
+        "days_to_expiry": days, "expiry_status": status,
     }
 
 @router.post("/products")
