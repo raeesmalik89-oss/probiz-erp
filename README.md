@@ -101,6 +101,37 @@ or `start-local-network.bat` to share the app with other PCs on your network.
 - Passwords: `SEED_ADMIN_PASSWORD` and `SEED_DEMO_PASSWORD`. If they are not set,
   random passwords are generated and printed once in the backend log.
 
+## Database migrations (Alembic)
+
+Schema changes are managed with **Alembic** (config in `backend/alembic.ini`,
+migrations in `backend/alembic/versions/`). Alembic reads `DATABASE_URL` from the
+app config, so it always targets the same database the app uses.
+
+Run from the `backend/` folder:
+
+```bash
+# Apply all migrations (creates/updates the schema). Run before first start
+# and after every deploy.
+python -m alembic upgrade head
+
+# After changing a model in models.py, generate a migration, review it, apply it:
+python -m alembic revision --autogenerate -m "describe the change"
+python -m alembic upgrade head
+```
+
+**Upgrading an existing database** that was created by the old
+`create_all()` path (anything deployed before Alembic was added): run this **once**
+to mark it as already at the baseline, then use `upgrade head` from then on:
+
+```bash
+python -m alembic stamp head
+```
+
+> Transitional note: `main.py` still calls `create_all()` so existing deployments
+> keep booting. Alembic is now the source of truth for schema changes — once every
+> environment is on Alembic (stamped or upgraded), remove that `create_all()` call
+> so migrations are the single authority.
+
 ## Key environment variables
 
 | Variable | Purpose |

@@ -16,6 +16,9 @@ logger = logging.getLogger(__name__)
 if not settings.SECRET_KEY:
     raise RuntimeError("SECRET_KEY is not set. Add it to your .env file.")
 
+# Transitional: kept so existing deployments keep booting. Schema changes are
+# now managed by Alembic (`python -m alembic upgrade head`); once every
+# environment is on Alembic, remove this line so migrations are the sole authority.
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
