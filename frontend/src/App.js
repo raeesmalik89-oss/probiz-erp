@@ -9,6 +9,7 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Assistant from './pages/Assistant';
 import Inventory from './pages/Inventory';
+import NearExpiry from './pages/NearExpiry';
 import Sales from './pages/Sales';
 import Purchases from './pages/Purchases';
 import Accounting from './pages/Accounting';
@@ -36,6 +37,7 @@ function AppRoutes() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="assistant" element={<Assistant />} />
         <Route path="inventory" element={<Inventory />} />
+        <Route path="near-expiry" element={<NearExpiry />} />
         <Route path="sales" element={<Sales />} />
         <Route path="purchases" element={<Purchases />} />
         <Route path="customers" element={<Customers />} />

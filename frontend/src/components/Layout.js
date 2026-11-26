@@ -6,7 +6,7 @@ import SubscriptionGuard from './SubscriptionGuard';
 import {
   LayoutDashboard, Package, ShoppingCart, Truck, Users, Building2,
   BookOpen, UserCheck, BarChart3, Settings, LogOut, Menu, X,
-  Stethoscope, FileText, ChevronRight, CalendarDays, Sun, Moon, Sparkles
+  Stethoscope, FileText, ChevronRight, CalendarDays, Sun, Moon, Sparkles, CalendarClock
 } from 'lucide-react';
 
 // Grouped navigation — like the medical dashboard reference.
@@ -16,8 +16,9 @@ const navGroups = [
     { to: '/app/assistant', icon: Sparkles,        label: 'Ask MediCloud' },
   ]},
   { title: 'Operations', items: [
-    { to: '/app/inventory', icon: Package,      label: 'Inventory' },
-    { to: '/app/sales',     icon: ShoppingCart, label: 'Sales / POS' },
+    { to: '/app/inventory',   icon: Package,       label: 'Inventory' },
+    { to: '/app/near-expiry', icon: CalendarClock, label: 'Near Expiry' },
+    { to: '/app/sales',       icon: ShoppingCart,  label: 'Sales / POS' },
     { to: '/app/purchases', icon: Truck,        label: 'Purchases' },
     { to: '/app/customers', icon: Users,        label: 'Customers' },
     { to: '/app/suppliers', icon: Building2,    label: 'Suppliers' },
